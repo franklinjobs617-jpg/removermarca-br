@@ -157,17 +157,7 @@ export default function GuidePage() {
             </details>
           </section>
         </article>
-      </main>
-
-      <footer className="bg-[#f8f9fa] border-t border-gray-200 py-16">
-        <div className="max-w-[850px] mx-auto px-[4%] text-center">
-          <p className="font-extrabold text-xl mb-2">RemoverMarca.com</p>
-          <p className="text-gray-600 font-medium">Guia de Excelência em Edição Digital</p>
-          <p className="text-sm text-gray-400 mt-6 pt-6 border-t border-gray-200">
-            Última atualização: Janeiro de 2026. Em conformidade com a LGPD.
-          </p>
-        </div>
-      </footer>
+      </main> 
     </div>
   )
 }

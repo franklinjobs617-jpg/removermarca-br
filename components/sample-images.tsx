@@ -24,12 +24,12 @@ export function SampleImages() {
           <button
             key={sample.id}
             onClick={handleSampleClick}
-            className="w-20 h-20 rounded-xl overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition-all hover:scale-105"
+            className="w-20 h-20 rounded-xl cursor-pointer overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition-all hover:scale-105"
           >
             <img
               src={sample.url || "/placeholder.svg"}
               alt={`Sample ${sample.id}`}
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
+              className="w-full h-full object-cover hover:grayscale-0 transition-all"
             />
           </button>
         ))}

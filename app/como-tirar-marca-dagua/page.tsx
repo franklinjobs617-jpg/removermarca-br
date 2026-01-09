@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Como Tirar a Marca d'Água de uma Foto (Guia Rápido 2026)",
   description: "Descubra como tirar a marca d'água de uma foto em segundos. Use nossa IA gratuita para limpar imagens sem perder qualidade. Guia fácil e 100% online.",
   alternates: {
-    canonical: "https://removermarca.com/como-tirar-foto",
+    canonical: "https://removermarca.com/como-tirar-marca-dagua",
   },
 }
 
@@ -202,18 +202,7 @@ export default function ComoTirarFotoPage() {
             </div>
           </section>
         </article>
-      </main>
-
-      <footer className="bg-slate-900 text-white py-20 mt-20 border-t border-slate-800">
-        <div className="max-w-[800px] mx-auto px-6 text-center">
-          <p className="text-2xl font-black tracking-tighter italic mb-4 uppercase">RemoverMarca.com</p>
-          <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12">Excelência em Edição Digital no Brasil</p>
-          <div className="w-16 h-1 bg-blue-600 mx-auto mb-12 rounded-full" />
-          <p className="text-xs text-slate-500 font-medium leading-loose">
-            Atualizado em Janeiro de 2026. Em conformidade com as diretrizes de E-E-A-T do Google e LGPD.
-          </p>
-        </div>
-      </footer>
+      </main> 
     </div>
   )
 }

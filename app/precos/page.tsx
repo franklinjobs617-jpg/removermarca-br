@@ -1,212 +1,240 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Header } from "@/components/header"
-import { Check, Zap, ShieldCheck, CreditCard } from "lucide-react"
-import Link from "next/link"
+import { Check, Info, Star } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
+
+type PlanType = "subscription" | "credits"
+type BillingCycle = "monthly" | "yearly"
+
+interface SubscriptionPlan {
+  id: string
+  name: string
+  credits: number
+  monthly: number
+  yearly: number
+  yearlyMonthly: number
+  highlighted?: boolean
+}
+
+interface CreditPack {
+  id: string
+  name: string
+  credits: number
+  price: number
+  perImg: number
+}
 
 export default function PricingPage() {
-  // 状态管理：订阅制 vs 一次性积分
-  const [type, setType] = useState<'sub' | 'pre'>('sub')
-  // 状态管理：月付 vs 年付
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('annual')
+  const { isLoaded } = useAuth()
+  const [activeTab, setActiveTab] = useState<PlanType>("subscription")
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("yearly")
+  const [selectedId, setSelectedId] = useState("pro")
 
-  // 订阅制方案数据
-  const subscriptions = [
-    {
-      name: "Plano Mini",
-      desc: "Uso ocasional",
-      monthly: "R$ 19,90",
-      annual: "R$ 149,90",
-      monthlyUSD: "$3.60",
-      annualUSD: "$27.20",
-      credits: "15 créditos /mês",
-      features: ["IA Alta Resolução"],
-    },
-    {
-      name: "Plano Basic",
-      desc: "Para iniciantes",
-      monthly: "R$ 39,90",
-      annual: "R$ 299,90",
-      monthlyUSD: "$7.20",
-      annualUSD: "$54.50",
-      credits: "45 créditos /mês",
-      features: ["Processamento rápido"],
-      color: "text-blue-600",
-    },
-    {
-      name: "Plano Pro",
-      desc: "Escolha popular",
-      monthly: "R$ 79,90",
-      annual: "R$ 599,90",
-      monthlyUSD: "$14.50",
-      annualUSD: "$109.00",
-      credits: "120 créditos /mês",
-      features: ["Processamento em lote", "Suporte prioritário"],
-      highlight: true,
-    },
-    {
-      name: "Plano Expert",
-      desc: "Profissionais",
-      monthly: "R$ 149,90",
-      annual: "R$ 1199,90",
-      monthlyUSD: "$27.20",
-      annualUSD: "$218.00",
-      credits: "300 créditos /mês",
-      features: ["Acesso via API (Beta)"],
-    },
-    {
-      name: "Plano Studio",
-      desc: "Agências",
-      monthly: "R$ 399,90",
-      annual: "R$ 2999,90",
-      monthlyUSD: "$72.70",
-      annualUSD: "$545.40",
-      credits: "1000 créditos /mês",
-      features: ["Gerente exclusivo"],
-    },
+  const subscriptions: SubscriptionPlan[] = [
+    { id: "mini", name: "Plano Mini", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49 },
+    { id: "basic", name: "Plano Basic", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99 },
+    { id: "pro", name: "Plano Pro", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, highlighted: true },
+    { id: "expert", name: "Plano Expert", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99 },
+    { id: "studio", name: "Plano Studio", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99 },
   ]
 
-  // 一次性包数据
-  const creditPacks = [
-    { name: "Starter Pack", price: "R$ 24,90", usd: "$4.50", credits: "10 Créditos" },
-    { name: "Standard Pack", price: "R$ 89,90", usd: "$16.30", credits: "50 Créditos", highlight: true },
-    { name: "Business Pack", price: "R$ 249,90", usd: "$45.40", credits: "200 Créditos" },
+  const creditPacks: CreditPack[] = [
+    { id: "starter", name: "Starter Pack", credits: 10, price: 24.9, perImg: 2.49 },
+    { id: "standard", name: "Standard Pack", credits: 50, price: 89.9, perImg: 1.79 },
+    { id: "business", name: "Business Pack", credits: 200, price: 249.9, perImg: 1.24 },
   ]
+
+  // 计算当前显示价格
+  const getDisplayPrice = () => {
+    if (activeTab === "subscription") {
+      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[2]
+      return billingCycle === "monthly" ? plan.monthly : plan.yearly
+    }
+    const pack = creditPacks.find(c => c.id === selectedId) || creditPacks[1]
+    return pack.price
+  }
+
+  // 优势描述组件
+  const Benefits = () => (
+    <div className="flex flex-col h-full space-y-4">
+      <div className="flex gap-1">
+        {[1, 2, 3].map(i => <div key={i} className="w-1 h-1 bg-blue-600 rounded-full opacity-30" />)}
+      </div>
+      <h2 className="text-2xl xl:text-3xl font-black text-slate-900 leading-tight tracking-tighter uppercase italic">
+        Escolha seu plano <br />
+        <span className="relative inline-block text-blue-600 lg:text-slate-900">
+          preferido
+          <div className="absolute -bottom-1 left-0 w-full h-1 bg-blue-600/20 rounded-full" />
+        </span>
+      </h2>
+      <div className="space-y-6 pt-4">
+        <div className="space-y-3">
+          <h4 className="text-blue-600 font-black text-sm uppercase tracking-[0.2em]">Vantagens Pro:</h4>
+          <ul className="space-y-2">
+            {[ "Créditos extras incluídos", "Ideal para iniciantes", "Sem marca d'água na prévia"].map((item, i) => (
+              <li key={i} className="flex items-center gap-2 text-slate-700 font-bold text-sm">
+                <div className="bg-blue-600 rounded-full p-0.5"><Check size={8} className="text-white stroke-[4px]" /></div>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="space-y-3">
+          <h4 className="text-blue-600 font-black text-sm uppercase tracking-[0.2em]">Sobre Créditos:</h4>
+          <ul className="space-y-2">
+            {["Acesso completo aos recursos", "Créditos que nunca expiram" ].map((item, i) => (
+              <li key={i} className="flex items-center gap-2 text-slate-700 font-bold text-sm">
+                <div className="bg-blue-600 rounded-full p-0.5"><Check size={8} className="text-white stroke-[4px]" /></div>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="mt-auto flex items-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-widest">
+        <Info size={10} />
+        <span>1 imagem = 1 crédito</span>
+      </div>
+    </div>
+  )
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8">
-        {/* 头部标题与切换 */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-            Remoção de Marcas d'Água com IA
-          </h1>
-          <p className="mt-4 text-xl text-slate-600">Escolha o plano perfeito para as suas necessidades.</p>
+      <main className="flex-1 flex items-center justify-center p-4 lg:p-6 pt-20 lg:pt-24">
+        {/* PC端高度锁定为 lg:h-[820px] 确保一屏展示完 */}
+        <div className="bg-white rounded-[32px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col-reverse lg:flex-row overflow-hidden w-full max-w-6xl h-fit lg:h-[820px]">
+          
+          {/* 左侧：描述 (PC lg:order-1) */}
+          <aside className="w-full lg:w-[280px] xl:w-[340px] bg-[#f4f7ff] p-6 lg:p-10 flex-col shrink-0 border-r border-blue-50 lg:flex">
+            <Benefits />
+          </aside>
 
-          <div className="mt-10 flex justify-center p-1 bg-slate-200 rounded-2xl max-w-sm mx-auto">
-            <button
-              onClick={() => setType('sub')}
-              className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition-all ${type === 'sub' ? 'bg-white shadow-md text-blue-600' : 'text-slate-600 hover:text-slate-900'}`}
-            >
-              Assinaturas
-            </button>
-            <button
-              onClick={() => setType('pre')}
-              className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition-all ${type === 'pre' ? 'bg-white shadow-md text-blue-600' : 'text-slate-600 hover:text-slate-900'}`}
-            >
-              Créditos Avulsos
-            </button>
-          </div>
-        </div>
-
-        {type === 'sub' ? (
-          /* 订阅模式 */
-          <div>
-            <div className="flex justify-center items-center gap-4 mb-12">
-              <span className={`text-sm font-bold ${billing === 'monthly' ? 'text-blue-600' : 'text-slate-500'}`}>Mensal</span>
-              <button
-                onClick={() => setBilling(billing === 'monthly' ? 'annual' : 'monthly')}
-                className="relative w-14 h-7 bg-slate-300 rounded-full transition duration-200 focus:outline-none"
-              >
-                <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200 ${billing === 'annual' ? 'translate-x-7' : 'translate-x-0'}`} />
-              </button>
-              <span className={`text-sm font-bold ${billing === 'annual' ? 'text-blue-600' : 'text-slate-500'}`}>
-                Anual <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-black ml-1 uppercase tracking-tighter">Economize 40%</span>
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-stretch">
-              {subscriptions.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`relative flex flex-col rounded-[32px] transition-all duration-300 ${
-                    plan.highlight 
-                    ? 'p-[2px] bg-gradient-to-br from-blue-600 to-cyan-400 shadow-2xl scale-105 z-10' 
-                    : 'bg-white p-6 border border-slate-200 hover:shadow-lg'
-                  }`}
+          {/* 右侧：选择区 (PC lg:order-2) */}
+          <div className="flex-1 p-6 lg:p-10 flex flex-col justify-center bg-white overflow-hidden">
+            
+            {/* Tab 切换 */}
+            <div className="flex justify-center mb-6 shrink-0">
+              <div className="bg-slate-100 p-1 rounded-2xl flex w-full max-w-[360px] shadow-inner">
+                <button 
+                  onClick={() => { setActiveTab("subscription"); setSelectedId("pro"); }}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}
                 >
-                  {plan.highlight ? (
-                    <div className="bg-white rounded-[30px] p-6 flex flex-col h-full">
-                       <span className="bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full self-start mb-4 uppercase tracking-widest">Melhor Valor</span>
-                       <h3 className="font-black text-slate-900 uppercase tracking-wider text-xs">{plan.name}</h3>
-                       <p className="mt-1 text-slate-500 text-xs font-medium">{plan.desc}</p>
-                       <div className="mt-6">
-                          <span className="text-4xl font-black text-slate-900">{billing === 'annual' ? plan.annual : plan.monthly}</span>
-                          <span className="text-slate-400 text-sm font-bold">{billing === 'annual' ? '/ano' : '/mês'}</span>
-                          <div className="text-[10px] text-blue-500 font-bold mt-1 uppercase tracking-widest">{billing === 'annual' ? plan.annualUSD : plan.monthlyUSD} USD</div>
-                       </div>
-                       <ul className="mt-8 space-y-4 text-sm text-slate-700 font-semibold flex-grow">
-                          <li className="flex items-center gap-2">🔥 {plan.credits}</li>
-                          {plan.features.map(f => <li key={f} className="flex items-center gap-2">🔥 {f}</li>)}
-                       </ul>
-                       <button className="mt-8 w-full py-4 px-4 rounded-2xl bg-blue-600 text-white font-black shadow-lg hover:bg-blue-700 transition-all active:scale-95">COMEÇAR AGORA</button>
-                    </div>
-                  ) : (
-                    <>
-                      <h3 className={`font-black uppercase tracking-wider text-xs ${plan.color || 'text-slate-400'}`}>{plan.name}</h3>
-                      <p className="mt-1 text-slate-500 text-xs font-medium">{plan.desc}</p>
-                      <div className="mt-6">
-                        <span className="text-3xl font-black text-slate-900">{billing === 'annual' ? plan.annual : plan.monthly}</span>
-                        <span className="text-slate-400 text-sm font-bold">{billing === 'annual' ? '/ano' : '/mês'}</span>
-                        <div className="text-[10px] text-blue-400 font-bold mt-1 uppercase tracking-widest">{billing === 'annual' ? plan.annualUSD : plan.monthlyUSD} USD</div>
-                      </div>
-                      <ul className="mt-8 space-y-4 text-sm text-slate-600 font-medium flex-grow">
-                        <li className="flex items-center gap-2">✅ {plan.credits}</li>
-                        {plan.features.map(f => <li key={f} className="flex items-center gap-2">✅ {f}</li>)}
-                      </ul>
-                      <button className="mt-8 w-full py-3.5 px-4 rounded-2xl border-2 border-blue-600 text-blue-600 font-black hover:bg-blue-50 transition-all text-sm uppercase tracking-widest">Assinar</button>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          /* 一次性模式 */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {creditPacks.map((pack) => (
-              <div
-                key={pack.name}
-                className={`bg-white p-10 rounded-[40px] text-center transition-all duration-300 ${
-                  pack.highlight 
-                  ? 'border-4 border-blue-600 shadow-2xl relative scale-105' 
-                  : 'border border-slate-200 shadow-sm hover:shadow-md'
-                }`}
-              >
-                {pack.highlight && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.2em]">POPULAR</div>
-                )}
-                <h3 className={`text-xl font-black ${pack.highlight ? 'text-blue-600' : 'text-slate-900'}`}>{pack.name}</h3>
-                <div className="my-8">
-                  <div className="text-5xl font-black text-slate-900">{pack.price}</div>
-                  <div className="text-sm text-slate-400 font-bold mt-2 italic uppercase tracking-widest">{pack.usd} USD</div>
-                </div>
-                <div className={`inline-block px-4 py-2 rounded-xl text-sm font-black mb-10 ${pack.highlight ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500'}`}>
-                  {pack.credits}
-                </div>
-                <button className={`w-full py-5 rounded-[24px] font-black text-lg transition-all active:scale-95 ${pack.highlight ? 'bg-blue-600 text-white shadow-xl shadow-blue-100 hover:bg-blue-700' : 'bg-slate-900 text-white hover:bg-black'}`}>
-                  Comprar Agora
+                  Assinaturas
+                </button>
+                <button 
+                  onClick={() => { setActiveTab("credits"); setSelectedId("standard"); }}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}
+                >
+                  Créditos Avulsos
                 </button>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
 
-        {/* 支付信任区 */}
-        <div className="mt-24 border-t border-slate-200 pt-12 text-center">
-          <div className="flex flex-col items-center gap-2 mb-8">
-            <ShieldCheck className="text-blue-600 w-8 h-8" />
-            <p className="text-slate-500 text-sm font-black uppercase tracking-widest">Pagamento 100% Seguro</p>
+           <div className="h-14 shrink-0 flex items-center justify-center">
+  {activeTab === "subscription" && (
+    <div className="flex justify-center gap-10 font-black text-sm uppercase tracking-widest border-b border-slate-50 pb-3 w-full animate-in fade-in duration-300">
+      <button 
+        onClick={() => setBillingCycle("monthly")} 
+        className={`pb-1 border-b-2 transition-all ${billingCycle === "monthly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}
+      >
+        Mensal
+      </button>
+      
+      {/* 关键修复点：relative 容器 */}
+      <button 
+        onClick={() => setBillingCycle("yearly")} 
+        className={`pb-1 relative border-b-2 transition-all flex items-center ${billingCycle === "yearly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}
+      >
+        Anual 
+        {/* 关键修复点：使用 left-full 和 -top 实现右上角悬浮 */}
+        <span className="absolute -top-4 left-full ml-1 whitespace-nowrap text-green-600 font-black bg-green-50 px-1.5 py-0.5 rounded text-[8px] shadow-sm border border-green-100">
+          Economize 40%
+        </span>
+      </button>
+    </div>
+  )}
+</div>
+
+            {/* 方案列表：在桌面端通过 flex-1 和紧凑内边距防止滚动 */}
+            <div className="flex-1 overflow-y-auto lg:overflow-hidden pr-1 no-scrollbar space-y-2 mb-6">
+              {activeTab === "subscription" ? (
+                subscriptions.map((plan) => (
+                  <div 
+                    key={plan.id}
+                    onClick={() => setSelectedId(plan.id)}
+                    className={`relative p-4 lg:p-3.5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedId === plan.id ? 'border-blue-600 bg-blue-50/30 ring-4 ring-blue-600/5' : 'border-slate-50 bg-slate-50/50 hover:border-blue-100'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selectedId === plan.id ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'}`}>
+                        {selectedId === plan.id && <Check size={10} className="stroke-[4px]" />}
+                      </div>
+                      <div>
+                        <div className="font-black text-slate-900 text-sm lg:text-[13px] uppercase leading-none">{plan.name}</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">+{plan.credits} créditos / {billingCycle === "monthly" ? "mês" : "ano"}</div>
+                      </div>
+                    </div>
+                    <div className="text-right font-black text-slate-900 italic">
+                      <div className="text-sm lg:text-lg leading-none">R${(billingCycle === "monthly" ? plan.monthly : plan.yearlyMonthly).toFixed(2)}<span className="text-[10px] font-bold text-slate-400 not-italic ml-0.5">/mês</span></div>
+                      {billingCycle === "yearly" && <div className="text-[10px] text-slate-400 font-bold uppercase mt-0.5 tracking-tighter">Total R${plan.yearly.toFixed(2)}</div>}
+                    </div>
+                    {plan.highlighted && (
+                      <div className="absolute -top-2 right-4 bg-blue-600 text-white text-[7px] px-2 py-0.5 rounded-full font-black shadow-lg flex items-center gap-1 uppercase">
+                        <Star size={6} fill="white" /> Recomendado
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col justify-center space-y-3">
+                  {creditPacks.map((pack) => (
+                    <div 
+                      key={pack.id}
+                      onClick={() => setSelectedId(pack.id)}
+                      className={`relative p-5 lg:p-6 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedId === pack.id ? 'border-blue-600 bg-blue-50/30 shadow-sm' : 'border-slate-50 bg-slate-50/50 hover:border-blue-100'}`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${selectedId === pack.id ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'}`}>
+                          {selectedId === pack.id && <Check size={10} className="stroke-[4px]" />}
+                        </div>
+                        <div>
+                          <div className="font-black text-slate-900 text-sm uppercase leading-none">{pack.credits} Créditos</div>
+                          <div className="text-[10px] font-black text-green-600 uppercase bg-green-50 px-1 py-0.5 rounded mt-1 inline-block">Validade permanente</div>
+                        </div>
+                      </div>
+                      <div className="text-right font-black text-slate-900 italic">
+                        <div className="text-xl leading-none">R${pack.price.toFixed(2)}</div>
+                        <div className="text-[10px] font-bold text-slate-400 not-italic uppercase tracking-widest mt-1">R${pack.perImg.toFixed(2)} / imagem</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 价格与按钮 */}
+            <div className="mt-auto pt-4 border-t border-slate-50 text-center shrink-0">
+               <div className="flex items-baseline justify-center gap-2 mb-4">
+                  <span className="text-sm font-black text-slate-400 uppercase tracking-widest leading-none">Subtotal:</span>
+                  <span className="text-4xl lg:text-5xl font-black text-blue-600 italic tracking-tighter">R${getDisplayPrice().toFixed(2)}</span>
+               </div>
+               
+               <button className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-4 rounded-2xl font-black text-base transition-all mb-6 shadow-xl shadow-blue-200 uppercase tracking-[0.1em]">
+                 {activeTab === "subscription" ? "Assine Agora" : "Compre Agora"}
+               </button>
+
+               <div className="flex justify-center items-center gap-6 opacity-30 grayscale scale-90">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" className="h-10" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-6" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-8" />
+               </div>
+            </div>
           </div>
-          <div className="flex justify-center items-center gap-10 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 flex-wrap">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_Pix.png" className="h-6 md:h-8" alt="Pix" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-3 md:h-4" alt="Visa" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-6 md:h-8" alt="Mastercard" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" className="h-5 md:h-6" alt="PayPal" />
-          </div>
+
         </div>
       </main>
     </div>

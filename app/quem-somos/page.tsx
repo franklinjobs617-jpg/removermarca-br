@@ -62,12 +62,7 @@ export default function QuemSomosPage() {
             Equipe RemoverMarca.com
           </p>
         </section>
-      </main>
-
-      {/* Internal Page Footer */}
-      <footer className="py-12 border-t border-slate-50 text-center text-slate-400 text-sm font-bold tracking-tighter">
-        © 2026 RemoverMarca.com — FEITO COM ❤️ NO BRASIL.
-      </footer>
+      </main> 
     </div>
   )
 }

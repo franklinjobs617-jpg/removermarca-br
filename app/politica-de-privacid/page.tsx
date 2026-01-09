@@ -94,11 +94,7 @@ export default function PrivacyPolicyPage() {
             Dúvidas sobre sua privacidade? Entre em contato com nossa equipe.
           </p>
         </div>
-      </main>
-
-      <footer className="py-12 bg-slate-50 text-center text-slate-400 text-xs font-black uppercase tracking-widest">
-        © 2026 RemoverMarca.com — Protegendo sua criatividade digital.
-      </footer>
+      </main> 
     </div>
   )
 }

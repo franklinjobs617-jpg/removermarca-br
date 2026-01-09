@@ -167,28 +167,7 @@ export default function WatermarkRemoverPage() {
         </section>
       </main>
 
-      <footer className="bg-[#1a1a1a] text-gray-400 py-16">
-        <div className="max-w-[1000px] mx-auto px-[4%] grid grid-cols-1 md:grid-cols-3 gap-12 text-sm leading-relaxed">
-          <div>
-            <h4 className="text-white font-bold mb-4">RemoverMarca.com</h4>
-            <p>Líder em ferramentas de edição baseadas em IA para o mercado brasileiro.</p>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Mais Ferramentas</h4>
-            <ul className="space-y-2">
-              <li><Link href="/" className="hover:text-white transition-colors text-decoration-none">Tirar Marca d'Água de Foto</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors text-decoration-none">Guia de Remoção</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-4">Privacidade</h4>
-            <p>Conforme LGPD - Seus dados protegidos.</p>
-          </div>
-        </div>
-        <div className="text-center mt-12 pt-8 border-t border-gray-800">
-          <p>&copy; 2026 RemoverMarca. Todos os direitos reservados.</p>
-        </div>
-      </footer>
+    
     </div>
   )
 }

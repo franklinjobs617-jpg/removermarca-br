@@ -108,11 +108,7 @@ export default function TermsOfUsePage() {
             RemoverMarca.com — Termos de Uso 2026
           </p>
         </div>
-      </main>
-
-      <footer className="py-12 bg-slate-50 text-center text-slate-400 text-[10px] font-black uppercase tracking-widest">
-        O uso continuado do site constitui aceitação destes termos.
-      </footer>
+      </main> 
     </div>
   )
 }

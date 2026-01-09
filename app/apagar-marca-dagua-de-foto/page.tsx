@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Apagar Marca d'Água de Foto Online - Melhor Ferramenta 2026",
   description: "Precisa apagar marca d'água de foto profissionalmente? Nossa IA remove logos e objetos sem borrões. Experimente agora: grátis, rápido e 100% online.",
   alternates: {
-    canonical: "https://removermarca.com/apagar-foto",
+    canonical: "https://removermarca.com/apagar-marca-dagua-de-foto",
   },
 }
 
@@ -162,22 +162,11 @@ export default function ApagarFotoPage() {
           <section className="internal-links bg-slate-50 p-8 rounded-3xl mt-12 text-sm leading-relaxed border border-slate-100">
             <h3 className="font-black text-slate-900 uppercase text-xs tracking-widest mb-4">Aumente sua Produtividade:</h3>
             <p className="text-slate-500 font-medium">
-              Ainda tem dúvidas? Veja nosso guia sobre <Link href="/como-tirar-foto" className="text-rose-500 font-bold hover:underline">como tirar a marca d&apos;água de uma foto</Link> ou use nosso <Link href="/online-gratis" className="text-rose-500 font-bold hover:underline">removedor de marca d&apos;água grátis</Link> para testes rápidos e ilimitados.
+              Ainda tem dúvidas? Veja nosso guia sobre <Link href="/como-tirar-marca-dagua" className="text-rose-500 font-bold hover:underline">como tirar a marca d&apos;água de uma foto</Link> ou use nosso <Link href="/tirar-marca-dagua-online-gratis" className="text-rose-500 font-bold hover:underline">removedor de marca d&apos;água grátis</Link> para testes rápidos e ilimitados.
             </p>
           </section>
         </article>
-      </main>
-
-      <footer className="bg-slate-900 text-white py-20 mt-20">
-        <div className="max-w-[1000px] mx-auto px-6 text-center">
-          <p className="text-2xl font-black tracking-tighter italic mb-4 text-rose-500 uppercase">RemoverMarca.com</p>
-          <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12">Ferramenta de IA Líder no Brasil em 2026</p>
-          <div className="w-20 h-1 bg-rose-500 mx-auto mb-12 rounded-full" />
-          <p className="text-xs text-slate-500 font-medium leading-loose max-w-lg mx-auto">
-            Processamento seguro em conformidade com a LGPD e normas de direitos autorais. Tecnologia dedicada à reconstrução neural de alta fidelidade.
-          </p>
-        </div>
-      </footer>
+      </main> 
     </div>
   )
 }
