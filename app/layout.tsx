@@ -4,6 +4,8 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
 import { Footer } from "@/components/footer" // 导入全局页脚
+import Head from "next/head"
+import Script from "next/script"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,29 +17,19 @@ export const metadata: Metadata = {
   description: "O melhor removedor de IA do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis. Tecnologia PicWish para limpeza extrema em 4K Ultra.",
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // 添加 suppressHydrationWarning 以解决插件引起的 body 属性冲突
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased font-sans`}>
+        {/* 加载 Google SDK */}
+        <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
+        
         <AuthProvider>
-          {/* 使用 flex-col 和 min-h-screen 确保页脚置底 */}
           <div className="flex flex-col min-h-screen">
-            
-            {/* 主要内容区域：flex-grow 会自动填满剩余空间 */}
-            <main className="flex-grow">
-              {children}
-            </main>
-
-            {/* 全局页脚 */}
+            <main className="flex-grow">{children}</main>
             <Footer />
-            
           </div>
-        </AuthProvider>
+        </AuthProvider> 
       </body>
     </html>
   )

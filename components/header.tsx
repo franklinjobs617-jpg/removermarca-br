@@ -9,36 +9,35 @@ import { PricingModal } from "./pricing-modal"
 import { LoginModal } from "./login-modal"
 import { Zap, Sparkles, ChevronDown } from "lucide-react"
 
-// --- 关键修复：在接口中添加 onOpenPricing ---
+// --- 关键修复：在接口中添加 imageCount ---
 interface HeaderProps {
   onStandardDownload?: () => void;
   onPremiumDownload?: () => void;
-  onOpenPricing?: () => void; // 新增：用于从外部控制定价弹窗
+  onOpenPricing?: () => void;
   canSave?: boolean;
+  imageCount?: number; // 新增属性
 }
 
 export function Header({ 
   onStandardDownload, 
   onPremiumDownload, 
   onOpenPricing, 
-  canSave = true 
+  canSave = true,
+  imageCount = 1 // 接收图片数量
 }: HeaderProps) {
   const pathname = usePathname()
   const { user, credits, isLoggedIn, isLoaded, logout } = useAuth()
   
-  // 显隐状态控制
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showSaveMenu, setShowSaveMenu] = useState(false)
   const [showToolsDropdown, setShowToolsDropdown] = useState(false)
-  const [showPromo, setShowPromo] = useState(false) // 积分优惠小窗
+  const [showPromo, setShowPromo] = useState(false)
   
-  // 模态框状态
   const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isPricingOpen, setIsPricingOpen] = useState(false) // 仅用于非编辑器页面的独立弹窗
+  const [isPricingOpen, setIsPricingOpen] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
 
-  // Refs 用于点击外部收回
   const toolsRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const saveMenuRef = useRef<HTMLDivElement>(null)
@@ -46,7 +45,6 @@ export function Header({
 
   const userInitial = user?.email?.[0]?.toUpperCase() || 'U'
 
-  // 点击外部自动收回
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -59,7 +57,6 @@ export function Header({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 路由改变自动关闭
   useEffect(() => {
     setIsDrawerOpen(false)
     setShowToolsDropdown(false)
@@ -135,8 +132,6 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          
-          {/* --- 积分徽章 & 优惠小窗 --- */}
           <div className="relative" ref={promoRef}>
             <button 
               onClick={() => setShowPromo(!showPromo)}
@@ -160,16 +155,8 @@ export function Header({
                   Ganhe até <span className="text-green-600 font-black">40% OFF</span> assinando um plano premium hoje!
                 </p>
                 <button 
-                  onClick={() => { 
-                    // 【逻辑关联】：优先使用外部传入的弹窗控制，否则使用内部的
-                    if (onOpenPricing) {
-                      onOpenPricing();
-                    } else {
-                      setIsPricingOpen(true);
-                    }
-                    setShowPromo(false); 
-                  }}
-                  className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-95"
+                  onClick={() => { if (onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); setShowPromo(false); }}
+                  className="w-full py-2.5 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-lg shadow-blue-100 active:scale-95"
                 >
                   Saiba Mais
                 </button>
@@ -177,16 +164,13 @@ export function Header({
             )}
           </div>
 
-          {/* --- SALVAR 按钮 --- */}
           {pathname === '/editor' && (
             <div className="relative" ref={saveMenuRef}>
               <button 
                 onClick={() => canSave && setShowSaveMenu(!showSaveMenu)}
                 disabled={!canSave}
                 className={`hidden lg:inline-block px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 ${
-                  canSave 
-                  ? "bg-blue-600 text-white shadow-blue-100 hover:bg-blue-700" 
-                  : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
+                  canSave ? "bg-blue-600 text-white shadow-blue-100 hover:bg-blue-700" : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                 }`}
               >
                 {canSave ? "SALVAR" : "LIMPANDO..."}
@@ -194,78 +178,55 @@ export function Header({
               {canSave && (
                 <SaveMenu 
                   isOpen={showSaveMenu} 
+                  imageCount={imageCount} // 传递图片数量给菜单
                   onStandard={() => { setShowSaveMenu(false); onStandardDownload?.(); }}
-                  onPremium={() => { 
-                    setShowSaveMenu(false); 
-                    if(onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); 
-                  }}
+                  onPremium={() => { setShowSaveMenu(false); if(onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); }}
+                  onPremiumDownload={() => { setShowSaveMenu(false); onPremiumDownload?.(); }} // 处理 ZIP 下载
                 />
               )}
             </div>
           )}
 
-          {/* 用户菜单 */}
           {isLoaded && (isLoggedIn ? (
             <div className="relative" ref={userMenuRef}>
-              <button 
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-inner active:scale-95 transition-transform"
-              >
+              <button onClick={() => setShowUserMenu(!showUserMenu)} className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-inner active:scale-95 transition-transform uppercase">
                 {userInitial}
               </button>
-              
               {showUserMenu && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[70] animate-in fade-in slide-in-from-top-2">
-                  <button 
-                    onClick={() => { 
-                      if(onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); 
-                      setShowUserMenu(false); 
-                    }}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <Sparkles size={16} className="text-blue-600" />
-                    Assinatura
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
+                  <button onClick={() => { if(onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); setShowUserMenu(false); }} className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors uppercase tracking-widest">
+                    <Sparkles size={16} className="text-blue-600" /> Assinatura
                   </button>
                   <div className="h-px bg-gray-100 mx-2 my-1" />
-                  <button 
-                    onClick={() => { logout(); setShowUserMenu(false); }} 
-                    className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors text-left"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    Sair
+                  <button onClick={() => { logout(); setShowUserMenu(false); }} className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors text-left uppercase tracking-widest">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg> Sair
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <button 
-              onClick={() => setIsLoginOpen(true)} 
-              className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md transition-all active:scale-95"
-            >
-              ENTRAR
-            </button>
+            <button onClick={() => setIsLoginOpen(true)} className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md active:scale-95 transition-all">ENTRAR</button>
           ))}
 
-          {/* 移动端菜单 */}
           <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
           </button>
         </div>
       </header>
 
-      {/* 移动端抽屉 */}
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <PricingModal isOpen={isPricingOpen} onClose={() => setIsPricingOpen(false)} />
       <div className={`fixed inset-0 z-[100] lg:hidden transition-all ${isDrawerOpen ? "visible" : "invisible"}`}>
         <div className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setIsDrawerOpen(false)} />
         <div className={`absolute top-0 right-0 w-80 h-full bg-white transition-transform duration-300 ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
            <div className="p-8 flex flex-col h-full">
-              <span className="font-black text-xl mb-10 block uppercase tracking-tighter italic">RemoverMarca</span>
-              <nav className="flex flex-col gap-3 flex-1 overflow-y-auto">
+              <span className="font-black text-xl mb-10 block italic uppercase">RemoverMarca</span>
+              <nav className="flex flex-col gap-3 flex-1 overflow-y-auto no-scrollbar">
                  {navItems.map(item => (
                     item.isDropdown ? (
                       <div key={item.name} className="flex flex-col">
                         <button onClick={() => setMobileToolsOpen(!mobileToolsOpen)} className={`flex items-center justify-between p-5 rounded-3xl font-bold ${mobileToolsOpen ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'}`}>
-                          {item.name}
-                          <ChevronDown className={`w-5 h-5 transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
+                          {item.name} <ChevronDown className={`w-5 h-5 transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
                         </button>
                         {mobileToolsOpen && (
                           <div className="flex flex-col gap-2 mt-2 ml-4">
@@ -276,9 +237,7 @@ export function Header({
                         )}
                       </div>
                     ) : (
-                      <Link key={item.name} href={item.href || "#"} className={`p-5 rounded-3xl font-bold ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}>
-                        {item.name}
-                      </Link>
+                      <Link key={item.name} href={item.href || "#"} className={`p-5 rounded-3xl font-bold ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}> {item.name} </Link>
                     )
                  ))}
                  {isLoggedIn && <button onClick={() => { logout(); setIsDrawerOpen(false); }} className="p-5 bg-red-50 text-red-500 rounded-3xl font-bold text-left">Sair</button>}
@@ -286,11 +245,6 @@ export function Header({
            </div>
         </div>
       </div>
-
-      {/* 模态框 */}
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      {/* 仅在非编辑器页面时渲染此弹窗。在编辑器页面，由外部传入的 onOpenPricing 控制 */}
-      <PricingModal isOpen={isPricingOpen} onClose={() => setIsPricingOpen(false)} />
     </>
   );
 }
