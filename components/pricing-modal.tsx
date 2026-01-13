@@ -100,14 +100,14 @@ export function PricingModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-0 sm:p-4">
-      <div 
+      <div
         className="bg-white w-full max-w-6xl h-full sm:h-auto sm:max-h-[85vh] flex flex-col md:flex-row overflow-hidden relative sm:rounded-[40px] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        
+
         {/* 关闭按钮 - 独立于分栏 */}
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="absolute right-4 top-4 sm:right-6 sm:top-6 z-[120] p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-all"
         >
           <X size={20} strokeWidth={3} />
@@ -125,18 +125,18 @@ export function PricingModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         {/* 右侧栏 - 滚动内容区 */}
         <div className="flex-1 bg-white overflow-y-auto no-scrollbar">
           <div className="p-6 sm:p-10 md:p-12">
-            
+
 
             {/* Tabs 切换 */}
             <div className="flex justify-center mb-8">
               <div className="bg-gray-100 p-1.5 rounded-2xl flex w-full max-w-[420px] shadow-inner">
-                <button 
+                <button
                   onClick={() => { setActiveTab("subscription"); setSelectedPlanId("pro"); }}
                   className={`flex-1 py-3 px-2 rounded-xl text-xs sm:text-sm font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400 hover:text-gray-600"}`}
                 >
                   Assinaturas
                 </button>
-                <button 
+                <button
                   onClick={() => { setActiveTab("credits"); setSelectedPlanId("standard"); }}
                   className={`flex-1 py-3 px-2 rounded-xl text-xs sm:text-sm font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-md" : "text-gray-400 hover:text-gray-600"}`}
                 >
@@ -159,10 +159,10 @@ export function PricingModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             <div className="space-y-3 mb-10">
               {activeTab === "subscription" ? (
                 subscriptions.map((plan) => (
-                  <div 
+                  <div
                     key={plan.id}
                     onClick={() => setSelectedPlanId(plan.id)}
-                    className={`relative p-4 md:p-5 rounded-[24px] border-2 cursor-pointer transition-all flex items-center justify-between ${selectedPlanId === plan.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5' : 'border-gray-50 bg-gray-50/50 hover:border-blue-200'}`}
+                    className={`relative p-4 md:p-5 rounded-3xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedPlanId === plan.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5' : 'border-gray-50 bg-gray-50/50 hover:border-blue-200'}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${selectedPlanId === plan.id ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-300 bg-white'}`}>
@@ -186,10 +186,10 @@ export function PricingModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 ))
               ) : (
                 creditPacks.map((pack) => (
-                  <div 
+                  <div
                     key={pack.id}
                     onClick={() => setSelectedPlanId(pack.id)}
-                    className={`relative p-6 rounded-[24px] border-2 cursor-pointer transition-all flex items-center justify-between ${selectedPlanId === pack.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5' : 'border-gray-50 bg-gray-50/50 hover:border-blue-200'}`}
+                    className={`relative p-6 rounded-3xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedPlanId === pack.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5' : 'border-gray-50 bg-gray-50/50 hover:border-blue-200'}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${selectedPlanId === pack.id ? 'border-blue-600 bg-blue-600 text-white' : 'border-gray-300 bg-white'}`}>
@@ -212,13 +212,13 @@ export function PricingModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             {/* 价格结算区 */}
             <div className="mt-auto pt-8 border-t border-gray-100">
               <div className="flex items-center justify-center gap-4 mb-6">
-                 {billingCycle === 'yearly' && activeTab === 'subscription' && (
-                   <span className="text-slate-300 line-through font-bold text-lg md:text-xl italic tracking-tighter">R${(subscriptions.find(s=>s.id===selectedPlanId)?.monthly! * 12).toFixed(2)}</span>
-                 )}
-                 <span className="text-4xl md:text-6xl font-black text-blue-600 italic tracking-tighter">R${getSelectedPrice()}</span>
+                {billingCycle === 'yearly' && activeTab === 'subscription' && (
+                  <span className="text-slate-300 line-through font-bold text-lg md:text-xl italic tracking-tighter">R${(subscriptions.find(s => s.id === selectedPlanId)?.monthly! * 12).toFixed(2)}</span>
+                )}
+                <span className="text-4xl md:text-6xl font-black text-blue-600 italic tracking-tighter">R${getSelectedPrice()}</span>
               </div>
-              
-              <button className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-5 rounded-[24px] font-black text-xl md:text-2xl transition-all mb-8 shadow-xl shadow-blue-100 uppercase tracking-widest">
+
+              <button className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-5 rounded-3xl font-black text-xl md:text-2xl transition-all mb-8 shadow-xl shadow-blue-100 uppercase tracking-widest">
                 {activeTab === "subscription" ? "Assine Agora" : "Comprar Agora"}
               </button>
 

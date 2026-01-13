@@ -11,8 +11,8 @@ export default function TermsOfUsePage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
+      <main className="max-w-225 mx-auto px-4 pt-24 pb-20">
 
-      <main className="max-w-[900px] mx-auto px-6 py-24 sm:py-32">
         {/* Header Section */}
         <header className="mb-16 border-b border-slate-100 pb-8 text-center sm:text-left">
           <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase italic">
@@ -25,7 +25,7 @@ export default function TermsOfUsePage() {
 
         {/* Content Section */}
         <div className="space-y-12">
-          
+
           {/* Section 1 */}
           <section className="group">
             <h2 className="text-xl font-black text-slate-900 mb-5 flex items-center gap-3 uppercase tracking-tight">
@@ -57,7 +57,7 @@ export default function TermsOfUsePage() {
             </h2>
             <div className="pl-11">
               <p className="text-slate-600 leading-relaxed">
-                O <strong className="text-slate-900 tracking-tight">RemoverMarca.com</strong> detém todos os direitos sobre a tecnologia e algoritmos de IA. 
+                O <strong className="text-slate-900 tracking-tight">RemoverMarca.com</strong> detém todos os direitos sobre a tecnologia e algoritmos de IA.
                 <span className="block mt-3 p-4 bg-blue-50/50 rounded-xl border-l-4 border-blue-600 italic text-slate-700">
                   Importante: O usuário é o único responsável pela imagem carregada. Você deve garantir que possui os direitos ou permissões necessárias sobre a foto antes de remover qualquer marca d&apos;água.
                 </span>
@@ -73,7 +73,7 @@ export default function TermsOfUsePage() {
             </h2>
             <div className="pl-11">
               <p className="text-slate-600 leading-relaxed mb-6">
-                Oferecemos créditos e assinaturas para processamento via IA de alta definição (4K/HD). 
+                Oferecemos créditos e assinaturas para processamento via IA de alta definição (4K/HD).
               </p>
               <div className="p-6 bg-amber-50 border border-amber-200 rounded-3xl">
                 <h4 className="font-black text-amber-900 uppercase text-xs tracking-widest mb-2 flex items-center gap-2">
@@ -108,7 +108,7 @@ export default function TermsOfUsePage() {
             RemoverMarca.com — Termos de Uso 2026
           </p>
         </div>
-      </main> 
+      </main>
     </div>
   )
 }

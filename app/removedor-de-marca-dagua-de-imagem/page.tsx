@@ -42,17 +42,17 @@ export default function WatermarkRemoverPage() {
       />
 
       <Header />
+      <main className="max-w-225 mx-auto px-4 pt-24 pb-20">
 
-      <main className="max-w-[1000px] mx-auto px-[4%] pt-24 pb-16">
         {/* Tool Box Section */}
-        <section className="bg-[#fdfdfd] border border-gray-200 rounded-[24px] p-10 text-center mb-10 shadow-sm">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+        <section className="bg-[#fdfdfd] border border-gray-200 rounded-3xl p-10 text-center mb-10 shadow-sm">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
             O melhor removedor de marca d'água de imagem com IA em 2026
           </h1>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
             Nossa inteligência artificial avançada permite <strong>remover marca d'água de imagem</strong> mantendo a textura e os detalhes originais. Grátis, rápido e online.
           </p>
-          
+
           {/* 复用项目已有的上传组件 */}
           <div className="max-w-2xl mx-auto">
             <UploadArea />
@@ -89,7 +89,7 @@ export default function WatermarkRemoverPage() {
             Formatos suportados: De JPG a WebP com alta fidelidade
           </h2>
           <div className="overflow-x-auto mt-6 rounded-xl border border-gray-200">
-            <table className="w-full text-left min-w-[500px]">
+            <table className="w-full text-left min-w-125">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="p-4 border-b">Formato</th>
@@ -167,7 +167,7 @@ export default function WatermarkRemoverPage() {
         </section>
       </main>
 
-    
+
     </div>
   )
 }

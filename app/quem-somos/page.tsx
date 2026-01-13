@@ -10,8 +10,8 @@ export default function QuemSomosPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
+      <main className="max-w-225 mx-auto px-4 pt-24 pb-20">
 
-      <main className="max-w-[800px] mx-auto px-6 py-24 sm:py-32">
         {/* Hero Section */}
         <section className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-black text-slate-900 leading-tight mb-6 tracking-tighter">
@@ -27,7 +27,7 @@ export default function QuemSomosPage() {
           <p className="text-lg leading-relaxed text-slate-700 mb-6">
             Olá! Nós somos a equipe do <strong className="text-slate-900">RemoverMarca.com</strong>. Diferente das grandes corporações, somos um time &quot;pequeno e focado&quot; — o que chamamos de <i className="italic">small and beautiful</i>.
           </p>
-          
+
           <p className="text-lg leading-relaxed text-slate-700 mb-6">
             A nossa jornada começou com uma frustração comum: queríamos restaurar fotos de família e produtos de e-commerce, mas só encontrávamos ferramentas lentas, cheias de anúncios invasivos ou extremamente complexas.
           </p>
@@ -62,7 +62,7 @@ export default function QuemSomosPage() {
             Equipe RemoverMarca.com
           </p>
         </section>
-      </main> 
+      </main>
     </div>
   )
 }

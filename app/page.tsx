@@ -6,13 +6,12 @@ import { Header } from "@/components/header"
 import { UploadArea } from "@/components/upload-area"
 import { BeforeAfterSlider } from "@/components/before-after-slider"
 import { SampleImages } from "@/components/sample-images"
-import { 
-  Check, 
-  Zap, 
-  ShieldCheck, 
-  Star, 
-  ArrowRight, 
-  HelpCircle, 
+import {
+  Check,
+  Zap,
+  ShieldCheck,
+  Star,
+  HelpCircle,
   Sparkles,
   MousePointer2,
   UploadCloud
@@ -94,21 +93,21 @@ export default function Home() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] relative">
+    <div className="min-h-screen bg-gray-50 relative">
       <Header />
 
       {/* --- 全屏拖拽覆盖层 (修复颜色：使用高级感深色磨砂) --- */}
       {isGlobalDragging && (
-        <div className="fixed inset-0 z-[200] bg-slate-900/60 backdrop-blur-xl flex flex-col items-center justify-center animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-200 bg-slate-900/60 backdrop-blur-xl flex flex-col items-center justify-center animate-in fade-in duration-300">
           <div className="absolute top-10 left-10 w-20 h-20 border-t-[8px] border-l-[8px] border-white/40 rounded-tl-3xl"></div>
           <div className="absolute top-10 right-10 w-20 h-20 border-t-[8px] border-r-[8px] border-white/40 rounded-tr-3xl"></div>
           <div className="absolute bottom-10 left-10 w-20 h-20 border-b-[8px] border-l-[8px] border-white/40 rounded-bl-3xl"></div>
           <div className="absolute bottom-10 right-10 w-20 h-20 border-b-[8px] border-r-[8px] border-white/40 rounded-br-3xl"></div>
           <div className="text-center space-y-4">
-             <div className="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl animate-bounce">
-                <UploadCloud className="w-10 h-10 text-white" />
-             </div>
-             <h2 className="text-white text-4xl md:text-5xl font-black  tracking-tighter">Solte para enviar</h2>
+            <div className="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl animate-bounce">
+              <UploadCloud className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-white text-4xl md:text-5xl font-black  tracking-tighter">Solte para enviar</h2>
           </div>
         </div>
       )}
@@ -117,10 +116,10 @@ export default function Home() {
         {/* --- SECTION 1: HERO --- */}
         <section className="relative pt-12 md:pt-20 pb-16 overflow-hidden bg-dot-grid">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            
+
             {/* 右侧/上传框 */}
             <div className="order-1 md:order-2 relative flex justify-center lg:justify-end animate-in fade-in slide-in-from-top-4 lg:slide-in-from-right duration-1000">
-              <div className="w-full max-w-[480px] bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-12 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] border border-slate-50 relative z-10 flex flex-col items-center">
+              <div className="w-full max-w-120 bg-white rounded-4xl md:rounded-[56px] p-6 md:p-12 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] border border-slate-50 relative z-10 flex flex-col items-center">
                 <div className="space-y-5 text-center lg:text-left block md:hidden">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full w-fit mx-auto lg:mx-0">
                     <Sparkles className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
@@ -147,7 +146,7 @@ export default function Home() {
                     Ao carregar, você concorda com nossos <Link href="/termos-de-uso" className="underline hover:text-blue-500">Termos</Link>
                   </p>
                 </div>
-              </div> 
+              </div>
             </div>
 
             {/* 左侧/文字和对比图 */}
@@ -164,15 +163,15 @@ export default function Home() {
                 </h1>
                 <p className="text-sm md:text-md text-slate-500 max-w-md mx-auto lg:mx-0 font-medium leading-relaxed">
                   O jeito mais rápido e profissional de <strong className="text-slate-900">remover marca d&apos;água de imagem</strong> sem perder qualidade ou deixar borrões.
-                </p> 
+                </p>
               </div>
 
               <div className="relative group w-full max-w-lg mx-auto lg:mx-0">
                 <div className="absolute -top-3 -left-2 bg-blue-600 text-white px-2 py-1 rounded-lg shadow-xl z-20 text-[9px] font-black  tracking-widest flex items-center gap-1.5">
-                   <MousePointer2 className="w-2.5 h-2.5" />
-                   Antes / Depois
+                  <MousePointer2 className="w-2.5 h-2.5" />
+                  Antes / Depois
                 </div>
-                <div className="rounded-[20px] md:rounded-[32px] overflow-hidden shadow-2xl border-[4px] md:border-[6px] border-white ring-1 ring-slate-100 bg-white transition-all duration-500 group-hover:scale-[1.01]">
+                <div className="rounded-[20px] md:rounded-4xl overflow-hidden shadow-2xl border-[4px] md:border-[6px] border-white ring-1 ring-slate-100 bg-white transition-all duration-500 group-hover:scale-[1.01]">
                   <BeforeAfterSlider />
                 </div>
               </div>
@@ -192,7 +191,7 @@ export default function Home() {
                 { title: "Processamento", desc: "Nossa inteligência artificial detecta automaticamente a marca d'água e reconstrói as texturas originais." },
                 { title: "Download", desc: "Verifique o resultado em alta resolução e baixe sua foto limpa sem perda de DPI ou custos ocultos." },
               ].map((item, idx) => (
-                <figure key={idx} className="relative p-10 bg-[#f8fafc] rounded-[48px] border border-slate-100 hover:bg-blue-50/30 transition-colors group">
+                <figure key={idx} className="relative p-10 bg-gray-50 rounded-[48px] border border-slate-100 hover:bg-blue-50/30 transition-colors group">
                   <span className="text-7xl font-black text-blue-600/5 absolute top-6 right-8 group-hover:text-blue-600/10 transition-colors italic">{idx + 1}</span>
                   <figcaption className="relative z-10">
                     <h3 className="text-xl font-black text-slate-900 mb-4  tracking-tighter">
@@ -226,7 +225,7 @@ export default function Home() {
                 { icon: <Star className="w-6 h-6 text-amber-400" />, title: "Grátis e Ilimitado", desc: "Processe quantas imagens precisar. Créditos diários disponíveis para todos os brasileiros." },
                 { icon: <Check className="w-6 h-6 text-blue-500" />, title: "Fidelidade 4K", desc: "Diferente de outros, mantemos o DPI original para que sua foto não fique pixelada." },
               ].map((feature, i) => (
-                <div key={i} className="p-8 bg-white rounded-[32px] border border-slate-100 shadow-sm space-y-4">
+                <div key={i} className="p-8 bg-white rounded-4xl border border-slate-100 shadow-sm space-y-4">
                   <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center">{feature.icon}</div>
                   <h3 className="text-lg font-black text-slate-900  tracking-tight">{feature.title}</h3>
                   <p className="text-slate-500 text-xs leading-relaxed font-medium">{feature.desc}</p>
@@ -238,10 +237,10 @@ export default function Home() {
 
         {/* --- SECTION 4: COMPARISON (深度优化响应式对比区) --- */}
         <section id="comparison" className="max-w-7xl mx-auto px-4 md:px-6 mb-32">
-          <div className="bg-[#0f172a] rounded-[40px] md:rounded-[56px] p-5 md:p-16 overflow-hidden relative shadow-2xl">
+          <div className="bg-gray-900 rounded-[40px] md:rounded-[56px] p-5 md:p-16 overflow-hidden relative shadow-2xl">
             {/* 背景装饰光晕 */}
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-[120px] -mr-40 -mt-40" />
-            
+
             <h2 className="text-3xl md:text-4xl font-black text-center text-slate-900 my-8 tracking-tight  italic text-white">
               Nossa IA vs. <br className="md:hidden" /> Métodos Tradicionais
             </h2>
@@ -283,23 +282,23 @@ export default function Home() {
             {/* --- 2. 移动端视图 (lg以下显示宽屏堆叠卡片) --- */}
             <div className="lg:hidden space-y-8 relative z-10">
               {[
-                { 
-                  label: "Tempo de Execução", 
-                  our: "< 5 segundos", 
-                  ps: "10-20 min", 
-                  apps: "1-2 min" 
+                {
+                  label: "Tempo de Execução",
+                  our: "< 5 segundos",
+                  ps: "10-20 min",
+                  apps: "1-2 min"
                 },
-                { 
-                  label: "Dificuldade", 
-                  our: "Nula (Auto)", 
-                  ps: "Alta (Curso)", 
-                  apps: "Média" 
+                {
+                  label: "Dificuldade",
+                  our: "Nula (Auto)",
+                  ps: "Alta (Curso)",
+                  apps: "Média"
                 },
-                { 
-                  label: "Preservação de Textura", 
-                  our: "Excelente", 
-                  ps: "Perfeita", 
-                  apps: "Baixa / Média" 
+                {
+                  label: "Preservação de Textura",
+                  our: "Excelente",
+                  ps: "Perfeita",
+                  apps: "Baixa / Média"
                 }
               ].map((item, idx) => (
                 <div key={idx} className="space-y-4">
@@ -309,27 +308,27 @@ export default function Home() {
                     <h3 className="text-slate-400 text-xs font-black  tracking-[0.2em] whitespace-nowrap">{item.label}</h3>
                     <div className="h-px flex-1 bg-slate-800"></div>
                   </div>
-                  
+
                   {/* 对比容器 */}
                   <div className="flex flex-col gap-3">
                     {/* 我们的优势：占满宽度，极具冲击力的字号 */}
                     <div className="bg-gradient-to-r from-blue-600/20 to-blue-600/5 border border-blue-500/30 rounded-3xl p-6 shadow-xl shadow-blue-900/20">
-                       <div className="flex justify-between items-start mb-2">
-                          <p className="text-blue-500 text-[10px] font-black  tracking-widest">RemoverMarca (IA)</p>
-                          <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-md font-bold">Vencedor</span>
-                       </div>
-                       <p className="text-blue-400 font-black italic text-xl tracking-tighter ">{item.our}</p>
+                      <div className="flex justify-between items-start mb-2">
+                        <p className="text-blue-500 text-[10px] font-black  tracking-widest">RemoverMarca (IA)</p>
+                        <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-md font-bold">Vencedor</span>
+                      </div>
+                      <p className="text-blue-400 font-black italic text-xl tracking-tighter ">{item.our}</p>
                     </div>
-                    
+
                     {/* 竞品对比：并排显示，增加字号 */}
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-4 bg-slate-800/40 rounded-2xl border border-white/5">
-                         <p className="text-slate-500 text-[9px] font-black  mb-1 tracking-wider">Photoshop</p>
-                         <p className="text-slate-200 text-sm font-black italic">{item.ps}</p>
+                        <p className="text-slate-500 text-[9px] font-black  mb-1 tracking-wider">Photoshop</p>
+                        <p className="text-slate-200 text-sm font-black italic">{item.ps}</p>
                       </div>
                       <div className="p-4 bg-slate-800/40 rounded-2xl border border-white/5">
-                         <p className="text-slate-500 text-[9px] font-black  mb-1 tracking-wider">Apps Mobile</p>
-                         <p className="text-slate-200 text-sm font-black italic">{item.apps}</p>
+                        <p className="text-slate-500 text-[9px] font-black  mb-1 tracking-wider">Apps Mobile</p>
+                        <p className="text-slate-200 text-sm font-black italic">{item.apps}</p>
                       </div>
                     </div>
                   </div>
@@ -343,8 +342,8 @@ export default function Home() {
         {/* --- SECTION 5: FAQ --- */}
         <section id="faq" className="max-w-4xl mx-auto px-6">
           <div className="flex flex-col items-center mb-16 space-y-4 text-center">
-             <HelpCircle className="w-12 h-12 text-blue-600 opacity-20" />
-             <h2 className="text-4xl font-black text-slate-900 tracking-tighter  italic">Perguntas Frequentes</h2>
+            <HelpCircle className="w-12 h-12 text-blue-600 opacity-20" />
+            <h2 className="text-4xl font-black text-slate-900 tracking-tighter  italic">Perguntas Frequentes</h2>
           </div>
           <div className="space-y-4">
             {[
@@ -352,7 +351,7 @@ export default function Home() {
               { q: "O site funciona para remover logo de vídeo?", a: "Atualmente focamos 100% na perfeição de imagens estáticas (JPG, PNG, WebP). Para vídeos, consulte nossa página de [serviços B2B](/contato)." },
               { q: "Minhas fotos estão seguras?", a: "Totalmente. Seguimos a LGPD. Suas fotos são processadas via conexão SSL criptografada e excluídas permanentemente dos nossos servidores logo após o download." },
             ].map((faq, i) => (
-              <details key={i} className="group bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden transition-all hover:border-blue-100">
+              <details key={i} className="group bg-white rounded-4xl border border-slate-100 shadow-sm overflow-hidden transition-all hover:border-blue-100">
                 <summary className="flex items-center justify-between p-7 cursor-pointer list-none font-black text-slate-800  text-sm tracking-widest transition-colors group-hover:text-blue-600">
                   <span className="pr-4">{faq.q}</span>
                   <span className="text-blue-600 text-xl font-black transition-transform group-open:rotate-45">+</span>
@@ -364,7 +363,7 @@ export default function Home() {
             ))}
           </div>
         </section>
-      </main> 
+      </main>
     </div>
   )
 }
