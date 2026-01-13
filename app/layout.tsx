@@ -4,7 +4,8 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
 import { Footer } from "@/components/footer" // 导入全局页脚 
-import Script from "next/script" 
+import Script from "next/script"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,18 +23,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} antialiased font-sans`}>
         {/* 加载 Google SDK */}
         <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
-        
+
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">{children}</main>
-            <Footer /> 
-            
-
+            <Footer />
           </div>
-        </AuthProvider> 
+        </AuthProvider>
       </body>
 
-     
+      <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
+      <Script
+        id="microsoft-clarity"
+        strategy="afterInteractive" // 在页面交互后加载，不影响首屏速度
+        dangerouslySetInnerHTML={{
+          __html: `
+                (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window, document, "clarity", "script", "v07km7j8jp");
+              `,
+        }}
+      />
     </html>
   )
 }
