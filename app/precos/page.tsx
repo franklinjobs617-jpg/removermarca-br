@@ -79,7 +79,7 @@ export default function PricingPage() {
 
     try {
       // 3. 请求后端支付 URL
-      const response = await fetch('https://inewline.com/prod-api/stripe/getPayUrl', {
+      const response = await fetch('https://api.removermarca.com/prod-api/stripe/getPayUrl', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
