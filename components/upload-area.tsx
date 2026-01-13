@@ -18,28 +18,32 @@ export function UploadArea() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center">
-      
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-      />
-      
-      {/* 1:1 还原 remove.bg 的蓝色大按钮 */}
-      <button 
-        onClick={() => fileInputRef.current?.click()}
-        className="w-full max-w-[400px] bg-[#007bff] hover:bg-[#0069d9] cursor-pointer text-white py-5 rounded-full font-black text-xl md:text-2xl shadow-[0_15px_30px_rgba(0,123,255,0.3)] transition-all active:scale-[0.98] uppercase tracking-widest mb-6"
-      >
-        Subir imagem
-      </button>
-      
-      {/* 桌面端显示的辅助文字 */}
-      <div className="hidden lg:block text-center space-y-2">
-        <p className="text-slate-900 font-bold text-xl">ou arraste um arquivo,</p>
-        <p className="text-slate-400 text-sm font-medium">Cole imagem ou <span className="text-blue-500 underline">URL</span></p>
+    
+     <div className="w-full mt-4 md:mt-0"> 
+      <div className="flex flex-col items-center justify-center text-center group h-full w-full">
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
+        />
+        
+        <button 
+          onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+          className="bg-[#007bff] hover:bg-[#0069d9] text-white px-14 py-5 rounded-[24px] font-black text-2xl md:text-3xl transition-all active:scale-95 mb-12 shadow-2xl shadow-blue-200 tracking-tight"
+        >
+          Subir imagem
+        </button>
+        
+        <div className="space-y-3">
+          <h3 className="text-2xl md:text-3xl font-black text-[#1e293b] tracking-tighter">
+            ou arraste um arquivo,
+          </h3>
+          <p className="text-slate-400 text-sm font-bold tracking-tight">
+            Cole imagem ou <span className="text-blue-500 font-extrabold cursor-help border-b border-blue-200">Ctrl+V</span>
+          </p>
+        </div>
       </div>
     </div>
   )

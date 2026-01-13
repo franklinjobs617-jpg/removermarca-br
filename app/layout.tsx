@@ -3,9 +3,8 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth-context"
-import { Footer } from "@/components/footer" // 导入全局页脚
-import Head from "next/head"
-import Script from "next/script"
+import { Footer } from "@/components/footer" // 导入全局页脚 
+import Script from "next/script" 
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,10 +26,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">{children}</main>
-            <Footer />
+            <Footer /> 
+            
+
           </div>
         </AuthProvider> 
       </body>
+
+     
     </html>
   )
 }

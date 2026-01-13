@@ -23,6 +23,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = async () => {
       const token = localStorage.getItem("auth_token");
       if (token) {
+
+
+
+
+
         try {
           // 修改点：使用 API_BASE
           const res = await fetch(`${API_BASE}/api/me`, {
@@ -71,9 +76,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 修改点：使用 API_BASE
       const res = await fetch(`${API_BASE}/api/deduct_credit`, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await res.json();

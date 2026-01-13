@@ -43,11 +43,11 @@ export default function ContactPage() {
 
             <div className="py-4">
               <a 
-                href="mailto:contato@removermarca.com" 
+                href="mailto:support@removermarca.com" 
                 className="inline-flex items-center gap-3 text-xl md:text-2xl font-black text-blue-600 hover:text-blue-700 transition-all underline underline-offset-8 decoration-2 hover:decoration-4"
               >
                 <Mail size={24} />
-                contato@removermarca.com
+                support@removermarca.com
               </a>
             </div>
 

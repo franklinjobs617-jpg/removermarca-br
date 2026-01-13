@@ -2,16 +2,13 @@ import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { UploadArea } from "@/components/upload-area"
 import Link from "next/link"
-import { 
-  Zap, 
-  ShieldCheck, 
-  Clock, 
-  CheckCircle2, 
-  BarChart3, 
-  MousePointerClick,
-  HelpCircle
+import {
+  Zap,
+  ShieldCheck,
+  CheckCircle2,
+  BarChart3
 } from "lucide-react"
-
+import Image from "next/image"
 export const metadata: Metadata = {
   title: "Tirar Marca d'Água Online Grátis e Rápido (2026) - IA Sem Cadastro",
   description: "Quer tirar marca d'água online grátis? Nossa IA remove logos, textos e carimbos de fotos em segundos. Sem registro, sem download e com alta qualidade original.",
@@ -60,7 +57,7 @@ export default function TirarGratisPage() {
               <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
                 Remova logos e objetos indesejados em 3 segundos. Sem registro, sem complicações e sem perder a qualidade original.
               </p>
-              
+
               <div className="max-w-2xl mx-auto mb-10 group">
                 <div className="bg-white border-4 border-dashed border-[#ff4757] rounded-[32px] p-2 shadow-2xl shadow-red-100 transition-all hover:border-[#2ed573]">
                   <UploadArea />
@@ -102,23 +99,24 @@ export default function TirarGratisPage() {
               </div>
             </div>
             <div className="bg-[#2f3542] p-8 rounded-[40px] shadow-2xl relative overflow-hidden group">
-               <BarChart3 className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 group-hover:rotate-12 transition-transform duration-700" />
-               <h3 className="text-white font-black text-xl mb-6 uppercase tracking-widest">Teste de Estresse (2025)</h3>
-               <div className="space-y-6 relative z-10">
-                  <div className="flex justify-between items-end">
-                    <span className="text-gray-400 text-[10px] font-black uppercase">Precisão IA</span>
-                    <span className="text-[#2ed573] font-black text-2xl">98%</span>
-                  </div>
-                  <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                    <div className="bg-[#2ed573] h-full w-[98%]" />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-black text-gray-400 uppercase tracking-tighter">
-                    <span>Tempo: 2.4 segundos</span>
-                    <span>Qualidade: 100% Original</span>
-                  </div>
-               </div>
+              <BarChart3 className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 group-hover:rotate-12 transition-transform duration-700" />
+              <h3 className="text-white font-black text-xl mb-6 uppercase tracking-widest">Teste de Estresse (2025)</h3>
+              <div className="space-y-6 relative z-10">
+                <div className="flex justify-between items-end">
+                  <span className="text-gray-400 text-[10px] font-black uppercase">Precisão IA</span>
+                  <span className="text-[#2ed573] font-black text-2xl">98%</span>
+                </div>
+                <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
+                  <div className="bg-[#2ed573] h-full w-[98%]" />
+                </div>
+                <div className="flex justify-between text-[10px] font-black text-gray-400 uppercase tracking-tighter">
+                  <span>Tempo: 2.4 segundos</span>
+                  <span>Qualidade: 100% Original</span>
+                </div>
+              </div>
             </div>
           </div>
+          <Image src="/como-tirar-marca-dagua-online-gratis-fluxo.jpg" width={200} height={200} alt="Fluxograma simples de 3 passos para tirar marca d'água online grátis com IA." className="w-full mt-10" />
         </section>
 
         {/* COMPARATIVO TABLE */}
@@ -200,7 +198,7 @@ export default function TirarGratisPage() {
             <strong>Uso Recomendado:</strong> Ideal para empreendedores de Dropshipping no Brasil que precisam limpar catálogos de fornecedores ou recuperar fotos antigas de redes sociais.
           </div>
         </section>
-      </main> 
+      </main>
     </div>
   )
 }

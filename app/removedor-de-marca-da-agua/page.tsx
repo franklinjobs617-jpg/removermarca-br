@@ -2,12 +2,13 @@ import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
-import { 
-  Zap, 
-  ShieldCheck, 
-  MousePointerClick, 
-  Lock, 
-  CheckCircle2, 
+import Image from "next/image"
+import {
+  Zap,
+  ShieldCheck,
+  MousePointerClick,
+  Lock,
+  CheckCircle2,
   FileSearch,
   ArrowRight
 } from "lucide-react"
@@ -35,8 +36,8 @@ export default function RemovedorMarcaDaguaInformativo() {
             <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto font-medium">
               Descubra como nossa ferramenta online apaga elementos indesejados sem complicar sua vida.
             </p>
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-xl shadow-blue-100 active:scale-95 inline-block"
             >
               Subir Foto Grátis
@@ -138,12 +139,13 @@ export default function RemovedorMarcaDaguaInformativo() {
             <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase italic tracking-tighter">
               Diferença entre removedores de texto e de logotipos
             </h2>
-            <figure className="bg-[#f8fafc] p-6 rounded-[40px] border border-slate-100 shadow-inner group">
-              <div className="aspect-video bg-slate-200 rounded-[32px] flex items-center justify-center overflow-hidden relative">
-                <span className="text-slate-400 font-black italic tracking-widest uppercase text-xs">Exemplo de Precisão IA 2026</span>
-                <div className="absolute inset-0 bg-blue-600/5 group-hover:bg-transparent transition-all" />
-              </div>
+            <figure className="bg-[#f8fafc] p-6 rounded-[40px] border border-slate-100 shadow-inner group flex flex-col items-center">
+              <Image
+                src="/removedor-de-marca-da-agua-antes-depois-exemplo.jpg"
+                alt="Comparação de eficácia do removedor de marca da agua em fundo de textura complexa." width={400} height={400}
+              />
               <figcaption className="text-center text-[10px] font-black text-slate-400 mt-6 uppercase tracking-[0.3em]">
+
                 Exemplo de restauração invisível em fundos complexos.
               </figcaption>
             </figure>
@@ -157,8 +159,8 @@ export default function RemovedorMarcaDaguaInformativo() {
             <p className="text-slate-900 font-bold mb-10 text-lg">
               Para quem busca agilidade e custo zero, nosso <strong>removedor de marca da agua</strong> é a escolha definitiva.
             </p>
-            <Link 
-              href="/tirar-marca-dagua-online-gratis" 
+            <Link
+              href="/tirar-marca-dagua-online-gratis"
               className="bg-slate-900 text-white px-10 py-5 rounded-2xl font-black text-xl uppercase tracking-widest hover:bg-black transition-all shadow-lg active:scale-95 inline-block"
             >
               Tirar Marca Grátis
@@ -166,24 +168,6 @@ export default function RemovedorMarcaDaguaInformativo() {
           </section>
         </article>
       </main>
-
-      <Footer />
-
-      {/* Mobile CTA Sticky Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 p-4 flex gap-4 z-[100] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-        <Link 
-          href="/" 
-          className="flex-1 bg-blue-600 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest text-center shadow-lg shadow-blue-100 active:scale-95"
-        >
-          Tirar Marca Agora
-        </Link>
-        <Link 
-          href="#passo-a-passo" 
-          className="flex-1 bg-slate-100 text-slate-900 py-4 rounded-xl font-black uppercase text-xs tracking-widest text-center active:scale-95"
-        >
-          Ver Guia
-        </Link>
-      </nav>
     </div>
   )
 }
