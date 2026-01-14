@@ -66,10 +66,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (idToken: string) => {
+    const guestCredits = localStorage.getItem("guest_credits") || "0";
+
     const res = await fetch(`/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: idToken })
+      body: JSON.stringify({ token: idToken, guestCredits })
     });
     const data = await res.json();
     if (data.status === 'success') {

@@ -38,6 +38,8 @@ export function Header({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
 
+  const [shouldReopenPricing, setShouldReopenPricing] = useState(false);
+
   const toolsRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const saveMenuRef = useRef<HTMLDivElement>(null)
@@ -81,6 +83,29 @@ export function Header({
     { name: "Tutorial", href: "/como-remover-marca-dagua-de-foto" },
     { name: "FAQ", href: "/como-tirar-marca-dagua" },
   ]
+
+  // 1. 当从订阅弹窗点击“登录”时触发
+  const handleOpenLoginFromPricing = () => {
+    setShouldReopenPricing(true); // 记住：一会儿要回来
+    setIsPricingOpen(false);      // 关闭订阅弹窗
+    setIsLoginOpen(true);         // 打开登录弹窗
+  };
+
+  // 2. 当登录弹窗关闭时触发（无论登录成功还是点击跳过）
+  const handleCloseLogin = () => {
+    setIsLoginOpen(false);
+
+    if (shouldReopenPricing) {
+      setIsPricingOpen(true);      // 重新打开订阅弹窗
+      setShouldReopenPricing(false); // 重置记忆
+    }
+  };
+
+  // 3. 正常的关闭订阅弹窗逻辑
+  const handleClosePricing = () => {
+    setIsPricingOpen(false);
+    setShouldReopenPricing(false); // 确保重置记忆
+  };
 
   return (
     <>
@@ -213,8 +238,18 @@ export function Header({
         </div>
       </header>
 
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <PricingModal isOpen={isPricingOpen} onClose={() => setIsPricingOpen(false)} />
+      {/* 订阅弹窗 */}
+      <PricingModal
+        isOpen={isPricingOpen}
+        onClose={handleClosePricing}
+        onOpenLogin={handleOpenLoginFromPricing} // 传入特殊处理函数
+      />
+
+      {/* 登录弹窗 */}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={handleCloseLogin} // 传入特殊处理函数
+      />
       <div className={`fixed inset-0 z-[100] lg:hidden transition-all ${isDrawerOpen ? "visible" : "invisible"}`}>
         <div className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setIsDrawerOpen(false)} />
         <div className={`absolute top-0 right-0 w-80 h-full bg-white transition-transform duration-300 ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
