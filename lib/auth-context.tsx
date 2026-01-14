@@ -1,7 +1,6 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect } from "react"
 
-const API_BASE = "https://ytdlp.vistaflyer.com";
 
 interface User { email: string; credits: number; }
 interface AuthContextType {
@@ -41,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (token) {
         // 1. 已登录逻辑：从后端同步
         try {
-          const res = await fetch(`${API_BASE}/api/me`, {
+          const res = await fetch(`/api/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           const data = await res.json();
@@ -67,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (idToken: string) => {
-    const res = await fetch(`${API_BASE}/api/login`, {
+    const res = await fetch(`/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: idToken })
@@ -94,7 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (user && token) {
       // 1. 登录用户：调用后端接口扣费
-      const res = await fetch(`${API_BASE}/api/deduct_credit`, {
+      const res = await fetch(`/api/deduct_credit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,6 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
 
 export const useAuth = () => {
   const c = useContext(AuthContext);
