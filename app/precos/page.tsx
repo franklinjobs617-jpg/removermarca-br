@@ -31,6 +31,7 @@ export default function PricingPage() {
     { id: "200", name: "Business Pack", credits: 200, price: 249.9, perImg: 1.24 },
   ]
 
+  // 在 PricingPage 组件内部修改 handlePayment 函数
   const handlePayment = async () => {
     if (!isLoggedIn) {
       setShowLogin(true)
@@ -39,6 +40,8 @@ export default function PricingPage() {
 
     setIsPaying(true)
     const token = localStorage.getItem("auth_token")
+
+    // 构建参数
     const paymentType = activeTab === "subscription"
       ? `plan_${selectedId}_${billingCycle}`
       : `credits_${selectedId}`
@@ -50,22 +53,27 @@ export default function PricingPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ type: paymentType })
+        // 前端传给 Next.js API 的 body
+        body: JSON.stringify({
+          type: paymentType
+        })
       })
 
       const resData = await response.json()
       if (resData.status === "success" && resData.url) {
+        // 成功获取链接，跳转到 Stripe
         window.location.href = resData.url
       } else {
-        alert(resData.message || "Erro ao iniciar pagamento")
+        // 如果报错，把后端的错误信息弹出来
+        alert(resData.message || "Falha ao processar pagamento")
         setIsPaying(false)
       }
     } catch (e) {
-      alert("Erro de conexão")
+      console.error("Fetch error:", e)
+      alert("Erro de conexão com o servidor")
       setIsPaying(false)
     }
   }
-
   const getDisplayPrice = () => {
     if (activeTab === "subscription") {
       const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[2]

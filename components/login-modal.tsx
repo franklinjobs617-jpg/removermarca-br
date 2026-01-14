@@ -24,7 +24,7 @@ export function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     script.onload = () => {
       // 创建一个获取 Access Token 的客户端
       const client = window.google.accounts.oauth2.initTokenClient({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        client_id: "253186021190-574pjhj63ojv2gmn5pts50pn51g15ehg.apps.googleusercontent.com",
         scope: "openid email profile", // 申请的权限范围
         callback: async (response: any) => {
           if (response.access_token) {
