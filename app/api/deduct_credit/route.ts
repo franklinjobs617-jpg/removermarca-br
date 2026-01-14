@@ -8,7 +8,9 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = authHeader.split(" ")[1];
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+    
+        const JWT_SECRET  = process.env.JWT_SECRET || "removermarca-v2-prod-secret-key-2026-pt-br-secure"; 
+    const decoded: any = jwt.verify(token, JWT_SECRET!);
     
     const user = await prisma.user.findUnique({ where: { email: decoded.email } });
     if (!user) return NextResponse.json({ status: "error" }, { status: 404 });

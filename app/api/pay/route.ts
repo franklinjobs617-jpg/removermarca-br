@@ -8,7 +8,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = authHeader.split(" ")[1];
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+    const JWT_SECRET = process.env.JWT_SECRET || "removermarca-v2-prod-secret-key-2026-pt-br-secure";
+    const decoded: any = jwt.verify(token, JWT_SECRET!);
     const { type } = await req.json();
 
     const user = await prisma.user.findUnique({ where: { email: decoded.email } });
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        googleUserId: user.googleUserId, 
+        googleUserId: user.googleUserId,
         type: type
       })
     });
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({ status: "success", url: resData.data });
     }
-    
+
     return NextResponse.json({ status: "error", message: resData.msg }, { status: 400 });
 
   } catch (error: any) {

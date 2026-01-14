@@ -70,7 +70,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 生成你自己应用的 JWT
-    const serverToken = jwt.sign({ email }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    const JWT_SECRET  = process.env.JWT_SECRET || "removermarca-v2-prod-secret-key-2026-pt-br-secure";
+    const serverToken = jwt.sign({ email }, JWT_SECRET!, { expiresIn: '7d' });
 
     return NextResponse.json({
       status: "success",
