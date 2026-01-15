@@ -9,13 +9,13 @@ import { LoginModal } from "./login-modal"
 import { SaveMenu } from "./save-menu"
 import { AlertCircle, RefreshCw, SquareSplitHorizontal, Maximize, ZoomIn, ZoomOut, Plus } from "lucide-react"
 
-// 1. 增加 error 状态
+// 定义图片项接口
 interface ImageItem {
   id: string
   originalUrl: string
   processedUrl: string
   processed: boolean
-  error?: boolean // 处理是否失败
+  error?: boolean
 }
 
 export function EditorInterface() {
@@ -27,6 +27,7 @@ export function EditorInterface() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
 
+  // 画布变换状态
   const [zoom, setZoom] = useState(100);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -36,6 +37,26 @@ export function EditorInterface() {
   const [showLogin, setShowLogin] = useState(false);
   const [showMobileSaveMenu, setShowMobileSaveMenu] = useState(false);
   const [pendingAction, setPendingAction] = useState<null | 'download'>(null);
+
+  const triggerBatchPricing = () => {
+    setShowPricing(true);
+  };
+
+  // --- 逻辑：切换图片或重试时重置位置 ---
+  const resetCanvas = () => {
+    setZoom(100);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  useEffect(() => {
+    resetCanvas();
+  }, [currentIdx]);
+
+  useEffect(() => {
+    if (images.length > 0) {
+      sessionStorage.setItem("editor_images_list", JSON.stringify(images));
+    }
+  }, [images]);
 
   useEffect(() => {
     const footer = document.querySelector('footer');
@@ -50,10 +71,8 @@ export function EditorInterface() {
     }
   }, [isLoggedIn, isLoaded, pendingAction]);
 
-  // --- 逻辑：处理图片请求并增加失败反馈 ---
   const processImageWithAPI = async (file: File, indexToUpdate: number) => {
     setIsProcessing(true);
-    // 重置之前的错误状态
     setImages(prev => prev.map((img, idx) =>
       idx === indexToUpdate ? { ...img, error: false, processed: false } : img
     ));
@@ -79,7 +98,6 @@ export function EditorInterface() {
       }
     } catch (error) {
       console.error("Erro ao processar:", error);
-      // 核心：设置错误状态
       setImages(prev => prev.map((img, idx) =>
         idx === indexToUpdate ? { ...img, processed: true, error: true } : img
       ));
@@ -88,12 +106,9 @@ export function EditorInterface() {
     }
   };
 
-  // 重试当前图片
   const handleRetry = async () => {
     const current = images[currentIdx];
     if (!current) return;
-
-    // 将 base64 或 Blob 转换为 File 重新发送
     const res = await fetch(current.originalUrl);
     const blob = await res.blob();
     const file = new File([blob], "retry.png", { type: "image/png" });
@@ -102,31 +117,51 @@ export function EditorInterface() {
 
   useEffect(() => {
     const uploadedBase64 = sessionStorage.getItem("uploadedImage");
+    const savedList = sessionStorage.getItem("editor_images_list");
+
     if (uploadedBase64) {
+      sessionStorage.removeItem("editor_images_list");
       const initialId = Date.now().toString();
       setImages([{ id: initialId, originalUrl: uploadedBase64, processedUrl: "", processed: false }]);
+      sessionStorage.removeItem("uploadedImage");
       fetch(uploadedBase64).then(res => res.blob()).then(blob => {
         const file = new File([blob], "input.png", { type: "image/png" });
         processImageWithAPI(file, 0);
       });
-    } else {
-      setImages([{ id: "sample", originalUrl: "/images/sample.png", processedUrl: "/images/sample.png", processed: true }]);
+      return;
     }
+
+    if (savedList) {
+      try {
+        const parsedList = JSON.parse(savedList);
+        setImages(parsedList);
+        return;
+      } catch (e) {
+        console.error("Failed to parse saved list");
+      }
+    }
+
+    setImages([{ id: "sample", originalUrl: "/images/sample.png", processedUrl: "/images/sample.png", processed: true }]);
   }, []);
 
   const handleAddImage = () => {
     if (!isLoaded) return;
     if (images.length >= credits) { setShowPricing(true); return; }
+
     const input = document.createElement("input");
     input.type = "file"; input.accept = "image/*";
     input.onchange = async (e: any) => {
       const file = e.target.files?.[0];
       if (file) {
-        const localPreviewUrl = URL.createObjectURL(file);
-        const newImgIdx = images.length;
-        setImages(prev => [...prev, { id: Date.now().toString(), originalUrl: localPreviewUrl, processedUrl: "", processed: false }]);
-        setCurrentIdx(newImgIdx);
-        await processImageWithAPI(file, newImgIdx);
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const base64 = event.target?.result as string;
+          const newImgIdx = images.length;
+          setImages(prev => [...prev, { id: Date.now().toString(), originalUrl: base64, processedUrl: "", processed: false }]);
+          setCurrentIdx(newImgIdx);
+          await processImageWithAPI(file, newImgIdx);
+        };
+        reader.readAsDataURL(file);
       }
     };
     input.click();
@@ -148,7 +183,6 @@ export function EditorInterface() {
   };
 
   const currentImg = images[currentIdx];
-  // 仅在已处理且无错误时允许保存
   const canSave = currentImg?.processed && !currentImg?.error && !isProcessing;
 
   return (
@@ -156,7 +190,7 @@ export function EditorInterface() {
       <Header
         canSave={canSave}
         onStandardDownload={processDownload}
-        onPremiumDownload={() => setShowPricing(true)}
+        onPremiumDownload={triggerBatchPricing}
         onOpenPricing={() => setShowPricing(true)}
         imageCount={images.length}
       />
@@ -175,13 +209,18 @@ export function EditorInterface() {
                 <div key={img.id} className="relative group">
                   <button onClick={() => setCurrentIdx(idx)} className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border-2 transition-all ${idx === currentIdx ? 'border-blue-500 ring-4 ring-blue-100' : 'border-white shadow-sm hover:border-blue-200'}`}>
                     <img src={img.originalUrl} className="w-full h-full object-cover" alt="" />
-                    {/* 侧边栏状态点：成功显示绿点，失败显示红点 */}
                     {img.processed && (
                       <div className={`absolute top-1 right-1 w-2.5 h-2.5 rounded-full border border-white ${img.error ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-green-500'}`} />
                     )}
                   </button>
                   {images.length > 1 && (
-                    <button onClick={(e) => { e.stopPropagation(); setImages(prev => prev.filter(i => i.id !== img.id)); if (currentIdx >= images.length - 1) setCurrentIdx(0); }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center shadow-lg transition-opacity"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg></button>
+                    <button onClick={(e) => {
+                      e.stopPropagation();
+                      const newList = images.filter(i => i.id !== img.id);
+                      setImages(newList);
+                      sessionStorage.setItem("editor_images_list", JSON.stringify(newList));
+                      if (currentIdx >= images.length - 1) setCurrentIdx(0);
+                    }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center shadow-lg transition-opacity"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg></button>
                   )}
                 </div>
               ))}
@@ -195,11 +234,11 @@ export function EditorInterface() {
         {/* 顶部悬浮工具栏 */}
         <div className="absolute top-20 left-1/2 -translate-x-1/2 glass-panel px-6 py-2 rounded-full shadow-2xl flex items-center gap-6 z-40 scale-90 md:scale-100">
           <div className="flex items-center gap-4">
-            <button onClick={() => setZoom(z => Math.max(z - 10, 50))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
+            <button onClick={() => setZoom(z => Math.max(z - 10, 20))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
               <ZoomOut size={20} />
             </button>
             <span className="text-xs font-black text-gray-700 min-w-10 text-center uppercase tracking-widest">{zoom}%</span>
-            <button onClick={() => setZoom(z => Math.min(z + 10, 200))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
+            <button onClick={() => setZoom(z => Math.min(z + 10, 400))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
               <ZoomIn size={20} />
             </button>
           </div>
@@ -207,68 +246,74 @@ export function EditorInterface() {
           <div className="flex items-center gap-6">
             <button
               onMouseDown={() => setShowComparison(true)} onMouseUp={() => setShowComparison(false)} onMouseLeave={() => setShowComparison(false)}
-              className={`text-gray-400 hover:text-blue-500 ${showComparison ? 'text-blue-600 scale-110' : ''}`}
+              className={`text-gray-400 hover:text-blue-500 transition-colors ${showComparison ? 'text-blue-600 scale-110' : ''}`}
             >
               <SquareSplitHorizontal size={20} />
             </button>
-            <button onClick={() => { setZoom(100); setPosition({ x: 0, y: 0 }); }} className="text-gray-400 hover:text-blue-500">
+            <button onClick={resetCanvas} className="text-gray-400 hover:text-blue-500">
               <Maximize size={20} />
             </button>
           </div>
         </div>
 
-        {/* 画布核心 */}
+        {/* 画布核心：图片适配屏幕且背景透明逻辑 */}
         {currentImg && (
           <div
             className="flex-1 flex items-center justify-center w-full h-full cursor-grab active:cursor-grabbing overflow-hidden"
             onMouseDown={(e) => { if (e.button === 0) { setIsDragging(true); setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y }); } }}
             onMouseMove={(e) => { if (isDragging) setPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y }); }}
             onMouseUp={() => setIsDragging(false)}
-            onWheel={(e) => { const d = e.deltaY > 0 ? -10 : 10; setZoom(z => Math.min(Math.max(z + d, 50), 400)); }}
+            onWheel={(e) => { const d = e.deltaY > 0 ? -10 : 10; setZoom(z => Math.min(Math.max(z + d, 20), 400)); }}
           >
+            {/* 修复：变换 div 不带固定宽高和背景，仅作为变换层 */}
             <div
-              className="relative shadow-[0_40px_100px_rgba(0,0,0,0.12)] rounded-2xl overflow-hidden bg-white transition-transform duration-150 ease-out"
+              className="relative transition-transform duration-150 ease-out"
               style={{ transform: `translate(${position.x}px, ${position.y}px) scale(${zoom / 100})` }}
             >
-              <img src={showComparison ? currentImg.originalUrl : (currentImg.processedUrl || currentImg.originalUrl)}
-                className="max-h-[80vh] w-auto block pointer-events-none" alt="Editor View" />
+              {/* 图片包装层：负责阴影和圆角，随图片大小自适应 */}
+              <div className="relative shadow-[0_40px_100px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden bg-transparent">
+                <img
+                  src={showComparison ? currentImg.originalUrl : (currentImg.processedUrl || currentImg.originalUrl)}
+                  className="block w-auto h-auto max-h-[75vh] max-w-[85vw] pointer-events-none"
+                  alt="Editor View"
+                />
 
-              {/* 1. 处理中的动画 */}
-              {isProcessing && (
-                <>
-                  <div className="ai-scan-line-vertical" />
-                  <div className="absolute inset-0 bg-blue-500/5 backdrop-blur-[2px] flex items-center justify-center">
-                    <div className="bg-white/90 p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-blue-50">
-                      <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                      <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest">Otimizando...</span>
+                {/* 处理动画覆盖在图片上 */}
+                {isProcessing && (
+                  <>
+                    <div className="ai-scan-line-vertical" />
+                    <div className="absolute inset-0 bg-blue-500/5 backdrop-blur-[2px] flex items-center justify-center">
+                      <div className="bg-white/90 p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-blue-50">
+                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                        <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest leading-none">Otimizando...</span>
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
-              {/* 2. 处理失败的提示反馈 (NEW) */}
-              {currentImg.error && !isProcessing && (
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center gap-4 animate-in fade-in duration-300">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-500">
-                    <AlertCircle size={28} />
+                {/* 失败反馈覆盖在图片上 */}
+                {currentImg.error && !isProcessing && (
+                  <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center gap-4 animate-in fade-in">
+                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-500 shadow-sm">
+                      <AlertCircle size={28} />
+                    </div>
+                    <div className="text-center px-4">
+                      <p className="font-black text-slate-800 uppercase text-xs tracking-widest mb-1">Falha no Processamento</p>
+                    </div>
+                    <button
+                      onClick={handleRetry}
+                      className="flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:scale-105 transition-all"
+                    >
+                      <RefreshCw size={12} /> Tentar Novamente
+                    </button>
                   </div>
-                  <div className="text-center">
-                    <p className="font-black text-slate-800 uppercase text-xs tracking-widest mb-1">Falha no Processamento</p>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase italic">Algo deu errado com a IA</p>
-                  </div>
-                  <button
-                    onClick={handleRetry}
-                    className="flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:scale-105 transition-all"
-                  >
-                    <RefreshCw size={12} /> Tentar Novamente
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* 移动端动作条 */}
+        {/* 移动端底部动作条 */}
         <div className="lg:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
           <div className="relative">
             <button
@@ -287,14 +332,18 @@ export function EditorInterface() {
                 isMobile={true}
                 imageCount={images.length}
                 onStandard={() => { setShowMobileSaveMenu(false); processDownload(); }}
-                onPremium={() => setShowPricing(true)}
+                onPremium={triggerBatchPricing}
               />
             )}
           </div>
         </div>
       </div>
 
-      <PricingModal isOpen={showPricing} onClose={() => setShowPricing(false)} />
+      <PricingModal
+        isOpen={showPricing}
+        onClose={() => setShowPricing(false)}
+        onOpenLogin={() => setShowLogin(true)}
+      />
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );

@@ -7,15 +7,15 @@ import { useAuth } from "@/lib/auth-context"
 import { SaveMenu } from "./save-menu"
 import { PricingModal } from "./pricing-modal"
 import { LoginModal } from "./login-modal"
-import { Zap, Sparkles, ChevronDown } from "lucide-react"
+import { Zap, Sparkles, ChevronDown, X } from "lucide-react"
 
-// --- 关键修复：在接口中添加 imageCount ---
+// --- 接口定义 ---
 interface HeaderProps {
   onStandardDownload?: () => void;
   onPremiumDownload?: () => void;
   onOpenPricing?: () => void;
   canSave?: boolean;
-  imageCount?: number; // 新增属性
+  imageCount?: number;
 }
 
 export function Header({
@@ -23,16 +23,18 @@ export function Header({
   onPremiumDownload,
   onOpenPricing,
   canSave = true,
-  imageCount = 1 // 接收图片数量
+  imageCount = 1
 }: HeaderProps) {
   const pathname = usePathname()
   const { user, credits, isLoggedIn, isLoaded, logout } = useAuth()
 
+  // 显隐状态控制
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showSaveMenu, setShowSaveMenu] = useState(false)
   const [showToolsDropdown, setShowToolsDropdown] = useState(false)
   const [showPromo, setShowPromo] = useState(false)
 
+  // 模态框状态
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isPricingOpen, setIsPricingOpen] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -40,6 +42,7 @@ export function Header({
 
   const [shouldReopenPricing, setShouldReopenPricing] = useState(false);
 
+  // Refs 锁定容器用于点击外部收回
   const toolsRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const saveMenuRef = useRef<HTMLDivElement>(null)
@@ -47,6 +50,19 @@ export function Header({
 
   const userInitial = user?.email?.[0]?.toUpperCase() || 'U'
 
+  // --- 关键修复 1：锁定背景滚动逻辑 ---
+  useEffect(() => {
+    if (isDrawerOpen) {
+      document.body.style.overflow = 'hidden'; // 锁定背景
+    } else {
+      document.body.style.overflow = 'unset'; // 恢复背景
+    }
+    return () => {
+      document.body.style.overflow = 'unset'; // 组件卸载时确保恢复
+    };
+  }, [isDrawerOpen]);
+
+  // 点击外部自动收回逻辑
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -59,6 +75,7 @@ export function Header({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // 路由改变自动关闭所有菜单
   useEffect(() => {
     setIsDrawerOpen(false)
     setShowToolsDropdown(false)
@@ -84,27 +101,23 @@ export function Header({
     { name: "FAQ", href: "/como-tirar-marca-dagua" },
   ]
 
-  // 1. 当从订阅弹窗点击“登录”时触发
   const handleOpenLoginFromPricing = () => {
-    setShouldReopenPricing(true); // 记住：一会儿要回来
-    setIsPricingOpen(false);      // 关闭订阅弹窗
-    setIsLoginOpen(true);         // 打开登录弹窗
+    setShouldReopenPricing(true);
+    setIsPricingOpen(false);
+    setIsLoginOpen(true);
   };
 
-  // 2. 当登录弹窗关闭时触发（无论登录成功还是点击跳过）
   const handleCloseLogin = () => {
     setIsLoginOpen(false);
-
     if (shouldReopenPricing) {
-      setIsPricingOpen(true);      // 重新打开订阅弹窗
-      setShouldReopenPricing(false); // 重置记忆
+      setIsPricingOpen(true);
+      setShouldReopenPricing(false);
     }
   };
 
-  // 3. 正常的关闭订阅弹窗逻辑
   const handleClosePricing = () => {
     setIsPricingOpen(false);
-    setShouldReopenPricing(false); // 确保重置记忆
+    setShouldReopenPricing(false);
   };
 
   return (
@@ -114,7 +127,7 @@ export function Header({
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-xl italic transition-transform group-hover:scale-110">R</div>
-            <span className="text-xl font-black text-slate-900 hidden sm:inline tracking-tighter">RemoverMarca</span>
+            <span className="text-xl font-black text-slate-900 hidden sm:inline tracking-tighter uppercase italic">RemoverMarca</span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6">
@@ -162,7 +175,7 @@ export function Header({
               onClick={() => setShowPromo(!showPromo)}
               className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all group"
             >
-              <div className="flex items-center justify-center w-5 h-5 bg-blue-600 rounded-lg shadow-sm">
+              <div className="flex items-center justify-center w-5 h-5 bg-blue-600 rounded-lg transform group-hover:rotate-12 transition-transform shadow-sm">
                 <Zap className="w-3 h-3 text-white fill-current" />
               </div>
               <span className="text-sm font-black text-slate-700 tracking-tight">
@@ -171,7 +184,7 @@ export function Header({
             </button>
 
             {showPromo && (
-              <div className="absolute top-full right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-blue-100 p-5 animate-in zoom-in duration-200 z-[70]">
+              <div className="absolute top-full -left-[20%] lg:right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-blue-100 p-5 animate-in zoom-in duration-200 z-[70]">
                 <div className="flex items-center gap-2 text-blue-600 mb-2">
                   <Sparkles size={16} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Oferta Especial</span>
@@ -202,10 +215,10 @@ export function Header({
               {canSave && (
                 <SaveMenu
                   isOpen={showSaveMenu}
-                  imageCount={imageCount} // 传递图片数量给菜单
+                  imageCount={imageCount}
                   onStandard={() => { setShowSaveMenu(false); onStandardDownload?.(); }}
                   onPremium={() => { setShowSaveMenu(false); if (onOpenPricing) onOpenPricing(); else setIsPricingOpen(true); }}
-                  onPremiumDownload={() => { setShowSaveMenu(false); onPremiumDownload?.(); }} // 处理 ZIP 下载
+                  onPremiumDownload={() => { setShowSaveMenu(false); onPremiumDownload?.(); }}
                 />
               )}
             </div>
@@ -229,56 +242,72 @@ export function Header({
               )}
             </div>
           ) : (
-            <button onClick={() => setIsLoginOpen(true)} className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md active:scale-95 transition-all">ENTRAR</button>
+            <button onClick={() => setIsLoginOpen(true)} className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md active:scale-95 transition-all font-bold">ENTRAR</button>
           ))}
 
-          <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg">
+          <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
           </button>
         </div>
       </header>
 
-      {/* 订阅弹窗 */}
-      <PricingModal
-        isOpen={isPricingOpen}
-        onClose={handleClosePricing}
-        onOpenLogin={handleOpenLoginFromPricing} // 传入特殊处理函数
-      />
-
-      {/* 登录弹窗 */}
-      <LoginModal
-        isOpen={isLoginOpen}
-        onClose={handleCloseLogin} // 传入特殊处理函数
-      />
-      <div className={`fixed inset-0 z-[100] lg:hidden transition-all ${isDrawerOpen ? "visible" : "invisible"}`}>
+      {/* --- 移动端侧边抽屉 (Drawer) --- */}
+      <div className={`fixed inset-0 z-[100] lg:hidden transition-all duration-300 ${isDrawerOpen ? "visible" : "invisible"}`}>
+        {/* 背景遮罩 */}
         <div className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setIsDrawerOpen(false)} />
-        <div className={`absolute top-0 right-0 w-80 h-full bg-white transition-transform duration-300 ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
-          <div className="p-8 flex flex-col h-full">
-            <span className="font-black text-xl mb-10 block italic uppercase">RemoverMarca</span>
-            <nav className="flex flex-col gap-3 flex-1 overflow-y-auto no-scrollbar">
-              {navItems.map(item => (
-                item.isDropdown ? (
-                  <div key={item.name} className="flex flex-col">
-                    <button onClick={() => setMobileToolsOpen(!mobileToolsOpen)} className={`flex items-center justify-between p-5 rounded-3xl font-bold ${mobileToolsOpen ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'}`}>
-                      {item.name} <ChevronDown className={`w-5 h-5 transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {mobileToolsOpen && (
-                      <div className="flex flex-col gap-2 mt-2 ml-4">
-                        {item.children?.map(child => (
-                          <Link key={child.name} href={child.href} className="p-4 rounded-2xl font-bold text-gray-500" onClick={() => setIsDrawerOpen(false)}>• {child.name}</Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link key={item.name} href={item.href || "#"} className={`p-5 rounded-3xl font-bold ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}> {item.name} </Link>
-                )
-              ))}
-              {isLoggedIn && <button onClick={() => { logout(); setIsDrawerOpen(false); }} className="p-5 bg-red-50 text-red-500 rounded-3xl font-bold text-left">Sair</button>}
-            </nav>
+
+        {/* 抽屉内容区 - 【关键修复 2：增加滚动容器限制】 */}
+        <div className={`absolute top-0 right-0 w-80 h-full bg-white transition-transform duration-300 ease-out shadow-2xl flex flex-col ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
+
+          {/* 抽屉固定头部 */}
+          <div className="p-6 flex justify-between items-center border-b border-gray-50 shrink-0">
+            <span className="font-black text-xl text-gray-900 tracking-tighter italic uppercase">RemoverMarca</span>
+            <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-slate-100 text-slate-500 rounded-full">
+              <X size={24} strokeWidth={2.5} />
+            </button>
           </div>
+
+          {/* --- 关键修复 3：独立的滚动容器，解决高度不够无法滚动的问题 --- */}
+          <nav className="flex-1 overflow-y-auto py-2 px-6 space-y-3 no-scrollbar overscroll-behavior-contain">
+            {navItems.map(item => (
+              item.isDropdown ? (
+                <div key={item.name} className="flex flex-col">
+                  <button onClick={() => setMobileToolsOpen(!mobileToolsOpen)} className={`flex items-center justify-between p-4 rounded-3xl text-sm font-bold transition-colors ${mobileToolsOpen ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'}`}>
+                    {item.name} <ChevronDown className={`w-5 h-5 transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileToolsOpen && (
+                    <div className="flex flex-col gap-2 mt-2 ml-4">
+                      {item.children?.map(child => (
+                        <Link key={child.name} href={child.href} className="p-4 rounded-2xl font-bold text-sm text-gray-500 active:text-blue-600" onClick={() => setIsDrawerOpen(false)}>• {child.name}</Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link key={item.name} href={item.href || "#"} className={`p-4 rounded-3xl text-sm font-bold block transition-all ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}>
+                  {item.name}
+                </Link>
+              )
+            ))}
+
+            {/* 退出登录 */}
+            {isLoggedIn && (
+              <button
+                onClick={() => { logout(); setIsDrawerOpen(false); }}
+                className="p-4 bg-red-50 text-red-500 rounded-3xl font-bold text-left w-full mt-4 text-sm"
+              >
+                Sair da conta
+              </button>
+            )}
+
+            {/* 底部留白确保滚动顺畅 */}
+            <div className="h-10 shrink-0" />
+          </nav>
         </div>
       </div>
+
+      <PricingModal isOpen={isPricingOpen} onClose={handleClosePricing} onOpenLogin={handleOpenLoginFromPricing} />
+      <LoginModal isOpen={isLoginOpen} onClose={handleCloseLogin} />
     </>
   );
 }
