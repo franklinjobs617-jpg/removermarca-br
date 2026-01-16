@@ -1,10 +1,8 @@
-"use client"
 
 import Link from "next/link"
-import { ShieldCheck, Mail, Globe, Github, Twitter, Instagram } from "lucide-react"
-
+import { ShieldCheck, Github, Twitter, Instagram } from "lucide-react"
+import Image from "next/image"
 export function Footer() {
-  const currentYear = new Date().getFullYear()
 
   return (
     <footer className="bg-white border-t border-gray-100 pt-20 pb-10">
@@ -27,6 +25,22 @@ export function Footer() {
               <Link href="#" className="hover:text-blue-600 transition-colors"><Instagram size={20} /></Link>
               <Link href="#" className="hover:text-blue-600 transition-colors"><Twitter size={20} /></Link>
               <Link href="#" className="hover:text-blue-600 transition-colors"><Github size={20} /></Link>
+            </div>
+            <div className="pt-2">
+              <Link
+                href="https://theresanaiforthat.com/ai/removermarca/?ref=featured&v=7340698"
+                target="_blank"
+                rel="nofollow"
+                className="block hover:opacity-80 transition-opacity"
+              >
+                <Image
+                  width="240"
+                  height="50"
+                  src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600"
+                  alt="Featured on There's An AI For That"
+                  className="rounded-lg shadow-sm"
+                />
+              </Link>
             </div>
           </div>
 
@@ -108,7 +122,7 @@ export function Footer() {
         <div className="pt-10 border-t border-slate-50 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.1em]">
-              © {currentYear} RemoverMarca.com — Orgulhosamente desenvolvido no Brasil 🇧🇷
+              © 2026 RemoverMarca.com — Orgulhosamente desenvolvido no Brasil 🇧🇷
             </p>
           </div>
 
