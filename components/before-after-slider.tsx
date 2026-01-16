@@ -46,10 +46,11 @@ export function BeforeAfterSlider() {
       {/* Before Image (带有水印) */}
       <div className="absolute inset-0">
         <Image
-          src="/images/image-before.png"
+          src="/images/image-before.webp"
           alt="Antes de remover marca d'água"
           fill
           priority // 关键优化：预加载首屏图片
+          fetchPriority="high"
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover pointer-events-none"
         />
@@ -65,6 +66,7 @@ export function BeforeAfterSlider() {
           alt="Depois de remover marca d'água"
           fill
           priority // 关键优化：预加载
+          fetchPriority="high"
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover pointer-events-none"
         />

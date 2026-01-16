@@ -31,7 +31,7 @@ export function HeroSection() {
                             <Sparkles className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
                             <span className="text-[10px] font-black text-blue-700 tracking-widest uppercase">Tecnologia IA 2026</span>
                         </div>
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] tracking-tight">
+                        <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
                             Ferramenta de IA para <br className="hidden sm:block" />
                             <span className="text-blue-600 italic">tirar marca d&apos;água</span> <br />
                             online grátis
