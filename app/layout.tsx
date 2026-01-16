@@ -21,9 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased font-sans`}>
-        {/* 加载 Google SDK */}
-        <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
-
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">{children}</main>

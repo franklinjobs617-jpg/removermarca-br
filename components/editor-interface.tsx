@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "./header"
 import { useAuth } from "@/lib/auth-context"
@@ -26,6 +26,9 @@ export function EditorInterface() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
+
+  // 【核心修复】：防止 React 18 严格模式下双次挂载导致数据丢失
+  const hasInitialized = useRef(false);
 
   // 画布变换状态
   const [zoom, setZoom] = useState(100);
@@ -115,35 +118,58 @@ export function EditorInterface() {
     await processImageWithAPI(file, currentIdx);
   };
 
+  // --- 核心修复：单页跳转初始化逻辑 ---
   useEffect(() => {
-    const uploadedBase64 = sessionStorage.getItem("uploadedImage");
+    if (hasInitialized.current) return; // 拦截第二次挂载
+
+    const uploadedData = sessionStorage.getItem("uploadedImage");
     const savedList = sessionStorage.getItem("editor_images_list");
 
-    if (uploadedBase64) {
-      sessionStorage.removeItem("editor_images_list");
+    // 1. 处理从首页上传/拖拽进入的情况
+    if (uploadedData) {
+      hasInitialized.current = true;
+      sessionStorage.removeItem("editor_images_list"); // 强制清空旧列表
+
       const initialId = Date.now().toString();
-      setImages([{ id: initialId, originalUrl: uploadedBase64, processedUrl: "", processed: false }]);
-      sessionStorage.removeItem("uploadedImage");
-      fetch(uploadedBase64).then(res => res.blob()).then(blob => {
-        const file = new File([blob], "input.png", { type: "image/png" });
-        processImageWithAPI(file, 0);
-      });
+      setImages([{ id: initialId, originalUrl: uploadedData, processedUrl: "", processed: false }]);
+
+      // 注意：如果是 Blob URL，fetch 它不会产生网络流量，直接读取内存
+      fetch(uploadedData)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], "input.png", { type: "image/png" });
+          processImageWithAPI(file, 0);
+          // 处理开始后清理缓存
+          sessionStorage.removeItem("uploadedImage");
+        })
+        .catch(err => {
+          console.error("Erro ao carregar dados:", err);
+          sessionStorage.removeItem("uploadedImage");
+        });
       return;
     }
 
+    // 2. 处理页面刷新，从保存的列表恢复
     if (savedList) {
       try {
         const parsedList = JSON.parse(savedList);
-        setImages(parsedList);
-        return;
+        if (parsedList.length > 0) {
+          hasInitialized.current = true;
+          setImages(parsedList);
+          return;
+        }
       } catch (e) {
         console.error("Failed to parse saved list");
       }
     }
 
-    setImages([{ id: "sample", originalUrl: "/images/sample.png", processedUrl: "/images/sample.png", processed: true }]);
+    // 3. 兜底逻辑：无数据时显示样例
+    if (!hasInitialized.current) {
+      setImages([{ id: "sample", originalUrl: "/images/sample.png", processedUrl: "/images/sample.png", processed: true }]);
+    }
   }, []);
 
+  // --- 性能优化：编辑器内添加图片也改用 Blob URL ---
   const handleAddImage = () => {
     if (!isLoaded) return;
     if (images.length >= credits) { setShowPricing(true); return; }
@@ -153,15 +179,19 @@ export function EditorInterface() {
     input.onchange = async (e: any) => {
       const file = e.target.files?.[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          const base64 = event.target?.result as string;
-          const newImgIdx = images.length;
-          setImages(prev => [...prev, { id: Date.now().toString(), originalUrl: base64, processedUrl: "", processed: false }]);
-          setCurrentIdx(newImgIdx);
-          await processImageWithAPI(file, newImgIdx);
-        };
-        reader.readAsDataURL(file);
+        // 不再使用 FileReader 转换 Base64，改用 Blob URL 提升性能
+        const blobUrl = URL.createObjectURL(file);
+        const newImgIdx = images.length;
+
+        setImages(prev => [...prev, {
+          id: Date.now().toString(),
+          originalUrl: blobUrl,
+          processedUrl: "",
+          processed: false
+        }]);
+
+        setCurrentIdx(newImgIdx);
+        await processImageWithAPI(file, newImgIdx);
       }
     };
     input.click();
@@ -256,7 +286,7 @@ export function EditorInterface() {
           </div>
         </div>
 
-        {/* 画布核心：图片适配屏幕且背景透明逻辑 */}
+        {/* 画布核心 */}
         {currentImg && (
           <div
             className="flex-1 flex items-center justify-center w-full h-full cursor-grab active:cursor-grabbing overflow-hidden"
@@ -265,12 +295,10 @@ export function EditorInterface() {
             onMouseUp={() => setIsDragging(false)}
             onWheel={(e) => { const d = e.deltaY > 0 ? -10 : 10; setZoom(z => Math.min(Math.max(z + d, 20), 400)); }}
           >
-            {/* 修复：变换 div 不带固定宽高和背景，仅作为变换层 */}
             <div
               className="relative transition-transform duration-150 ease-out"
               style={{ transform: `translate(${position.x}px, ${position.y}px) scale(${zoom / 100})` }}
             >
-              {/* 图片包装层：负责阴影和圆角，随图片大小自适应 */}
               <div className="relative shadow-[0_40px_100px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden bg-transparent">
                 <img
                   src={showComparison ? currentImg.originalUrl : (currentImg.processedUrl || currentImg.originalUrl)}
@@ -278,7 +306,6 @@ export function EditorInterface() {
                   alt="Editor View"
                 />
 
-                {/* 处理动画覆盖在图片上 */}
                 {isProcessing && (
                   <>
                     <div className="ai-scan-line-vertical" />
@@ -291,7 +318,6 @@ export function EditorInterface() {
                   </>
                 )}
 
-                {/* 失败反馈覆盖在图片上 */}
                 {currentImg.error && !isProcessing && (
                   <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center gap-4 animate-in fade-in">
                     <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-500 shadow-sm">

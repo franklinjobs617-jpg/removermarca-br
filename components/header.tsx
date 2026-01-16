@@ -1,12 +1,12 @@
 "use client"
-
+import dynamic from 'next/dynamic'
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
-import { SaveMenu } from "./save-menu"
-import { PricingModal } from "./pricing-modal"
-import { LoginModal } from "./login-modal"
+const PricingModal = dynamic(() => import("./pricing-modal").then(mod => mod.PricingModal), { ssr: false })
+const LoginModal = dynamic(() => import("./login-modal").then(mod => mod.LoginModal), { ssr: false })
+const SaveMenu = dynamic(() => import("./save-menu").then(mod => mod.SaveMenu), { ssr: false })
 import { Zap, Sparkles, ChevronDown, X } from "lucide-react"
 
 // --- 接口定义 ---

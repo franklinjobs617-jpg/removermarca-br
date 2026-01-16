@@ -1,24 +1,25 @@
 "use client"
 
 import { useRef } from "react"
+import { useRouter } from "next/navigation" // 引入 router
 
 export function UploadArea() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const router = useRouter() // 初始化 router
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        sessionStorage.setItem("uploadedImage", event.target?.result as string)
-        window.location.href = "/editor"
-      }
-      reader.readAsDataURL(file)
+      // 核心优化 1：使用 Blob URL
+      const blobUrl = URL.createObjectURL(file)
+      sessionStorage.setItem("uploadedImage", blobUrl)
+
+      // 核心优化 2：单页跳转
+      router.push("/editor")
     }
   }
 
   return (
-
     <div className="w-full mt-4 md:mt-0">
       <div className="flex flex-col items-center justify-center text-center group h-full w-full">
         <input
