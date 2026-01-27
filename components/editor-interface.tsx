@@ -102,7 +102,7 @@ export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
       formData.append("file", file);
       formData.append("sync", "0");
 
-      const res = await fetch("/api/watermark", {
+      const res = await fetch("/api/watermark-remove", {
         method: "POST",
         body: formData,
       });
