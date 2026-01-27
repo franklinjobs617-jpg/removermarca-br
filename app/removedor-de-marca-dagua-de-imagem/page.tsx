@@ -55,7 +55,12 @@ export default function WatermarkRemoverPage() {
 
           {/* 复用项目已有的上传组件 */}
           <div className="max-w-2xl mx-auto">
-            <UploadArea />
+            <UploadArea
+              buttonText="Subir imagem"
+              dragText="ou arraste um arquivo,"
+              pasteLabel="Cole imagem ou"
+              pasteAction="Ctrl+V"
+            />
             <p className="mt-4 text-sm text-gray-500 italic">
               PNG, JPG, WebP suportados. Máximo 15MB.
             </p>

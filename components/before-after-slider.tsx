@@ -2,11 +2,24 @@
 
 import { useState, useRef, useCallback } from "react"
 import Image from "next/image"
+import { usePathname } from "next/navigation" // 引入路径检测钩子
 
 export function BeforeAfterSlider() {
+  const pathname = usePathname() // 获取当前路径
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // 判断是否为英文环境
+  const isEn = pathname?.startsWith('/en')
+
+  // 定义多语言文案
+  const labels = {
+    before: isEn ? "Before" : "Antes",
+    after: isEn ? "After" : "Depois",
+    altBefore: isEn ? "Photo before removing watermark" : "Antes de remover marca d'água",
+    altAfter: isEn ? "Photo after removing watermark" : "Depois de remover marca d'água"
+  }
 
   const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return
@@ -47,9 +60,9 @@ export function BeforeAfterSlider() {
       <div className="absolute inset-0">
         <Image
           src="/images/image-before.webp"
-          alt="Antes de remover marca d'água"
+          alt={labels.altBefore} // 适配 SEO
           fill
-          priority // 关键优化：预加载首屏图片
+          priority
           fetchPriority="high"
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover pointer-events-none"
@@ -63,9 +76,9 @@ export function BeforeAfterSlider() {
       >
         <Image
           src="/images/image.avif"
-          alt="Depois de remover marca d'água"
+          alt={labels.altAfter} // 适配 SEO
           fill
-          priority // 关键优化：预加载
+          priority
           fetchPriority="high"
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover pointer-events-none"
@@ -91,10 +104,14 @@ export function BeforeAfterSlider() {
 
       {/* 视觉提示标签 */}
       <div className="absolute bottom-4 left-4 z-20 pointer-events-none">
-        <span className="bg-black/40 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-widest">Antes</span>
+        <span className="bg-black/40 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-widest">
+          {labels.before}
+        </span>
       </div>
       <div className="absolute bottom-4 right-4 z-20 pointer-events-none">
-        <span className="bg-blue-600/60 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-widest">Depois</span>
+        <span className="bg-blue-600/60 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded font-bold uppercase tracking-widest">
+          {labels.after}
+        </span>
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Check, Info, X, Star, Loader2, LogIn } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import Image from "next/image"
+import { EditorDictionary } from "./editor-interface"
 
 type PlanType = "subscription" | "credits"
 type BillingCycle = "monthly" | "yearly"
@@ -28,7 +29,15 @@ interface CreditPack {
   tag: string
 }
 
-export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean; onClose: () => void; onOpenLogin: () => void }) {
+interface PricingModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpenLogin: () => void;
+  locale: string;
+  dict: EditorDictionary;
+}
+
+export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: PricingModalProps) {
   const { isLoggedIn } = useAuth()
   const [activeTab, setActiveTab] = useState<PlanType>("subscription")
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("yearly")
@@ -47,18 +56,21 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
 
   if (!isOpen) return null
 
+  // 货币符号
+  const currency = locale === 'en' ? '$' : 'R$';
+
   const subscriptions: SubscriptionPlan[] = [
-    { id: "mini", name: "Plano Mini", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49, desc: "Iniciante" },
-    { id: "basic", name: "Plano Basic", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99, desc: "Vendedor" },
-    { id: "pro", name: "Plano Pro", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, desc: "Popular", highlighted: true },
-    { id: "expert", name: "Plano Expert", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99, desc: "Expert" },
-    { id: "studio", name: "Plano Studio", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99, desc: "Studio" },
+    { id: "mini", name: "Mini", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49, desc: "Iniciante" },
+    { id: "basic", name: "Basic", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99, desc: "Vendedor" },
+    { id: "pro", name: "Pro", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, desc: "Popular", highlighted: true },
+    { id: "expert", name: "Expert", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99, desc: "Expert" },
+    { id: "studio", name: "Studio", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99, desc: "Studio" },
   ]
 
   const creditPacks: CreditPack[] = [
-    { id: "10", name: "Starter Pack", credits: 10, price: 24.9, perImg: 2.49, tag: "Experimental" },
-    { id: "50", name: "Standard Pack", credits: 50, price: 89.9, perImg: 1.79, tag: "Mais Comum" },
-    { id: "200", name: "Business Pack", credits: 200, price: 249.9, perImg: 1.24, tag: "Melhor Taxa" },
+    { id: "10", name: "Starter", credits: 10, price: 24.9, perImg: 2.49, tag: "Experimental" },
+    { id: "50", name: "Standard", credits: 50, price: 89.9, perImg: 1.79, tag: "Mais Comum" },
+    { id: "200", name: "Business", credits: 200, price: 249.9, perImg: 1.24, tag: "Melhor Taxa" },
   ]
 
   const handleAction = async () => {
@@ -110,15 +122,15 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
         {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 bg-blue-600 rounded-full opacity-30" />)}
       </div>
       <h2 className="text-3xl lg:text-[40px] font-black text-slate-900 leading-[1.1] tracking-tighter italic">
-        Escolha seu plano <br />
+        {dict.pricingTitle} <br />
         <span className="relative inline-block text-blue-600 lg:text-slate-900">
-          preferido
+          {dict.pricingSubtitle}
           <div className="absolute -bottom-1 left-0 w-full h-1 bg-blue-600/20 rounded-full" />
         </span>
       </h2>
       <div className="space-y-10 pt-4">
         <div className="space-y-4">
-          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">Vantagens Pro:</h4>
+          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">{dict.proBenefits}</h4>
           <ul className="space-y-4">
             {["50 downloads HD por dia", "Créditos extras incluídos", "Ideal para iniciantes", "Sem marca d'água na prévia"].map(item => (
               <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
@@ -130,7 +142,7 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
         </div>
       </div>
       <div className="mt-auto pt-6 flex items-center gap-2 text-slate-400 text-xs font-black tracking-widest">
-        <Info size={12} /> <span>1 IMAGEM = 1 CRÉDITO</span>
+        <Info size={12} /> <span>{dict.creditInfo}</span>
       </div>
     </div>
   )
@@ -140,11 +152,11 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
       <div className="flex items-center justify-center gap-4 mb-4">
         {billingCycle === 'yearly' && activeTab === 'subscription' && (
           <span className="text-slate-300 line-through font-bold text-lg md:text-xl tracking-tighter italic">
-            R${(subscriptions.find(s => s.id === selectedId)?.monthly! * 12).toFixed(2)}
+            {currency}{(subscriptions.find(s => s.id === selectedId)?.monthly! * 12).toFixed(2)}
           </span>
         )}
         <span className="text-4xl md:text-5xl font-black text-blue-600 tracking-tighter italic leading-none">
-          R${getSelectedPrice().toFixed(2)}
+          {currency}{getSelectedPrice().toFixed(2)}
         </span>
       </div>
 
@@ -158,15 +170,16 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
         ) : !isLoggedIn ? (
           <>
             <LogIn size={20} />
-            <span>Entrar para Continuar</span>
+            <span>{dict.loginToContinue}</span>
           </>
         ) : (
-          activeTab === "subscription" ? "Assine Agora" : "Compre Agora"
+          activeTab === "subscription" ? dict.subscribeNow : dict.buyNow
         )}
       </button>
 
       <div className="flex justify-center items-center gap-8 opacity-30 grayscale mt-4 pb-2">
-        <Image src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" width={30} height={32} />
+        {/* 如果是 EN，不显示 Pix */}
+        {locale !== 'en' && <Image src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" width={30} height={32} />}
         <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" width={40} height={40} alt="Visa" />
         <Image src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" width={30} height={25} alt="Mastercard" />
         <Image src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width={80} height={15} alt="PayPal" />
@@ -183,7 +196,6 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
       `}</style>
 
       <div
-        // 关键点：sm:h-[750px] 固定高度防止闪动
         className="bg-white w-full max-w-6xl h-full sm:h-[750px] flex flex-col lg:flex-row overflow-hidden relative sm:rounded-[40px] shadow-2xl transition-all duration-300"
         onClick={(e) => e.stopPropagation()}
       >
@@ -203,7 +215,6 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
         {/* 右侧：主内容区 */}
         <div className="flex-1 flex flex-col bg-white overflow-hidden">
 
-          {/* 容器在移动端整体滚动，在PC端内部滚动 */}
           <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden">
 
             <div className="p-6 pt-12 md:pt-6 flex flex-col h-full lg:overflow-hidden">
@@ -215,33 +226,32 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
                     <button
                       onClick={() => { setActiveTab("subscription"); setSelectedId("pro"); }}
                       className={`flex-1 py-2 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}
-                    >Assinaturas</button>
+                    >{dict.subscription}</button>
                     <button
                       onClick={() => { setActiveTab("credits"); setSelectedId("50"); }}
                       className={`flex-1 py-2 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}
-                    >Créditos Avulsos</button>
+                    >{dict.credits}</button>
                   </div>
                 </div>
 
-                {/* 关键修复：固定副标题高度 (h-16)，防止切换模式时列表位置跳动 */}
                 <div className="h-12 flex items-center justify-center">
                   {activeTab === "subscription" ? (
                     <div className="flex justify-center gap-10 font-black text-sm tracking-widest border-b border-slate-50 pb-3 w-full animate-in fade-in duration-300">
-                      <button onClick={() => setBillingCycle("monthly")} className={`pb-1 border-b-2 transition-all ${billingCycle === "monthly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>MENSAL</button>
+                      <button onClick={() => setBillingCycle("monthly")} className={`pb-1 border-b-2 transition-all ${billingCycle === "monthly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>{dict.monthly.toUpperCase()}</button>
                       <button onClick={() => setBillingCycle("yearly")} className={`pb-1 relative border-b-2 transition-all flex items-center ${billingCycle === "yearly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>
-                        ANUAL
-                        <span className="absolute -top-4.5 left-2 md:left-full whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-[10px] border border-green-100 uppercase">Economize 40%</span>
+                        {dict.yearly.toUpperCase()}
+                        <span className="absolute -top-4.5 left-2 md:left-full whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-[10px] border border-green-100 uppercase">{dict.savePercent}</span>
                       </button>
                     </div>
                   ) : (
                     <div className="text-slate-400 font-black text-xs tracking-[0.2em] uppercase pb-3 animate-in fade-in duration-300">
-                      Pagamento Único
+                      {dict.oneTimePayment}
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* 2. 列表区域：PC端独立滚动，设置最小高度保证平滑 */}
+              {/* 2. 列表区域 */}
               <div className="flex-1 lg:overflow-y-auto lg:modal-scrollbar space-y-2 min-h-95">
                 {activeTab === "subscription" ? subscriptions.map((p) => (
                   <div key={p.id} onClick={() => setSelectedId(p.id)} className={`relative p-3 rounded-3xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedId === p.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5 shadow-sm' : 'border-slate-50 bg-slate-50/50 hover:border-blue-100'}`}>
@@ -251,11 +261,11 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
                       </div>
                       <div>
                         <div className="font-black text-slate-900 text-sm lg:text-base tracking-tight leading-none uppercase">{p.name}</div>
-                        <div className="text-[11px] font-bold text-slate-400 mt-1.5 tracking-tight">+{p.credits} créditos / {billingCycle === 'monthly' ? 'mês' : 'ano'}</div>
+                        <div className="text-[11px] font-bold text-slate-400 mt-1.5 tracking-tight">+{p.credits} {dict.credits} / {billingCycle === 'monthly' ? 'mo' : 'yr'}</div>
                       </div>
                     </div>
                     <div className="text-right font-black text-slate-900 italic leading-none">
-                      <div className="text-xl lg:text-2xl tracking-tighter leading-none">R${(billingCycle === "monthly" ? p.monthly : p.yearlyMonthly).toFixed(2)}<span className="text-[10px] font-bold text-slate-400 not-italic ml-0.5">/mês</span></div>
+                      <div className="text-xl lg:text-2xl tracking-tighter leading-none">{currency}{(billingCycle === "monthly" ? p.monthly : p.yearlyMonthly).toFixed(2)}<span className="text-[10px] font-bold text-slate-400 not-italic ml-0.5">/mo</span></div>
                     </div>
                     {p.highlighted && (
                       <div className="absolute -top-2.5 right-6 bg-blue-600 text-white text-[8px] px-3 py-1 rounded-full font-black shadow-lg flex items-center gap-1 tracking-widest uppercase">
@@ -271,16 +281,15 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
                       </div>
                       <div>
                         <div className="font-black text-slate-900 text-base tracking-tight leading-none uppercase">{pack.name}</div>
-                        <div className="text-[10px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block">SEM EXPIRAÇÃO</div>
+                        <div className="text-[10px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block">PERMANENT</div>
                       </div>
                     </div>
                     <div className="text-right font-black text-slate-900 italic leading-none">
-                      <div className="text-2xl lg:text-3xl tracking-tighter">R${pack.price.toFixed(2)}</div>
+                      <div className="text-2xl lg:text-3xl tracking-tighter">{currency}{pack.price.toFixed(2)}</div>
                     </div>
                   </div>
                 ))}
 
-                {/* 移动端专属布局：支付按钮和Benefits在列表后连续显示 */}
                 <div className="lg:hidden mt-8">
                   <FooterContent />
                   <div className="mt-10 pt-8 border-t border-slate-100 pb-10">
@@ -290,7 +299,6 @@ export function PricingModal({ isOpen, onClose, onOpenLogin }: { isOpen: boolean
               </div>
             </div>
 
-            {/* 3. PC端底部固定结算区 (通过 shrink-0 确保不闪动) */}
             <div className="hidden lg:block mt-auto pt-6 pb-2 px-10 border-t border-slate-50 bg-white shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
               <FooterContent />
             </div>

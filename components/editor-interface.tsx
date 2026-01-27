@@ -18,7 +18,24 @@ interface ImageItem {
   error?: boolean
 }
 
-export function EditorInterface() {
+// 定义字典接口 (你需要确保传入的 dict 符合此结构)
+export interface EditorDictionary {
+  processing: string;       // "Processando..." / "Processing..."
+  optimizing: string;       // "Otimizando..." / "Optimizing..."
+  errorTitle: string;       // "Falha no Processamento" / "Processing Failed"
+  retry: string;            // "Tentar Novamente" / "Try Again"
+  savePhoto: string;        // "SALVAR FOTO" / "SAVE PHOTO"
+  errorAI: string;          // "ERRO NA IA" / "AI ERROR"
+  processingBtn: string;    // "PROCESSANDO..." / "PROCESSING..." 
+  [key: string]: any;
+}
+
+interface EditorInterfaceProps {
+  dict: EditorDictionary;
+  locale: string; // 'pt' | 'en'
+}
+
+export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
   const router = useRouter();
   const { credits, isLoggedIn, isLoaded, deductCredit } = useAuth();
 
@@ -85,7 +102,7 @@ export function EditorInterface() {
       formData.append("file", file);
       formData.append("sync", "0");
 
-      const res = await fetch("/api/watermark-remove", {
+      const res = await fetch("/api/watermark", {
         method: "POST",
         body: formData,
       });
@@ -114,7 +131,8 @@ export function EditorInterface() {
     if (!current) return;
     const res = await fetch(current.originalUrl);
     const blob = await res.blob();
-    const file = new File([blob], "retry.png", { type: "image/png" });
+    const fileName = locale === 'en' ? "retry.png" : "tente-novamente.png"; // 根据语言设置文件名
+    const file = new File([blob], fileName, { type: "image/png" });
     await processImageWithAPI(file, currentIdx);
   };
 
@@ -137,7 +155,8 @@ export function EditorInterface() {
       fetch(uploadedData)
         .then(res => res.blob())
         .then(blob => {
-          const file = new File([blob], "input.png", { type: "image/png" });
+          const fileName = locale === 'en' ? "input.png" : "entrada.png";
+          const file = new File([blob], fileName, { type: "image/png" });
           processImageWithAPI(file, 0);
           // 处理开始后清理缓存
           sessionStorage.removeItem("uploadedImage");
@@ -215,6 +234,9 @@ export function EditorInterface() {
   const currentImg = images[currentIdx];
   const canSave = currentImg?.processed && !currentImg?.error && !isProcessing;
 
+  // 根据语言决定返回首页的路径
+  const homePath = locale === 'en' ? '/en' : '/';
+
   return (
     <div className="h-screen w-full flex flex-col bg-gray-50 overflow-hidden select-none">
       <Header
@@ -223,13 +245,17 @@ export function EditorInterface() {
         onPremiumDownload={triggerBatchPricing}
         onOpenPricing={() => setShowPricing(true)}
         imageCount={images.length}
+        // 将语言传给 Header，如果 Header 还没适配，这行会被忽略，不影响现有功能
+        // @ts-ignore 
+        locale={locale}
+        dict={dict}
       />
 
       <div className="flex-1 relative bg-dot-grid overflow-hidden flex items-center justify-center">
 
         {/* 左侧侧边栏 */}
         <div className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-30 scale-90 md:scale-100">
-          <button onClick={() => router.push("/")} className="w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center border border-gray-100 transition-hover hover:bg-gray-50">
+          <button onClick={() => router.push(homePath)} className="w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center border border-gray-100 transition-hover hover:bg-gray-50">
             <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 19l-7-7 7-7" strokeWidth="2" /></svg>
           </button>
 
@@ -312,7 +338,7 @@ export function EditorInterface() {
                     <div className="absolute inset-0 bg-blue-500/5 backdrop-blur-[2px] flex items-center justify-center">
                       <div className="bg-white/90 p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-blue-50">
                         <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                        <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest leading-none">Otimizando...</span>
+                        <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest leading-none">{dict.optimizing}</span>
                       </div>
                     </div>
                   </>
@@ -324,13 +350,13 @@ export function EditorInterface() {
                       <AlertCircle size={28} />
                     </div>
                     <div className="text-center px-4">
-                      <p className="font-black text-slate-800 uppercase text-xs tracking-widest mb-1">Falha no Processamento</p>
+                      <p className="font-black text-slate-800 uppercase text-xs tracking-widest mb-1">{dict.errorTitle}</p>
                     </div>
                     <button
                       onClick={handleRetry}
                       className="flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:scale-105 transition-all"
                     >
-                      <RefreshCw size={12} /> Tentar Novamente
+                      <RefreshCw size={12} /> {dict.retry}
                     </button>
                   </div>
                 )}
@@ -350,7 +376,7 @@ export function EditorInterface() {
                 : "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
                 }`}
             >
-              {canSave ? "SALVAR FOTO" : currentImg?.error ? "ERRO NA IA" : "PROCESSANDO..."}
+              {canSave ? dict.savePhoto : currentImg?.error ? dict.errorAI : dict.processingBtn}
             </button>
             {canSave && (
               <SaveMenu
@@ -359,6 +385,9 @@ export function EditorInterface() {
                 imageCount={images.length}
                 onStandard={() => { setShowMobileSaveMenu(false); processDownload(); }}
                 onPremium={triggerBatchPricing}
+                // @ts-ignore
+                locale={locale}
+                dict={dict}
               />
             )}
           </div>
@@ -369,8 +398,17 @@ export function EditorInterface() {
         isOpen={showPricing}
         onClose={() => setShowPricing(false)}
         onOpenLogin={() => setShowLogin(true)}
+        // @ts-ignore
+        locale={locale}
+        dict={dict}
       />
-      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <LoginModal
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
+        // @ts-ignore
+        locale={locale}
+        dict={dict}
+      />
     </div>
   );
 }

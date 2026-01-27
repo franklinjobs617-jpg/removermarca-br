@@ -1,12 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation" // 引入 usePathname
 import { UploadCloud } from "lucide-react"
 
 export function GlobalDragDrop() {
     const [isGlobalDragging, setIsGlobalDragging] = useState(false)
     const router = useRouter()
+    const pathname = usePathname() // 获取当前路径
+
+    // 判断是否为英文环境
+    const isEn = pathname?.startsWith('/en')
 
     const handleFileProcess = (file: File) => {
         if (!file.type.startsWith("image/")) return
@@ -21,8 +25,9 @@ export function GlobalDragDrop() {
         // 存储 Blob URL
         sessionStorage.setItem("uploadedImage", blobUrl)
 
-        // 核心优化 2：单页跳转，不刷新页面
-        router.push("/editor")
+        // 适配语言跳转：如果是英文路径，跳转到 /en/editor，否则跳转到 /editor
+        const targetPath = isEn ? "/en/editor" : "/editor"
+        router.push(targetPath)
     }
 
     useEffect(() => {
@@ -65,12 +70,13 @@ export function GlobalDragDrop() {
             window.removeEventListener("dragleave", handleDragLeave)
             window.removeEventListener("drop", handleDrop)
         }
-    }, [router])
+    }, [router, pathname, isEn]) // 将依赖项补充完整
 
     if (!isGlobalDragging) return null
 
     return (
         <div className="fixed inset-0 z-[300] bg-slate-900/60 backdrop-blur-xl flex flex-col items-center justify-center animate-in fade-in duration-300 pointer-events-none">
+            {/* 边角装饰装饰 */}
             <div className="absolute top-10 left-10 w-20 h-20 border-t-[8px] border-l-[8px] border-white/40 rounded-tl-3xl"></div>
             <div className="absolute top-10 right-10 w-20 h-20 border-t-[8px] border-r-[8px] border-white/40 rounded-tr-3xl"></div>
             <div className="absolute bottom-10 left-10 w-20 h-20 border-b-[8px] border-l-[8px] border-white/40 rounded-bl-3xl"></div>
@@ -81,7 +87,8 @@ export function GlobalDragDrop() {
                     <UploadCloud className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-white text-4xl md:text-5xl font-black tracking-tighter uppercase italic">
-                    Solte para enviar
+                    {/* 适配文字 */}
+                    {isEn ? "Drop to upload" : "Solte para enviar"}
                 </h2>
             </div>
         </div>
