@@ -4,11 +4,11 @@ import { HeroSectionEn } from "@/components/home/heroSectionEn"
 import { GlobalDragDrop } from "@/components/home/globalDragDrop"
 import { Metadata } from "next"
 export const metadata: Metadata = {
-    title: "Terms of Use | RemoverMarca.com",
-    description: "Read our terms of use. Rules regarding licensing, intellectual property, and our refund policy for AI services.",
+    title: "AI Watermark Remover: Remove Watermark from Photo Online 4K",
+    description: "Remove watermarks from photos instantly with AI. 100% automatic, 4K quality, and bulk processing. Better than Photoshop for quick cleanup.",
     openGraph: {
-        title: "Terms of Use | RemoverMarca.com",
-        description: "Read our terms of use. Rules regarding licensing, intellectual property, and our refund policy for AI services.",
+        title: "AI Watermark Remover: Remove Watermark from Photo Online 4K",
+        description: "Remove watermarks from photos instantly with AI. 100% automatic, 4K quality, and bulk processing. Better than Photoshop for quick cleanup.",
         url: "https://removermarca.com/en",
         images: [
             {
