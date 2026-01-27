@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </AuthProvider>
       </body>
 
-      {/* <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
+      <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
       <Script
         id="microsoft-clarity"
         strategy="afterInteractive" // 在页面交互后加载，不影响首屏速度
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 })(window, document, "clarity", "script", "v07km7j8jp");
               `,
         }}
-      /> */}
+      />
     </html>
   )
 }
