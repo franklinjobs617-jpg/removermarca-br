@@ -14,9 +14,9 @@ export function HeroSectionEn() {
                     <div className="w-full max-w-120 bg-white rounded-4xl md:rounded-[56px] p-6 md:p-12 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] border border-slate-50 relative z-10 flex flex-col items-center">
                         {/* Mobile Text */}
                         <div className="space-y-5 text-center block md:hidden mb-8">
-                            <h1 className="text-4xl font-black text-slate-900 leading-[1.15] tracking-tight">
+                            <span className="text-4xl font-black text-slate-900 leading-[1.15] tracking-tight">
                                 Remove Watermark from <span className="text-blue-600 italic">Photo Online</span>
-                            </h1>
+                            </span>
                         </div>
                         <UploadArea
                             buttonText="Upload image"

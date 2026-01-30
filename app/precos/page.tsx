@@ -2,11 +2,13 @@
 
 import React, { useState } from "react"
 import { Header } from "@/components/header"
-import { Check, Info, Star, Loader2 } from "lucide-react"
+import { Check, Info, Star, Loader2, CreditCard } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { LoginModal } from "@/components/login-modal"
-
 import Image from "next/image"
+import { dictionaries } from "@/lib/dictionaries"
+import { PayPalButtons } from "@paypal/react-paypal-js";
+
 type PlanType = "subscription" | "credits"
 type BillingCycle = "monthly" | "yearly"
 
@@ -33,25 +35,40 @@ export default function PricingPage() {
 
   const [activeTab, setActiveTab] = useState<PlanType>("subscription")
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("yearly")
-  const [selectedId, setSelectedId] = useState("pro")
+  const [selectedId, setSelectedId] = useState("standard")
 
   const [isPaying, setIsPaying] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
 
+  // --- Dados de Preços (Brasil R$) ---
   const subscriptions: SubscriptionPlan[] = [
-    { id: "mini", name: "Plano Mini", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49 },
-    { id: "basic", name: "Plano Basic", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99 },
-    { id: "pro", name: "Plano Pro", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, highlighted: true },
-    { id: "expert", name: "Plano Expert", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99 },
-    { id: "studio", name: "Plano Studio", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99 },
+    { id: "lite", name: "Lite", credits: 50, monthly: 25.00, yearly: 239.00, yearlyMonthly: 19.92 },
+    { id: "standard", name: "Standard", credits: 200, monthly: 65.00, yearly: 625.00, yearlyMonthly: 52.08, highlighted: true },
+    { id: "advanced", name: "Advanced", credits: 800, monthly: 199.00, yearly: 1910.00, yearlyMonthly: 159.17 },
   ]
 
   const creditPacks: CreditPack[] = [
-    { id: "10", name: "Starter Pack", credits: 10, price: 24.9, perImg: 2.49 },
-    { id: "50", name: "Standard Pack", credits: 50, price: 89.9, perImg: 1.79 },
-    { id: "200", name: "Business Pack", credits: 200, price: 249.9, perImg: 1.24 },
+    { id: "starter", name: "Starter", credits: 5, price: 9.90, perImg: 1.98 },
+    { id: "value", name: "Value", credits: 60, price: 49.90, perImg: 0.83 },
+    { id: "pro", name: "Pro", credits: 150, price: 99.00, perImg: 0.66 },
   ]
 
+  // --- 核心：映射后端需要的参数格式 ---
+  const getBackendParams = () => {
+    let type = "";
+    if (activeTab === "subscription") {
+      // 转换 ID 首字母大写并拼接周期 (例如: Lite_monthly)
+      const capId = selectedId.charAt(0).toUpperCase() + selectedId.slice(1);
+      type = `${capId}_${billingCycle}`;
+    } else {
+      // 转换点数包 ID 为对应的点数数字 (starter->5, value->60, pro->150)
+      const mapping: Record<string, string> = { starter: "5", value: "60", pro: "150" };
+      type = `credits_${mapping[selectedId]}`;
+    }
+    return { type, currency: "brl" };
+  }
+
+  // --- Lógica Stripe / API Geral ---
   const handlePayment = async () => {
     if (!isLoggedIn) {
       setShowLogin(true)
@@ -60,10 +77,7 @@ export default function PricingPage() {
 
     setIsPaying(true)
     const token = localStorage.getItem("auth_token")
-
-    const paymentType = activeTab === "subscription"
-      ? `plan_${selectedId}_${billingCycle}`
-      : `credits_${selectedId}`
+    const { type, currency } = getBackendParams();
 
     try {
       const response = await fetch('/api/pay', {
@@ -72,7 +86,7 @@ export default function PricingPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ type: paymentType })
+        body: JSON.stringify({ type, currency })
       })
 
       const resData = await response.json()
@@ -90,7 +104,7 @@ export default function PricingPage() {
 
   const getDisplayPrice = () => {
     if (activeTab === "subscription") {
-      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[2]
+      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[1]
       return billingCycle === "monthly" ? plan.monthly : plan.yearly
     }
     const pack = creditPacks.find(c => c.id === selectedId) || creditPacks[1]
@@ -111,9 +125,9 @@ export default function PricingPage() {
       </h2>
       <div className="space-y-10 pt-4">
         <div className="space-y-4">
-          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em]">Vantagens Pro:</h4>
+          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">Vantagens Pro:</h4>
           <ul className="space-y-4">
-            {["50 downloads HD por dia", "Créditos extras incluídos", "Ideal para iniciantes", "Sem marca d'água na prévia"].map(item => (
+            {["Downloads em alta qualidade", "Créditos extras incluídos", "Ideal para profissionais", "Sem marca d'água nas prévias"].map(item => (
               <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
                 <div className="bg-blue-600 rounded-full p-0.5 shrink-0 mt-0.5"><Check size={10} className="text-white stroke-[4px]" /></div>
                 <span>{item}</span>
@@ -122,9 +136,9 @@ export default function PricingPage() {
           </ul>
         </div>
         <div className="space-y-4">
-          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em]">Sobre Créditos:</h4>
+          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">Sobre Créditos:</h4>
           <ul className="space-y-4">
-            {["Acesso completo aos recursos", "Créditos que nunca expiram", "Modo de equipe acessível"].map(item => (
+            {["Acesso total aos recursos", "Créditos nunca expiram", "Modo de equipe disponível"].map(item => (
               <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
                 <div className="bg-blue-600 rounded-full p-0.5 shrink-0 mt-0.5"><Check size={10} className="text-white stroke-[4px]" /></div>
                 <span>{item}</span>
@@ -141,7 +155,8 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
+      <Header locale="pt" dict={dictionaries.pt as any} />
+
       <main className="flex-1 flex items-center justify-center p-4 lg:p-6 pt-24 lg:pt-24">
         <div className="bg-white rounded-[40px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col-reverse lg:flex-row overflow-hidden w-full max-w-6xl h-fit">
 
@@ -152,8 +167,8 @@ export default function PricingPage() {
           <div className="flex-1 p-6 flex flex-col bg-white overflow-hidden">
             <div className="flex justify-center mb-6 shrink-0">
               <div className="bg-slate-100 p-1.5 rounded-2xl flex w-full max-w-105 shadow-inner">
-                <button onClick={() => { setActiveTab("subscription"); setSelectedId("pro"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}>Assinaturas</button>
-                <button onClick={() => { setActiveTab("credits"); setSelectedId("50"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}>Créditos Avulsos</button>
+                <button onClick={() => { setActiveTab("subscription"); setSelectedId("standard"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}>Assinaturas</button>
+                <button onClick={() => { setActiveTab("credits"); setSelectedId("value"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}>Créditos</button>
               </div>
             </div>
 
@@ -163,7 +178,7 @@ export default function PricingPage() {
                   <button onClick={() => setBillingCycle("monthly")} className={`pb-1 border-b-2 transition-all ${billingCycle === "monthly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>Mensal</button>
                   <button onClick={() => setBillingCycle("yearly")} className={`pb-1 relative border-b-2 transition-all flex items-center ${billingCycle === "yearly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>
                     Anual
-                    <span className="absolute -top-4 left-full ml-1 whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-xs shadow-sm border border-green-100">Economize 40%</span>
+                    <span className="absolute -top-4 left-full ml-1 whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-xs shadow-sm border border-green-100">Economize 20%</span>
                   </button>
                 </div>
               )}
@@ -186,7 +201,7 @@ export default function PricingPage() {
                     {billingCycle === 'yearly' && <div className="text-xs font-bold text-slate-400 not-italic tracking-tighter mt-1">Total R${p.yearly.toFixed(2)}</div>}
                   </div>
                   {p.highlighted && (
-                    <div className="absolute -top-3 right-6 bg-blue-600 text-white text-[8px] px-3 py-0.5 rounded-full font-black shadow-lg flex items-center gap-1 tracking-widest">
+                    <div className="absolute -top-3 right-6 bg-blue-600 text-white text-[8px] px-3 py-0.5 rounded-full font-black shadow-lg flex items-center gap-1 tracking-widest uppercase">
                       <Star size={8} fill="white" /> Recomendado
                     </div>
                   )}
@@ -199,7 +214,7 @@ export default function PricingPage() {
                     </div>
                     <div>
                       <div className="font-black text-slate-900 text-base tracking-tight leading-none">{pack.name}</div>
-                      <div className="text-xs font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block">Validade permanente</div>
+                      <div className="text-xs font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block uppercase">Validade Permanente</div>
                     </div>
                   </div>
                   <div className="text-right font-black text-slate-900 italic">
@@ -212,30 +227,115 @@ export default function PricingPage() {
 
             <div className="mt-auto pt-4 border-t border-slate-100 text-center shrink-0">
               <div className="flex items-baseline justify-center gap-3 mb-6">
-                <span className="text-sm font-black text-slate-400 tracking-widest">Total a pagar:</span>
+                <span className="text-sm font-black text-slate-400 tracking-widest uppercase">Total:</span>
                 <span className="text-5xl font-black text-blue-600 italic tracking-tighter leading-none">R${getDisplayPrice().toFixed(2)}</span>
               </div>
 
-              <button
-                onClick={handlePayment}
-                disabled={isPaying}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white py-5 rounded-3xl font-black text-xl tracking-widest shadow-xl shadow-blue-100 flex items-center justify-center gap-2 active:scale-95 transition-all"
-              >
-                {isPaying ? <Loader2 className="animate-spin" /> : (activeTab === "subscription" ? "Assine Agora" : "Compre Agora")}
-              </button>
+              {/* Botão Stripe / Cartão */}
+              <div className="w-full max-w-xs mx-auto mb-3">
+                <button
+                  onClick={handlePayment}
+                  disabled={isPaying}
+                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-black py-3.5 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  {isPaying ? <Loader2 className="animate-spin" size={20} /> : (
+                    <>
+                      <CreditCard size={18} />
+                      <span>Pagar com Cartão</span>
+                    </>
+                  )}
+                </button>
+              </div>
 
-              <div className="flex justify-center items-center gap-8 opacity-30 grayscale mt-8 pb-2">
+              {/* Divisor */}
+              <div className="relative flex py-2 items-center w-full max-w-xs mx-auto mb-3">
+                <div className="flex-grow border-t border-slate-200"></div>
+                <span className="flex-shrink-0 mx-4 text-slate-300 text-[10px] font-black uppercase tracking-widest">Ou pagar com</span>
+                <div className="flex-grow border-t border-slate-200"></div>
+              </div>
 
-                <Image src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" width={34} height={32} />
+              {/* Botão PayPal */}
+              <div className="w-full max-w-xs mx-auto mb-6 min-h-[50px] z-0">
+                <PayPalButtons
+                  fundingSource="paypal"
+                  style={{ layout: "vertical", color: "blue", shape: "rect", label: "paypal" }}
+                  forceReRender={[activeTab, selectedId, billingCycle, isLoggedIn]}
+                  onClick={(data, actions) => {
+                    if (!isLoggedIn) {
+                      setShowLogin(true)
+                      return actions.reject()
+                    }
+                    return actions.resolve()
+                  }}
+                  createOrder={async (data, actions) => {
+                    const { type, currency } = getBackendParams();
+
+                    try {
+                      const res = await fetch("/api/pay/paypal-smart-create", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          googleUserId: (user as any)?.googleUserId || "",
+                          type,
+                          currency,
+                          email: user?.email || "",
+                          userId: (user as any)?.id || ""
+                        })
+                      })
+
+                      const json = await res.json()
+                      if (!res.ok || !json.data) {
+                        throw new Error(json.msg || "Falha na criação do pedido")
+                      }
+
+                      return json.data;
+                    } catch (err: any) {
+                      console.error("PayPal Create Error:", err)
+                      alert("Não foi possível iniciar o PayPal. Tente novamente.")
+                      throw err;
+                    }
+                  }}
+                  onApprove={async (data, actions) => {
+                    try {
+                      const res = await fetch("/api/pay/paypal-smart-capture", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          orderId: data.orderID
+                        })
+                      })
+
+                      const json = await res.json()
+                      if (json.code === 200 || json.status === "COMPLETED") {
+                        alert("Pagamento concluído com sucesso!")
+                        window.location.reload()
+                      } else {
+                        alert("Status do pagamento desconhecido: " + (json.msg || "Erro"))
+                      }
+                    } catch (err) {
+                      console.error("Capture Error:", err)
+                      alert("Erro ao processar o pagamento.")
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex justify-center items-center gap-8 opacity-30 grayscale pb-2">
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" width={50} height={40} alt="Visa" />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" width={40} height={25} alt="Mastercard" />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width={100} height={15} alt="PayPal" />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" width={40} height={40} alt="Amex" />
               </div>
             </div>
           </div>
         </div>
       </main>
-      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
+      <LoginModal
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
+        locale="pt"
+        dict={dictionaries.pt as any}
+      />
     </div>
   )
 }

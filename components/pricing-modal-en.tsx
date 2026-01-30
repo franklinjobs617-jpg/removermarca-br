@@ -2,11 +2,12 @@
 
 import React, { useState } from "react"
 import { Header } from "@/components/header"
-import { Check, Info, Star, Loader2 } from "lucide-react"
+import { Check, Info, Star, Loader2, CreditCard } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { LoginModal } from "@/components/login-modal"
 import Image from "next/image"
 import { dictionaries } from "@/lib/dictionaries"
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 type PlanType = "subscription" | "credits"
 type BillingCycle = "monthly" | "yearly"
@@ -34,26 +35,42 @@ export function PricingContent() {
 
   const [activeTab, setActiveTab] = useState<PlanType>("subscription")
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("yearly")
-  const [selectedId, setSelectedId] = useState("pro")
+  const [selectedId, setSelectedId] = useState("standard")
 
   const [isPaying, setIsPaying] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
 
-  // Translated Data
+  // --- 数据定义 ---
   const subscriptions: SubscriptionPlan[] = [
-    { id: "mini", name: "Mini Plan", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49 },
-    { id: "basic", name: "Basic Plan", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99 },
-    { id: "pro", name: "Pro Plan", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, highlighted: true },
-    { id: "expert", name: "Expert Plan", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99 },
-    { id: "studio", name: "Studio Plan", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99 },
+    { id: "lite", name: "Lite Plan", credits: 50, monthly: 4.90, yearly: 47.00, yearlyMonthly: 3.92 },
+    { id: "standard", name: "Standard Plan", credits: 200, monthly: 12.90, yearly: 124.00, yearlyMonthly: 10.33, highlighted: true },
+    { id: "advanced", name: "Advanced Plan", credits: 800, monthly: 39.90, yearly: 383.00, yearlyMonthly: 31.92 },
   ]
 
   const creditPacks: CreditPack[] = [
-    { id: "10", name: "Starter Pack", credits: 10, price: 24.9, perImg: 2.49 },
-    { id: "50", name: "Standard Pack", credits: 50, price: 89.9, perImg: 1.79 },
-    { id: "200", name: "Business Pack", credits: 200, price: 249.9, perImg: 1.24 },
+    { id: "starter", name: "Starter Pack", credits: 5, price: 1.99, perImg: 0.40 },
+    { id: "value", name: "Value Pack", credits: 60, price: 9.90, perImg: 0.17 },
+    { id: "pro", name: "Pro Pack", credits: 150, price: 19.90, perImg: 0.13 },
   ]
 
+  // --- 核心：将前端 ID 转换为后端需要的 Type 格式 ---
+  const getBackendPaymentType = () => {
+    if (activeTab === "subscription") {
+      // 转换示例: lite + monthly -> Lite_monthly
+      const capitalizedId = selectedId.charAt(0).toUpperCase() + selectedId.slice(1);
+      return `${capitalizedId}_${billingCycle}`;
+    } else {
+      // 转换示例: starter -> credits_5, value -> credits_60, pro -> credits_150
+      const creditMapping: Record<string, string> = {
+        starter: "5",
+        value: "60",
+        pro: "150"
+      };
+      return `credits_${creditMapping[selectedId]}`;
+    }
+  }
+
+  // --- Stripe/通用支付逻辑 ---
   const handlePayment = async () => {
     if (!isLoggedIn) {
       setShowLogin(true)
@@ -62,10 +79,7 @@ export function PricingContent() {
 
     setIsPaying(true)
     const token = localStorage.getItem("auth_token")
-
-    const paymentType = activeTab === "subscription"
-      ? `plan_${selectedId}_${billingCycle}`
-      : `credits_${selectedId}`
+    const paymentType = getBackendPaymentType(); // 使用新转换逻辑
 
     try {
       const response = await fetch('/api/pay', {
@@ -92,7 +106,7 @@ export function PricingContent() {
 
   const getDisplayPrice = () => {
     if (activeTab === "subscription") {
-      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[2]
+      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[1]
       return billingCycle === "monthly" ? plan.monthly : plan.yearly
     }
     const pack = creditPacks.find(c => c.id === selectedId) || creditPacks[1]
@@ -115,18 +129,7 @@ export function PricingContent() {
         <div className="space-y-4">
           <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">Pro Benefits:</h4>
           <ul className="space-y-4">
-            {["50 HD downloads per day", "Extra credits included", "Ideal for beginners", "No watermark on previews"].map(item => (
-              <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
-                <div className="bg-blue-600 rounded-full p-0.5 shrink-0 mt-0.5"><Check size={10} className="text-white stroke-[4px]" /></div>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="space-y-4">
-          <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">About Credits:</h4>
-          <ul className="space-y-4">
-            {["Full access to features", "Credits never expire", "Team mode accessible"].map(item => (
+            {["High quality downloads", "Extra credits included", "Ideal for professionals", "No watermark on previews"].map(item => (
               <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
                 <div className="bg-blue-600 rounded-full p-0.5 shrink-0 mt-0.5"><Check size={10} className="text-white stroke-[4px]" /></div>
                 <span>{item}</span>
@@ -155,8 +158,8 @@ export function PricingContent() {
           <div className="flex-1 p-6 flex flex-col bg-white overflow-hidden">
             <div className="flex justify-center mb-6 shrink-0">
               <div className="bg-slate-100 p-1.5 rounded-2xl flex w-full max-w-105 shadow-inner">
-                <button onClick={() => { setActiveTab("subscription"); setSelectedId("pro"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}>Subscriptions</button>
-                <button onClick={() => { setActiveTab("credits"); setSelectedId("50"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}>Credit Packs</button>
+                <button onClick={() => { setActiveTab("subscription"); setSelectedId("standard"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}>Subscriptions</button>
+                <button onClick={() => { setActiveTab("credits"); setSelectedId("value"); }} className={`flex-1 py-3 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}>Credit Packs</button>
               </div>
             </div>
 
@@ -166,7 +169,7 @@ export function PricingContent() {
                   <button onClick={() => setBillingCycle("monthly")} className={`pb-1 border-b-2 transition-all ${billingCycle === "monthly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>Monthly</button>
                   <button onClick={() => setBillingCycle("yearly")} className={`pb-1 relative border-b-2 transition-all flex items-center ${billingCycle === "yearly" ? "text-blue-600 border-blue-600" : "text-slate-300 border-transparent"}`}>
                     Yearly
-                    <span className="absolute -top-4 left-full ml-1 whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-xs shadow-sm border border-green-100">Save 40%</span>
+                    <span className="absolute -top-4 left-full ml-1 whitespace-nowrap text-green-600 font-black bg-green-50 px-2 py-0.5 rounded text-xs shadow-sm border border-green-100">Save 20%</span>
                   </button>
                 </div>
               )}
@@ -207,7 +210,6 @@ export function PricingContent() {
                   </div>
                   <div className="text-right font-black text-slate-900 italic">
                     <div className="text-2xl lg:text-3xl tracking-tighter leading-none">${pack.price.toFixed(2)}</div>
-                    <div className="text-[10px] font-bold text-slate-400 not-italic tracking-tight mt-1">${pack.perImg.toFixed(2)} / image</div>
                   </div>
                 </div>
               ))}
@@ -219,15 +221,84 @@ export function PricingContent() {
                 <span className="text-5xl font-black text-blue-600 italic tracking-tighter leading-none">${getDisplayPrice().toFixed(2)}</span>
               </div>
 
-              <button
-                onClick={handlePayment}
-                disabled={isPaying}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white py-5 rounded-3xl font-black text-xl tracking-widest shadow-xl shadow-blue-100 flex items-center justify-center gap-2 active:scale-95 transition-all uppercase"
-              >
-                {isPaying ? <Loader2 className="animate-spin" /> : (activeTab === "subscription" ? "Subscribe Now" : "Buy Credits")}
-              </button>
+              <div className="w-full max-w-xs mx-auto mb-3">
+                <button
+                  onClick={handlePayment}
+                  disabled={isPaying}
+                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-black py-3.5 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  {isPaying ? <Loader2 className="animate-spin" size={20} /> : <span>Pay with Stripe</span>}
+                </button>
+              </div>
 
-              <div className="flex justify-center items-center gap-8 opacity-30 grayscale mt-8 pb-2">
+              <div className="relative flex py-2 items-center w-full max-w-xs mx-auto mb-3">
+                <div className="flex-grow border-t border-slate-200"></div>
+                <span className="flex-shrink-0 mx-4 text-slate-300 text-[10px] font-black uppercase tracking-widest">Or pay with</span>
+                <div className="flex-grow border-t border-slate-200"></div>
+              </div>
+
+              <div className="w-full max-w-xs mx-auto mb-6 min-h-[50px] z-0">
+                <PayPalButtons
+                  style={{ layout: "vertical", color: "blue", shape: "rect", label: "paypal" }}
+                  forceReRender={[activeTab, selectedId, billingCycle, isLoggedIn]}
+                  onClick={(data, actions) => {
+                    if (!isLoggedIn) {
+                      setShowLogin(true)
+                      return actions.reject()
+                    }
+                    return actions.resolve()
+                  }}
+                  createOrder={async (data, actions) => {
+                    const paymentType = getBackendPaymentType(); // 使用新转换逻辑
+
+                    try {
+                      const res = await fetch("/api/pay/paypal-smart-create", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          googleUserId: (user as any)?.googleUserId || "",
+                          type: paymentType,
+                          email: user?.email || "",
+                          userId: (user as any)?.id || ""
+                        })
+                      })
+
+                      const json = await res.json()
+                      if (!res.ok || !json.data) {
+                        throw new Error(json.msg || "Order creation failed")
+                      }
+
+                      return json.data;
+                    } catch (err: any) {
+                      console.error("PayPal Create Error:", err)
+                      alert("Could not initiate PayPal payment. Please try again.")
+                      throw err;
+                    }
+                  }}
+                  onApprove={async (data, actions) => {
+                    try {
+                      const res = await fetch("/api/pay/paypal-smart-capture", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ orderId: data.orderID })
+                      })
+
+                      const json = await res.json()
+                      if (json.code === 200 || json.status === "COMPLETED") {
+                        alert("Payment Successful! Thank you.")
+                        window.location.reload()
+                      } else {
+                        alert("Payment captured but status unknown: " + (json.msg || "Unknown"))
+                      }
+                    } catch (err) {
+                      console.error("Capture Error:", err)
+                      alert("Payment failed during capture.")
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex justify-center items-center gap-8 opacity-30 grayscale pb-2">
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" width={50} height={40} alt="Visa" />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" width={40} height={25} alt="Mastercard" />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width={100} height={15} alt="PayPal" />

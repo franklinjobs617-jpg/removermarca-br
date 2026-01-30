@@ -1,7 +1,7 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect } from "react"
 
-interface User { email: string; credits: number; }
+interface User { email: string; credits: number; googleUserId: string; id: string; }
 interface AuthContextType {
   user: User | null; isLoggedIn: boolean; credits: number; isLoaded: boolean;
   login: (idToken: string) => Promise<void>;

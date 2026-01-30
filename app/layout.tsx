@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth-context"
 import { FooterWrapper } from "@/components/footer-wrapper" // 导入全局页脚 
 import Script from "next/script"
 import { GoogleAnalytics } from '@next/third-parties/google'
+import PayPalProviderWrapper from "@/components/PayPalProviderWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +37,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} antialiased font-sans`}>
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow">
+              <PayPalProviderWrapper>
+
+                {children}
+              </PayPalProviderWrapper>
+            </main>
             <FooterWrapper />
           </div>
         </AuthProvider>

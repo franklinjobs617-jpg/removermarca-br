@@ -1,10 +1,12 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { Check, Info, X, Star, Loader2, LogIn } from "lucide-react"
+import { Check, Info, X, Star, Loader2, LogIn, CreditCard } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { EditorDictionary } from "./editor-interface"
+import { PayPalButtons } from "@paypal/react-paypal-js"
 
 type PlanType = "subscription" | "credits"
 type BillingCycle = "monthly" | "yearly"
@@ -33,18 +35,23 @@ interface PricingModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenLogin: () => void;
-  locale: string;
   dict: EditorDictionary;
 }
 
-export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: PricingModalProps) {
-  const { isLoggedIn } = useAuth()
+export function PricingModal({ isOpen, onClose, onOpenLogin, dict }: PricingModalProps) {
+  const { isLoggedIn, user } = useAuth()
+  const pathname = usePathname()
+
+  // 核心判断逻辑
+  const isEn = pathname?.includes("/en") ?? false;
+  const currency = isEn ? '$' : 'R$';
+
   const [activeTab, setActiveTab] = useState<PlanType>("subscription")
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("yearly")
-  const [selectedId, setSelectedId] = useState("pro")
+  const [selectedId, setSelectedId] = useState("standard")
   const [isPaying, setIsPaying] = useState(false)
 
-  // --- 修复 1: 锁定背景滚动 ---
+  // 锁定背景滚动
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
@@ -56,33 +63,41 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
 
   if (!isOpen) return null
 
-  // 货币符号
-  const currency = locale === 'en' ? '$' : 'R$';
-
+  // --- 套餐数据映射 ---
   const subscriptions: SubscriptionPlan[] = [
-    { id: "mini", name: "Mini", credits: 15, monthly: 19.9, yearly: 149.9, yearlyMonthly: 12.49, desc: "Iniciante" },
-    { id: "basic", name: "Basic", credits: 45, monthly: 39.9, yearly: 299.9, yearlyMonthly: 24.99, desc: "Vendedor" },
-    { id: "pro", name: "Pro", credits: 120, monthly: 79.9, yearly: 599.9, yearlyMonthly: 49.99, desc: "Popular", highlighted: true },
-    { id: "expert", name: "Expert", credits: 300, monthly: 149.9, yearly: 1199.9, yearlyMonthly: 99.99, desc: "Expert" },
-    { id: "studio", name: "Studio", credits: 1000, monthly: 399.9, yearly: 2999.9, yearlyMonthly: 249.99, desc: "Studio" },
+    { id: "lite", name: "Lite", credits: 50, monthly: isEn ? 4.90 : 25.00, yearly: isEn ? 47.00 : 239.00, yearlyMonthly: isEn ? 3.92 : 19.92, desc: isEn ? "Entry" : "Iniciante" },
+    { id: "standard", name: "Standard", credits: 200, monthly: isEn ? 12.90 : 65.00, yearly: isEn ? 124.00 : 625.00, yearlyMonthly: isEn ? 10.33 : 52.08, desc: isEn ? "Most Popular" : "Mais Popular", highlighted: true },
+    { id: "advanced", name: "Advanced", credits: 800, monthly: isEn ? 39.90 : 199.00, yearly: isEn ? 383.00 : 1910.00, yearlyMonthly: isEn ? 31.92 : 159.17, desc: isEn ? "Best Value" : "Melhor Valor" },
   ]
 
   const creditPacks: CreditPack[] = [
-    { id: "10", name: "Starter", credits: 10, price: 24.9, perImg: 2.49, tag: "Experimental" },
-    { id: "50", name: "Standard", credits: 50, price: 89.9, perImg: 1.79, tag: "Mais Comum" },
-    { id: "200", name: "Business", credits: 200, price: 249.9, perImg: 1.24, tag: "Melhor Taxa" },
+    { id: "starter", name: "Starter", credits: 5, price: isEn ? 1.99 : 9.90, perImg: isEn ? 0.40 : 1.98, tag: isEn ? "Trial" : "Experimental" },
+    { id: "value", name: "Value", credits: 60, price: isEn ? 9.90 : 49.90, perImg: isEn ? 0.17 : 0.83, tag: isEn ? "Best Choice" : "Mais Comum" },
+    { id: "pro", name: "Pro", credits: 150, price: isEn ? 19.90 : 99.00, perImg: isEn ? 0.13 : 0.66, tag: isEn ? "Big Volume" : "Grande Volume" },
   ]
 
-  const handleAction = async () => {
+  // --- 参数转换逻辑 ---
+  const getBackendParams = () => {
+    let type = "";
+    if (activeTab === "subscription") {
+      const capId = selectedId.charAt(0).toUpperCase() + selectedId.slice(1);
+      type = `${capId}_${billingCycle}`;
+    } else {
+      const mapping: Record<string, string> = { starter: "5", value: "60", pro: "150" };
+      type = `credits_${mapping[selectedId]}`;
+    }
+    return { type, currency: isEn ? "usd" : "brl" };
+  }
+
+  // --- Stripe 支付逻辑 ---
+  const handleStripePayment = async () => {
     if (!isLoggedIn) {
       onOpenLogin();
       return;
     }
     setIsPaying(true);
     const token = localStorage.getItem("auth_token");
-    let paymentType = activeTab === "subscription"
-      ? `plan_${selectedId}_${billingCycle}`
-      : `credits_${selectedId}`;
+    const { type, currency } = getBackendParams();
 
     try {
       const response = await fetch('/api/pay', {
@@ -91,13 +106,13 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ type: paymentType })
+        body: JSON.stringify({ type, currency })
       });
       const resData = await response.json();
       if (resData.status === "success" && resData.url) {
         window.location.href = resData.url;
       } else {
-        alert(resData.message || "Erro ao iniciar pagamento");
+        alert(resData.message || (isEn ? "Error initiating payment" : "Erro ao iniciar pagamento"));
         setIsPaying(false);
       }
     } catch (error) {
@@ -108,7 +123,7 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
 
   const getSelectedPrice = () => {
     if (activeTab === "subscription") {
-      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[2]
+      const plan = subscriptions.find(s => s.id === selectedId) || subscriptions[1]
       return billingCycle === "monthly" ? plan.monthly : plan.yearly
     } else {
       const pack = creditPacks.find(p => p.id === selectedId) || creditPacks[1]
@@ -132,7 +147,12 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
         <div className="space-y-4">
           <h4 className="text-blue-600 font-black text-xs tracking-[0.2em] uppercase">{dict.proBenefits}</h4>
           <ul className="space-y-4">
-            {["50 downloads HD por dia", "Créditos extras incluídos", "Ideal para iniciantes", "Sem marca d'água na prévia"].map(item => (
+            {[
+              isEn ? "High quality downloads" : "Downloads em alta qualidade",
+              isEn ? "Extra credits included" : "Créditos extras incluídos",
+              isEn ? "Ideal for professionals" : "Ideal para profissionais",
+              isEn ? "No watermark on previews" : "Sem marca d'água na prévia"
+            ].map(item => (
               <li key={item} className="flex items-start gap-3 text-slate-700 font-bold text-sm leading-tight">
                 <div className="bg-blue-600 rounded-full p-0.5 shrink-0 mt-0.5"><Check size={10} className="text-white stroke-[4px]" /></div>
                 <span>{item}</span>
@@ -160,26 +180,85 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
         </span>
       </div>
 
+      {/* Stripe 支付按钮 */}
       <button
-        onClick={handleAction}
+        onClick={handleStripePayment}
         disabled={isPaying}
-        className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-4 rounded-3xl font-black text-md md:text-xl transition-all mb-4 shadow-xl shadow-blue-100 uppercase tracking-widest flex items-center justify-center gap-3"
+        className="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-3.5 rounded-3xl font-black text-md md:text-lg transition-all mb-3 shadow-xl shadow-blue-100 uppercase tracking-widest flex items-center justify-center gap-3"
       >
-        {isPaying ? (
-          <Loader2 className="animate-spin" />
-        ) : !isLoggedIn ? (
+        {isPaying ? <Loader2 className="animate-spin" /> : (
           <>
-            <LogIn size={20} />
-            <span>{dict.loginToContinue}</span>
+            <CreditCard size={18} />
+            <span>{isEn ? "Pay with Card" : "Pagar com Cartão"}</span>
           </>
-        ) : (
-          activeTab === "subscription" ? dict.subscribeNow : dict.buyNow
         )}
       </button>
 
-      <div className="flex justify-center items-center gap-8 opacity-30 grayscale mt-4 pb-2">
-        {/* 如果是 EN，不显示 Pix */}
-        {locale !== 'en' && <Image src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" width={30} height={32} />}
+      {/* 分割线 */}
+      <div className="relative flex py-2 items-center w-full max-w-xs mx-auto mb-2">
+        <div className="flex-grow border-t border-slate-200"></div>
+        <span className="flex-shrink-0 mx-4 text-slate-300 text-[10px] font-black uppercase tracking-widest">
+          {isEn ? "Or pay with" : "Ou pagar com"}
+        </span>
+        <div className="flex-grow border-t border-slate-200"></div>
+      </div>
+
+      {/* PayPal 按钮逻辑 */}
+      <div className="w-full max-w-xs mx-auto mb-4 min-h-[50px]">
+        <PayPalButtons
+          fundingSource="paypal"
+          style={{ layout: "vertical", color: "blue", shape: "rect", label: "paypal" }}
+          forceReRender={[activeTab, selectedId, billingCycle, isLoggedIn, isEn]}
+          onClick={(data, actions) => {
+            if (!isLoggedIn) {
+              onOpenLogin();
+              return actions.reject();
+            }
+            return actions.resolve();
+          }}
+          createOrder={async (data, actions) => {
+            const { type, currency } = getBackendParams();
+            try {
+              const res = await fetch("/api/pay/paypal-smart-create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  googleUserId: (user as any)?.googleUserId || "",
+                  type,
+                  currency,
+                  email: user?.email || "",
+                  userId: (user as any)?.id || ""
+                })
+              });
+              const json = await res.json();
+              if (!res.ok || !json.data) throw new Error("Order creation failed");
+              return json.data;
+            } catch (err) {
+              alert(isEn ? "Could not initiate PayPal." : "Não foi possível iniciar o PayPal.");
+              throw err;
+            }
+          }}
+          onApprove={async (data, actions) => {
+            try {
+              const res = await fetch("/api/pay/paypal-smart-capture", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ orderId: data.orderID })
+              });
+              const json = await res.json();
+              if (json.code === 200 || json.status === "COMPLETED") {
+                alert(isEn ? "Success!" : "Sucesso!");
+                window.location.reload();
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+        />
+      </div>
+
+      <div className="flex justify-center items-center gap-8 opacity-30 grayscale mt-2 pb-2">
+        {!isEn && <Image src="https://upload.wikimedia.org/wikipedia/commons/8/81/Wikimedia-logo.svg" alt="Pix" width={30} height={32} />}
         <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" width={40} height={40} alt="Visa" />
         <Image src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" width={30} height={25} alt="Mastercard" />
         <Image src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" width={80} height={15} alt="PayPal" />
@@ -199,7 +278,6 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
         className="bg-white w-full max-w-6xl h-full sm:h-[750px] flex flex-col lg:flex-row overflow-hidden relative sm:rounded-[40px] shadow-2xl transition-all duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 关闭按钮 */}
         <button
           onClick={onClose}
           className="absolute right-4 top-2 sm:right-6 sm:top-6 z-[120] p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-all shadow-sm"
@@ -207,28 +285,22 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
           <X size={20} strokeWidth={3} />
         </button>
 
-        {/* 左侧：描述 (PC端固定显示) */}
         <aside className="hidden lg:flex w-full lg:w-85 xl:w-95 bg-[#f4f7ff] p-12 flex-col shrink-0 border-r border-blue-50">
           <Benefits />
         </aside>
 
-        {/* 右侧：主内容区 */}
         <div className="flex-1 flex flex-col bg-white overflow-hidden">
-
           <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden">
-
             <div className="p-6 pt-12 md:pt-6 flex flex-col h-full lg:overflow-hidden">
-
-              {/* 1. Tab 切换区 (固定高度) */}
               <div className="shrink-0">
                 <div className="flex justify-center mb-4">
                   <div className="bg-slate-100 p-1.5 rounded-2xl flex w-full max-w-md shadow-inner">
                     <button
-                      onClick={() => { setActiveTab("subscription"); setSelectedId("pro"); }}
+                      onClick={() => { setActiveTab("subscription"); setSelectedId("standard"); }}
                       className={`flex-1 py-2 rounded-xl text-md font-black transition-all ${activeTab === "subscription" ? "bg-white text-blue-600 shadow-md" : "text-gray-400"}`}
                     >{dict.subscription}</button>
                     <button
-                      onClick={() => { setActiveTab("credits"); setSelectedId("50"); }}
+                      onClick={() => { setActiveTab("credits"); setSelectedId("value"); }}
                       className={`flex-1 py-2 rounded-xl text-md font-black transition-all ${activeTab === "credits" ? "bg-white text-blue-600 shadow-sm" : "text-gray-400"}`}
                     >{dict.credits}</button>
                   </div>
@@ -251,7 +323,6 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
                 </div>
               </div>
 
-              {/* 2. 列表区域 */}
               <div className="flex-1 lg:overflow-y-auto lg:modal-scrollbar space-y-2 min-h-95">
                 {activeTab === "subscription" ? subscriptions.map((p) => (
                   <div key={p.id} onClick={() => setSelectedId(p.id)} className={`relative p-3 rounded-3xl border-2 cursor-pointer transition-all flex items-center justify-between ${selectedId === p.id ? 'border-blue-600 bg-blue-50/40 ring-4 ring-blue-600/5 shadow-sm' : 'border-slate-50 bg-slate-50/50 hover:border-blue-100'}`}>
@@ -269,7 +340,7 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
                     </div>
                     {p.highlighted && (
                       <div className="absolute -top-2.5 right-6 bg-blue-600 text-white text-[8px] px-3 py-1 rounded-full font-black shadow-lg flex items-center gap-1 tracking-widest uppercase">
-                        <Star size={8} fill="white" /> Popular
+                        <Star size={8} fill="white" /> {isEn ? "Recommended" : "Recomendado"}
                       </div>
                     )}
                   </div>
@@ -281,7 +352,7 @@ export function PricingModal({ isOpen, onClose, onOpenLogin, locale, dict }: Pri
                       </div>
                       <div>
                         <div className="font-black text-slate-900 text-base tracking-tight leading-none uppercase">{pack.name}</div>
-                        <div className="text-[10px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block">PERMANENT</div>
+                        <div className="text-[10px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded mt-1.5 inline-block">{isEn ? "PERMANENT" : "PERMANENTE"}</div>
                       </div>
                     </div>
                     <div className="text-right font-black text-slate-900 italic leading-none">
