@@ -8,6 +8,8 @@ import Script from "next/script"
 import { GoogleAnalytics } from '@next/third-parties/google'
 import PayPalProviderWrapper from "@/components/PayPalProviderWrapper";
 
+import { headers } from 'next/headers';
+import { LangSync } from '@/components/lang-sync'
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -31,10 +33,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // 1. 服务端获取路径 (用于首屏 SEO)
+  const headerList = await headers();
+  const pathname = headerList.get('x-current-path') || "";
+
+  const isEn = pathname.startsWith('/en');
+  const lang = isEn ? "en" : "pt-BR";
+
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={`${inter.variable} antialiased font-sans`}>
+        <LangSync />
+
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">
@@ -48,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </AuthProvider>
       </body>
 
-      <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
+      {/* <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
       <Script
         id="microsoft-clarity"
         strategy="afterInteractive" // 在页面交互后加载，不影响首屏速度
@@ -61,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 })(window, document, "clarity", "script", "v07km7j8jp");
               `,
         }}
-      />
+      /> */}
     </html>
   )
 }

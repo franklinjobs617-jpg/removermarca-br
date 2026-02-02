@@ -180,3 +180,7 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 button { cursor: pointer; }
+
+ iframe.component-frame{
+  z-index: 0 !important;
+}
