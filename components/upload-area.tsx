@@ -54,6 +54,17 @@ export function UploadArea({ buttonText, dragText, pasteLabel, pasteAction, loca
             {/* 注入粘贴文字 */}
             {pasteLabel} <span className="text-blue-500 font-extrabold cursor-help border-b border-blue-200">{pasteAction}</span>
           </p>
+          
+          {/* 情感化隐私提示 */}
+          <div className="flex items-center justify-center gap-2 text-xs text-slate-500 mt-4 font-medium">
+            <span className="text-green-600">🔒</span>
+            <span className="italic">
+              {locale === "en" 
+                ? "Your privacy is our priority. Photos are automatically deleted after processing."
+                : "Sua privacidade é nossa prioridade. Fotos são deletadas automaticamente após o processamento."
+              }
+            </span>
+          </div>
         </div>
       </div>
     </div>

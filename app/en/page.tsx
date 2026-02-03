@@ -2,6 +2,7 @@
 import { Header } from "@/components/header"
 import { HeroSectionEn } from "@/components/home/heroSectionEn"
 import { GlobalDragDrop } from "@/components/home/globalDragDrop"
+import { HomeWithRetention } from "@/components/home-with-retention"
 import { Metadata } from "next"
 export const metadata: Metadata = {
     title: "AI Watermark Remover: Remove Watermark from Photo Online 4K",
@@ -121,6 +122,9 @@ export default function EnglishHomePage() {
                     </div>
                 </article>
             </main>
+
+            {/* 用户留存横幅和登录模态框 - 英文版 */}
+            <HomeWithRetention locale="en" />
         </div>
     )
 }

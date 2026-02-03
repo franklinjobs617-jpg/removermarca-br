@@ -15,9 +15,39 @@ import {
 // --- 1. SEO Metadados (SSR) ---
 export const metadata: Metadata = {
   title: "Como Remover Marca d'Água de Foto: Guia Passo a Passo (2026)",
-  description: "Aprenda como remover marca d'água de foto de forma simples e profissional. Guia completo com dicas de IA para limpar imagens sem perder qualidade.",
+  description: "Aprenda como remover marca d'água de foto, apagar marca d'água de foto e remover marca d'água foto de forma profissional. Guia completo com IA para limpar imagens sem perder qualidade.",
+  keywords: [
+    "remover marca d'água de foto",
+    "como remover marca d'água de foto",
+    "apagar marca d'água de foto",
+    "remover marca d'água foto",
+    "tirar marca d'água de foto",
+    "como tirar marca d'água de foto"
+  ],
   alternates: {
     canonical: "https://removermarca.com/como-remover-marca-dagua-de-foto",
+  },
+  openGraph: {
+    title: "Como Remover Marca d'Água de Foto: Guia Completo 2026",
+    description: "Tutorial passo a passo para remover marca d'água de foto usando IA. Aprenda técnicas profissionais.",
+    url: "https://removermarca.com/como-remover-marca-dagua-de-foto",
+    siteName: "RemoverMarca",
+    images: [
+      {
+        url: "https://removermarca.com/tutorial-como-remover-marca-dagua-de-foto-passo-a-passo.webp",
+        width: 1200,
+        height: 630,
+        alt: "Tutorial: Como remover marca d'água de foto"
+      }
+    ],
+    locale: "pt_BR",
+    type: "article"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Como Remover Marca d'Água de Foto - Guia 2026",
+    description: "Tutorial completo para remover marca d'água de foto com IA.",
+    images: ["https://removermarca.com/tutorial-como-remover-marca-dagua-de-foto-passo-a-passo.webp"]
   }
 }
 
@@ -59,10 +89,10 @@ export default function ComoRemoverMarcaPassoAPasso() {
           {/* Header da Página */}
           <header className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight uppercase italic">
-              Como remover marca d&apos;água de foto: Guia Passo a Passo (2026)
+              Como Remover Marca d&apos;Água de Foto: Guia Completo (2026)
             </h1>
             <p className="text-lg text-slate-600 font-medium italic mb-8">
-              Seja você um designer ou um vendedor do Mercado Livre, saber <strong>como remover marca d&apos;água de foto</strong> com qualidade profissional economiza tempo e dinheiro. Neste guia, mostramos o método testado por especialistas em 2026.
+              Seja você um designer ou um vendedor do Mercado Livre, dominar essa técnica com qualidade profissional economiza tempo e dinheiro. Neste guia completo, mostramos o método testado por especialistas em 2026.
             </p>
 
             {/* --- ÍNDICE (TOC) COM LINKS DE ANCORAGEM --- */}
@@ -92,10 +122,10 @@ export default function ComoRemoverMarcaPassoAPasso() {
           {/* Seção 1: Começar */}
           <section id="prep" className="py-10 border-t border-slate-100 scroll-mt-24">
             <h2 className="text-2xl font-black text-slate-900 mb-6 uppercase italic tracking-tighter">
-              1. O que você precisa saber antes de remover marca d&apos;água de foto
+              1. O que você precisa saber antes de começar
             </h2>
             <p className="mb-6">
-              Muitas pessoas cometem o erro de apenas &quot;borrar&quot; o logotipo. Para um resultado invisível, a técnica de <em>Inpainting</em> é essencial. Isso reconstrói os detalhes da imagem em vez de apenas escondê-los.
+              Muitas pessoas cometem o erro de apenas &quot;borrar&quot; o logotipo. Para um resultado invisível ao <strong>remover marca d&apos;água foto</strong>, a técnica de <em>Inpainting</em> é essencial. Isso reconstrói os detalhes da imagem em vez de apenas escondê-los, garantindo que você possa <strong>apagar marca d&apos;água de foto</strong> sem deixar rastros.
             </p>
 
             {/* [INSERT_LEGAL_CONTEXT_BRAZIL_HERE] */}
@@ -110,7 +140,7 @@ export default function ComoRemoverMarcaPassoAPasso() {
           {/* Seção 2: Tutorial */}
           <section id="tutorial" className="py-10 border-t border-slate-100 scroll-mt-24">
             <h2 className="text-2xl font-black text-slate-900 mb-10 uppercase italic tracking-tighter text-blue-600">
-              2. Como remover marca d&apos;água de foto usando inteligência artificial
+              2. Tutorial passo a passo usando inteligência artificial
             </h2>
 
             <div className="space-y-12 mb-10">
@@ -144,7 +174,7 @@ export default function ComoRemoverMarcaPassoAPasso() {
                 {/* [INSERT_EXPERT_TIP_TEXT_HERE] */}
                 <div className="ml-12 relative p-8 bg-amber-50 rounded-[40px] border border-amber-200 italic font-bold text-amber-900 shadow-sm">
                   <Lightbulb className="text-amber-500 mb-4" />
-                  &quot;Depois de processar milhares de fotos, aprendi que como remover marca d&apos;água de foto em fundos complexos (como grama ou mar) exige um truque: nunca use um pincel grande demais. Pinte apenas o contorno do logo. Isso força a IA a buscar texturas mais próximas e evita aquele efeito de &apos;mancha&apos; que entrega a edição.&quot;
+                  &quot;Depois de processar milhares de fotos, aprendi que trabalhar com fundos complexos (como grama ou mar) exige um truque: nunca use um pincel grande demais. Pinte apenas o contorno do logo. Isso força a IA a buscar texturas mais próximas e evita aquele efeito de &apos;mancha&apos; que entrega a edição.&quot;
                 </div>
               </div>
             </div>

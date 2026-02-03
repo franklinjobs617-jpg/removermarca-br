@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { HeroSection } from "@/components/home/heroSection"
 import { GlobalDragDrop } from "@/components/home/globalDragDrop"
 import { StaticContent } from "@/components/home/staticContent"
+import { HomeWithRetention } from "@/components/home-with-retention"
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
         {/* 纯静态 HTML 区：SEO 核心，0 字节客户端 JS */}
         <StaticContent />
       </main>
+
+      {/* 用户留存横幅和登录模态框 */}
+      <HomeWithRetention locale="pt" />
     </div>
   )
 }

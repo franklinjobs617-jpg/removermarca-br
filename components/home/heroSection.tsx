@@ -21,6 +21,7 @@ export function HeroSection() {
                             dragText="ou arraste um arquivo,"
                             pasteLabel="Cole imagem ou"
                             pasteAction="Ctrl+V"
+                            locale="pt"
                         />
                         <div className="w-full pt-6 border-t border-slate-50 mt-6 text-center">
                             <p className="text-[10px] font-black text-slate-400 tracking-[0.2em] mb-4 uppercase">Tente estas:</p>
@@ -32,9 +33,9 @@ export function HeroSection() {
                 {/* 文字和对比图 */}
                 <div className="order-2 md:order-1 flex flex-col space-y-8">
                     <div className="space-y-5 text-center lg:text-left hidden md:block">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full w-fit mx-auto lg:mx-0">
-                            <Sparkles className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
-                            <span className="text-[10px] font-black text-blue-700 tracking-widest uppercase">Tecnologia IA 2026</span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full w-fit mx-auto lg:mx-0">
+                            <Sparkles className="w-3 h-3 text-blue-600" />
+                            <span className="text-[11px] font-black text-blue-700 tracking-widest uppercase">Algoritmo de Inpainting Avançado</span>
                         </div>
                         <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
                             Ferramenta de IA para <br className="hidden sm:block" />
@@ -42,8 +43,29 @@ export function HeroSection() {
                             online grátis
                         </h1>
                         <p className="text-lg text-slate-500 max-w-md mx-auto lg:mx-0 font-medium">
-                            O jeito mais rápido e profissional de <strong className="text-slate-900">remover marca d&apos;água</strong> sem perder qualidade.
+                            O jeito mais rápido e profissional de <strong className="text-slate-900">remover marca d&apos;água de foto</strong> sem perder qualidade.
                         </p>
+                        
+                        {/* Prova Social */}
+                        <div className="flex items-center gap-4 text-sm text-slate-400 pt-2">
+                            <div className="flex items-center gap-1">
+                                <div className="flex -space-x-1">
+                                    <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white"></div>
+                                    <div className="w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
+                                    <div className="w-6 h-6 bg-purple-500 rounded-full border-2 border-white"></div>
+                                    <div className="w-6 h-6 bg-orange-500 rounded-full border-2 border-white"></div>
+                                </div>
+                                <span className="ml-2 font-bold">+15.000 usuários</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="flex text-yellow-400">
+                                    {"★★★★★".split("").map((star, i) => (
+                                        <span key={i} className="text-sm">{star}</span>
+                                    ))}
+                                </div>
+                                <span className="font-bold">4.9/5</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="relative group w-full max-w-lg mx-auto lg:mx-0">

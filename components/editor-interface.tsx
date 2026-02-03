@@ -7,7 +7,8 @@ import { useAuth } from "@/lib/auth-context"
 import { PricingModal } from "./pricing-modal"
 import { LoginModal } from "./login-modal"
 import { SaveMenu } from "./save-menu"
-import { AlertCircle, RefreshCw, SquareSplitHorizontal, Maximize, ZoomIn, ZoomOut, Plus } from "lucide-react"
+import { EditorTutorial } from "./editor-tutorial"
+import { AlertCircle, RefreshCw, SquareSplitHorizontal, Maximize, ZoomIn, ZoomOut, Plus, HelpCircle } from "lucide-react"
 
 // 定义图片项接口
 interface ImageItem {
@@ -56,7 +57,13 @@ export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
   const [showPricing, setShowPricing] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showMobileSaveMenu, setShowMobileSaveMenu] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [pendingAction, setPendingAction] = useState<null | 'download'>(null);
+
+  const handleCloseTutorial = () => {
+    setShowTutorial(false);
+    localStorage.setItem('editor_tutorial_seen', 'true');
+  };
 
   const triggerBatchPricing = () => {
     setShowPricing(true);
@@ -90,6 +97,14 @@ export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
       setPendingAction(null);
     }
   }, [isLoggedIn, isLoaded, pendingAction]);
+
+  // Mostrar tutorial para novos usuários
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem('editor_tutorial_seen');
+    if (!hasSeenTutorial && images.length > 0) {
+      setShowTutorial(true);
+    }
+  }, [images.length]);
 
   const processImageWithAPI = async (file: File, indexToUpdate: number) => {
     setIsProcessing(true);
@@ -290,24 +305,61 @@ export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
         {/* 顶部悬浮工具栏 */}
         <div className="absolute top-20 left-1/2 -translate-x-1/2 glass-panel px-6 py-2 rounded-full shadow-2xl flex items-center gap-6 z-40 scale-90 md:scale-100">
           <div className="flex items-center gap-4">
-            <button onClick={() => setZoom(z => Math.max(z - 10, 20))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
+            <button 
+              onClick={() => setZoom(z => Math.max(z - 10, 20))} 
+              className="text-gray-400 px-2 font-bold hover:text-blue-500 relative group"
+              title={locale === 'en' ? 'Zoom Out' : 'Diminuir Zoom'}
+            >
               <ZoomOut size={20} />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {locale === 'en' ? 'Zoom Out' : 'Diminuir Zoom'}
+              </div>
             </button>
             <span className="text-xs font-black text-gray-700 min-w-10 text-center uppercase tracking-widest">{zoom}%</span>
-            <button onClick={() => setZoom(z => Math.min(z + 10, 400))} className="text-gray-400 px-2 font-bold hover:text-blue-500">
+            <button 
+              onClick={() => setZoom(z => Math.min(z + 10, 400))} 
+              className="text-gray-400 px-2 font-bold hover:text-blue-500 relative group"
+              title={locale === 'en' ? 'Zoom In' : 'Aumentar Zoom'}
+            >
               <ZoomIn size={20} />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {locale === 'en' ? 'Zoom In' : 'Aumentar Zoom'}
+              </div>
             </button>
           </div>
           <div className="w-px h-6 bg-gray-200" />
           <div className="flex items-center gap-6">
             <button
-              onMouseDown={() => setShowComparison(true)} onMouseUp={() => setShowComparison(false)} onMouseLeave={() => setShowComparison(false)}
-              className={`text-gray-400 hover:text-blue-500 transition-colors ${showComparison ? 'text-blue-600 scale-110' : ''}`}
+              onMouseDown={() => setShowComparison(true)} 
+              onMouseUp={() => setShowComparison(false)} 
+              onMouseLeave={() => setShowComparison(false)}
+              className={`text-gray-400 hover:text-blue-500 transition-colors relative group ${showComparison ? 'text-blue-600 scale-110' : ''}`}
+              title={locale === 'en' ? 'Hold to Compare' : 'Segure para Comparar'}
             >
               <SquareSplitHorizontal size={20} />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {locale === 'en' ? 'Hold to Compare' : 'Segure para Comparar'}
+              </div>
             </button>
-            <button onClick={resetCanvas} className="text-gray-400 hover:text-blue-500">
+            <button 
+              onClick={resetCanvas} 
+              className="text-gray-400 hover:text-blue-500 relative group"
+              title={locale === 'en' ? 'Reset View' : 'Resetar Visualização'}
+            >
               <Maximize size={20} />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {locale === 'en' ? 'Reset View' : 'Resetar Visualização'}
+              </div>
+            </button>
+            <button 
+              onClick={() => setShowTutorial(true)} 
+              className="text-gray-400 hover:text-blue-500 relative group"
+              title={locale === 'en' ? 'Help' : 'Ajuda'}
+            >
+              <HelpCircle size={20} />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {locale === 'en' ? 'Help' : 'Ajuda'}
+              </div>
             </button>
           </div>
         </div>
@@ -408,6 +460,11 @@ export function EditorInterface({ dict, locale }: EditorInterfaceProps) {
         // @ts-ignore
         locale={locale}
         dict={dict}
+      />
+      <EditorTutorial
+        isOpen={showTutorial}
+        onClose={handleCloseTutorial}
+        locale={locale}
       />
     </div>
   );

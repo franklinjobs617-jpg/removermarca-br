@@ -8,7 +8,7 @@ export function StaticContent() {
             <section className="py-24 bg-white border-y border-slate-100">
                 <div className="max-w-7xl mx-auto px-6">
                     <h2 className="text-3xl md:text-4xl font-black text-center mb-16 italic">
-                        Como remover marca d&apos;água de foto <span className="text-blue-600">passo a passo</span>
+                        Como <span className="text-blue-600">remover marca d&apos;água de foto</span> e tirar marca d&apos;água passo a passo
                     </h2>
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
@@ -33,8 +33,86 @@ export function StaticContent() {
                     <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
                         <FeatureCard icon={<ShieldCheck className="text-emerald-500" />} title="Privacidade" desc="Fotos deletadas em 24h. Seguro e criptografado." />
                         <FeatureCard icon={<Zap className="text-blue-500" />} title="IA Neural" desc="Inpainting de ponta para pixels perfeitos." />
-                        <FeatureCard icon={<Star className="text-amber-400" />} title="100% Grátis" desc="Créditos diários para todos os usuários." />
+                        <FeatureCard icon={<Star className="text-amber-400" />} title="Teste Gratuito" desc="1 crédito gratuito para novos usuários testarem a qualidade." />
                         <FeatureCard icon={<Check className="text-blue-500" />} title="Fidelidade 4K" desc="Mantemos o DPI original da sua imagem." />
+                    </div>
+                </div>
+
+                {/* 内部链接 CTA */}
+                <div className="mt-16 text-center space-y-4">
+                    <p className="text-slate-600 text-sm font-medium">
+                        Pronto para começar? <Link href="/editor" className="text-blue-600 font-black hover:underline">Experimente nossa ferramenta de remover marca d&apos;água grátis</Link> ou veja nossos <Link href="/precos" className="text-blue-600 font-black hover:underline">planos premium</Link>.
+                    </p>
+                </div>
+            </section>
+
+            {/* SECTION: TESTIMONIALS */}
+            <section className="py-24 bg-slate-50">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-black italic mb-4">
+                            O que nossos <span className="text-blue-600">usuários dizem</span>
+                        </h2>
+                        <p className="text-slate-500 font-medium">Mais de 15.000 profissionais confiam em nossa ferramenta</p>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <TestimonialCard 
+                            name="Marina Silva"
+                            role="Fotógrafa Profissional"
+                            text="Uso para limpar amostras do meu portfólio. A qualidade é impressionante, não perde nada da resolução original."
+                            rating={5}
+                            scenario="portfolio"
+                        />
+                        <TestimonialCard 
+                            name="Carlos Mendes"
+                            role="Vendedor Mercado Livre"
+                            text="Ajudou a remover logos antigos de 50+ fotos de produtos em minutos. Minha loja ficou muito mais profissional e as vendas aumentaram 30%."
+                            rating={5}
+                            scenario="ecommerce"
+                        />
+                        <TestimonialCard 
+                            name="Ana Costa"
+                            role="Filha dedicada"
+                            text="Consegui restaurar fotos antigas da minha avó que tinham carimbos de estúdio. Ver o sorriso dela sem as marcas foi emocionante."
+                            rating={5}
+                            scenario="personal"
+                        />
+                    </div>
+
+                    {/* Casos de uso específicos */}
+                    <div className="mt-16 grid md:grid-cols-2 gap-8">
+                        <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span className="text-blue-600 font-black text-sm">💼</span>
+                                </div>
+                                <div>
+                                    <p className="font-black text-sm">Caso E-commerce</p>
+                                    <p className="text-slate-400 text-xs">Loja de Eletrônicos</p>
+                                </div>
+                            </div>
+                            <p className="text-slate-600 text-sm italic leading-relaxed">
+                                "Precisava remover logos de fornecedores de 200+ fotos de produtos. Em 1 hora estava tudo pronto. 
+                                Antes levava dias no Photoshop. Resultado: +40% nas conversões."
+                            </p>
+                        </div>
+
+                        <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <span className="text-green-600 font-black text-sm">❤️</span>
+                                </div>
+                                <div>
+                                    <p className="font-black text-sm">Caso Pessoal</p>
+                                    <p className="text-slate-400 text-xs">Memórias de Família</p>
+                                </div>
+                            </div>
+                            <p className="text-slate-600 text-sm italic leading-relaxed">
+                                "Fotos do casamento dos meus pais de 1985 tinham marca d'água do estúdio. 
+                                Consegui limpar tudo e fazer um álbum surpresa para o aniversário de 40 anos deles."
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -46,12 +124,62 @@ export function StaticContent() {
                     <h2 className="text-4xl font-black italic">Perguntas Frequentes</h2>
                 </div>
                 <div className="space-y-4">
-                    <FaqItem q="É realmente gratuito?" a="Sim, o RemoverMarca.com oferece uma versão gratuita com créditos diários." />
-                    <FaqItem q="Funciona em vídeos?" a="Atualmente focamos 100% em imagens estáticas (JPG, PNG, WebP)." />
-                    <FaqItem q="É seguro?" a="Totalmente. Seguimos a LGPD e usamos conexão SSL criptografada." />
+                    <FaqItem
+                        q="Quantos créditos gratuitos recebo?"
+                        a="Novos usuários recebem 1 crédito gratuito para testar nossa ferramenta. Cada crédito permite remover marca d'água de uma foto em alta qualidade. Após o teste, oferecemos planos flexíveis para uso contínuo."
+                    />
+                    <FaqItem
+                        q="Como funciona a ferramenta para tirar marca d'água?"
+                        a="Nossa IA usa tecnologia de inpainting neural para reconstruir texturas automaticamente. Basta fazer upload da foto e a ferramenta remove marca d'água em segundos."
+                    />
+                    <FaqItem
+                        q="É seguro usar o removedor de marca d'água online?"
+                        a="Totalmente. Seguimos a LGPD, usamos conexão SSL criptografada e deletamos suas fotos em 24h após processar."
+                    />
+                    <FaqItem
+                        q="Funciona para apagar marca d'água de vídeos?"
+                        a="Atualmente focamos 100% em imagens estáticas (JPG, PNG, WebP). Para vídeos, recomendamos ferramentas especializadas."
+                    />
                 </div>
             </section>
         </>
+    )
+}
+
+function TestimonialCard({ name, role, text, rating, scenario }: { 
+  name: string, 
+  role: string, 
+  text: string, 
+  rating: number,
+  scenario?: string 
+}) {
+    const getScenarioColor = (scenario?: string) => {
+        switch (scenario) {
+            case 'ecommerce': return 'bg-blue-100 text-blue-600'
+            case 'personal': return 'bg-green-100 text-green-600'
+            case 'portfolio': return 'bg-purple-100 text-purple-600'
+            default: return 'bg-blue-100 text-blue-600'
+        }
+    }
+
+    return (
+        <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm">
+            <div className="flex items-center gap-1 mb-4">
+                {Array.from({ length: rating }, (_, i) => (
+                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+            </div>
+            <p className="text-slate-600 text-sm font-medium italic mb-6 leading-relaxed">"{text}"</p>
+            <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getScenarioColor(scenario)}`}>
+                    <span className="font-black text-sm">{name.charAt(0)}</span>
+                </div>
+                <div>
+                    <p className="font-black text-sm">{name}</p>
+                    <p className="text-slate-400 text-xs font-medium">{role}</p>
+                </div>
+            </div>
+        </div>
     )
 }
 

@@ -5,11 +5,41 @@ import Link from "next/link"
 
 // 严格保留 SEO 元数据
 export const metadata: Metadata = {
-  title: "Removedor de Marca d'Água de Imagem Online (2026) - IA Grátis",
-  description: "Use o melhor removedor de marca d'água de imagem online. Tecnologia de IA para apagar logos e textos sem perder qualidade. Rápido, gratuito e seguro!",
+  title: "Remover Marca d'Água de Imagem Online (2026) - IA Grátis HD",
+  description: "Use o melhor removedor para remover marca d'água de imagem online. Tecnologia de IA para apagar logos e textos sem perder qualidade. Rápido, gratuito e seguro!",
+  keywords: [
+    "remover marca d'água de imagem",
+    "removedor de marca d'água de imagem",
+    "como remover marca d'água de imagem",
+    "apagar marca d'água de imagem",
+    "tirar marca d'água de imagem",
+    "remover marca d'água imagem online"
+  ],
   alternates: {
     canonical: "https://removermarca.com/removedor-de-marca-dagua-de-imagem",
   },
+  openGraph: {
+    title: "Remover Marca d'Água de Imagem - IA Gratuita 2026",
+    description: "Ferramenta avançada para remover marca d'água de imagem com IA. Processamento HD sem perder qualidade.",
+    url: "https://removermarca.com/removedor-de-marca-dagua-de-imagem",
+    siteName: "RemoverMarca",
+    images: [
+      {
+        url: "https://removermarca.com/melhor-removedor-de-marca-dagua-de-imagem-ia-2026.webp",
+        width: 1200,
+        height: 630,
+        alt: "Como remover marca d'água de imagem com IA"
+      }
+    ],
+    locale: "pt_BR",
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Remover Marca d'Água de Imagem - Ferramenta IA Gratuita",
+    description: "Tecnologia avançada para remover marca d'água de imagem online. Grátis e sem perder qualidade.",
+    images: ["https://removermarca.com/melhor-removedor-de-marca-dagua-de-imagem-ia-2026.webp"]
+  }
 }
 
 export default function WatermarkRemoverPage() {
@@ -33,12 +63,56 @@ export default function WatermarkRemoverPage() {
     }
   }
 
+  // --- Dados Estruturados FAQ ---
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "A qualidade da imagem diminui após o processamento?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Não. Nosso algoritmo foi treinado para realizar o preenchimento inteligente sem comprimir o arquivo original significativamente."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "É seguro usar com fotos privadas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. Seguimos a LGPD. Suas imagens são processadas de forma criptografada e excluídas dos nossos servidores após a sessão."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quais formatos de imagem são suportados?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Suportamos JPG, PNG e WebP. Todos os formatos mantêm alta qualidade após o processamento com nossa IA."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como funciona a tecnologia de IA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utilizamos Inpainting Neural, onde nossa IA reconstrói os pixels ocultos analisando o contexto da imagem ao redor do objeto removido."
+        }
+      }
+    ]
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* 注入 JSON-LD */}
       <script
         type="application/ld-json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld-json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       <Header />
@@ -47,10 +121,10 @@ export default function WatermarkRemoverPage() {
         {/* Tool Box Section */}
         <section className="bg-[#fdfdfd] border border-gray-200 rounded-3xl p-10 text-center mb-10 shadow-sm">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-            O melhor removedor de marca d'água de imagem com IA em 2026
+            Como remover marca d'água de imagem com IA em 2026
           </h1>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Nossa inteligência artificial avançada permite <strong>remover marca d'água de imagem</strong> mantendo a textura e os detalhes originais. Grátis, rápido e online.
+            Nossa inteligência artificial avançada permite <strong>remover marca d'água de imagem</strong> mantendo a textura e os detalhes originais. Use nosso <strong>removedor de marca d'água de imagem</strong> grátis, rápido e online.
           </p>
 
           {/* 复用项目已有的上传组件 */}
@@ -74,16 +148,16 @@ export default function WatermarkRemoverPage() {
         {/* Tecnologia Section */}
         <section id="tecnologia" className="py-10 border-t border-gray-100">
           <h2 className="text-2xl font-bold mb-6 relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-12 after:h-1 after:bg-blue-600">
-            Como apagar marca d'água de imagem sem borrar o fundo
+            Como remover marca d'água de imagem sem borrar o fundo
           </h2>
           <div className="grid md:grid-cols-2 gap-6 mt-8">
             <div className="p-6 rounded-xl bg-gray-50 border-l-4 border-blue-600">
               <h3 className="font-bold text-lg mb-2">Inpainting Neural</h3>
-              <p className="text-gray-600">Nossa IA reconstrói os pixels ocultos analisando o contexto da imagem ao redor do objeto removido.</p>
+              <p className="text-gray-600">Nossa IA reconstrói os pixels ocultos analisando o contexto da imagem ao redor do objeto removido. Ideal para <strong>remover marca d'água de imagem</strong> complexas.</p>
             </div>
             <div className="p-6 rounded-xl bg-gray-50 border-l-4 border-blue-600">
               <h3 className="font-bold text-lg mb-2">Preservação de DPI</h3>
-              <p className="text-gray-600">Diferente de outros sites, mantemos a densidade de pixels para impressões de alta qualidade.</p>
+              <p className="text-gray-600">Diferente de outros sites, mantemos a densidade de pixels para impressões de alta qualidade ao <strong>remover marca d'água de imagem</strong>.</p>
             </div>
           </div>
         </section>
@@ -91,7 +165,7 @@ export default function WatermarkRemoverPage() {
         {/* Formatos Section */}
         <section className="py-10">
           <h2 className="text-2xl font-bold mb-6 relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-12 after:h-1 after:bg-blue-600">
-            Formatos suportados: De JPG a WebP com alta fidelidade
+            Formatos suportados para remover marca d'água de imagem com alta fidelidade
           </h2>
           <div className="overflow-x-auto mt-6 rounded-xl border border-gray-200">
             <table className="w-full text-left min-w-125">
@@ -139,7 +213,70 @@ export default function WatermarkRemoverPage() {
             </div>
             <div className="flex gap-4">
               <span className="text-4xl font-black text-blue-100 italic">02</span>
-              <p><strong>Aguarde:</strong> Nossa IA processa o <strong>removedor de marca d'água de imagem</strong> em segundos.</p>
+              <p><strong>Aguarde:</strong> Nossa IA processa para <strong>remover marca d'água de imagem</strong> em segundos.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Nova Seção: Benefícios e Casos de Uso */}
+        <section className="py-10 border-t border-gray-100">
+          <h2 className="text-2xl font-bold mb-6 relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-12 after:h-1 after:bg-blue-600">
+            Por que escolher nossa ferramenta para remover marca d'água de imagem
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+              <h3 className="font-bold text-blue-900 mb-4">Processamento HD</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Mantenha a resolução original ao <strong>remover marca d'água de imagem</strong>. Ideal para impressões e uso profissional.
+              </p>
+            </div>
+            
+            <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+              <h3 className="font-bold text-green-900 mb-4">IA Avançada</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Tecnologia de Inpainting Neural reconstrói texturas complexas com precisão ao <strong>remover marca d'água de imagem</strong>.
+              </p>
+            </div>
+
+            <div className="p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl border border-purple-100">
+              <h3 className="font-bold text-purple-900 mb-4">100% Gratuito</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Sem limites ou cadastros. Use quantas vezes precisar para <strong>remover marca d'água de imagem</strong> online.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Nova Seção: Casos de Uso Específicos */}
+        <section className="py-10 border-t border-gray-100">
+          <h2 className="text-2xl font-bold mb-6 relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-12 after:h-1 after:bg-blue-600">
+            Principais usos para remover marca d'água de imagem
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="p-6 bg-gray-50 rounded-xl">
+              <h3 className="font-bold text-lg mb-3">Fotografia Profissional</h3>
+              <p className="text-gray-600 mb-4">
+                Fotógrafos podem <strong>remover marca d'água de imagem</strong> de amostras para criar portfólios limpos e apresentações profissionais.
+              </p>
+              <ul className="text-sm text-gray-500 space-y-1">
+                <li>• Portfólios online</li>
+                <li>• Apresentações para clientes</li>
+                <li>• Redes sociais profissionais</li>
+              </ul>
+            </div>
+            
+            <div className="p-6 bg-gray-50 rounded-xl">
+              <h3 className="font-bold text-lg mb-3">E-commerce e Marketing</h3>
+              <p className="text-gray-600 mb-4">
+                Empresas usam para <strong>remover marca d'água de imagem</strong> de produtos para catálogos e materiais promocionais.
+              </p>
+              <ul className="text-sm text-gray-500 space-y-1">
+                <li>• Catálogos de produtos</li>
+                <li>• Anúncios online</li>
+                <li>• Materiais de marketing</li>
+              </ul>
             </div>
           </div>
         </section>
@@ -147,25 +284,56 @@ export default function WatermarkRemoverPage() {
         {/* FAQ Section */}
         <section id="faq" className="py-10">
           <h2 className="text-2xl font-bold mb-6 relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-12 after:h-1 after:bg-blue-600">
-            FAQ: Dúvidas sobre o removedor de imagem online
+            FAQ: Dúvidas sobre como remover marca d'água de imagem online
           </h2>
           <div className="space-y-4 mt-6">
             <details className="group bg-gray-50 rounded-xl p-4 cursor-pointer">
               <summary className="font-bold flex justify-between items-center list-none">
-                A qualidade da imagem diminui?
+                A qualidade da imagem diminui ao remover marca d'água de imagem?
                 <span className="group-open:rotate-180 transition-transform">↓</span>
               </summary>
               <p className="pt-4 text-gray-600 border-t mt-4 border-gray-200">
                 Não. Nosso algoritmo foi treinado para realizar o preenchimento inteligente sem comprimir o arquivo original significativamente.
               </p>
             </details>
+            
             <details className="group bg-gray-50 rounded-xl p-4 cursor-pointer">
               <summary className="font-bold flex justify-between items-center list-none">
-                É seguro para fotos privadas?
+                É seguro usar o removedor para remover marca d'água de imagem com fotos privadas?
                 <span className="group-open:rotate-180 transition-transform">↓</span>
               </summary>
               <p className="pt-4 text-gray-600 border-t mt-4 border-gray-200">
                 Sim. Seguimos a LGPD. Suas imagens são processadas de forma criptografada e excluídas dos nossos servidores após a sessão.
+              </p>
+            </details>
+
+            <details className="group bg-gray-50 rounded-xl p-4 cursor-pointer">
+              <summary className="font-bold flex justify-between items-center list-none">
+                Quais formatos de imagem são suportados para remover marca d'água de imagem?
+                <span className="group-open:rotate-180 transition-transform">↓</span>
+              </summary>
+              <p className="pt-4 text-gray-600 border-t mt-4 border-gray-200">
+                Suportamos JPG, PNG e WebP. Todos os formatos mantêm alta qualidade após o processamento com nossa IA.
+              </p>
+            </details>
+
+            <details className="group bg-gray-50 rounded-xl p-4 cursor-pointer">
+              <summary className="font-bold flex justify-between items-center list-none">
+                Como funciona a tecnologia para remover marca d'água de imagem?
+                <span className="group-open:rotate-180 transition-transform">↓</span>
+              </summary>
+              <p className="pt-4 text-gray-600 border-t mt-4 border-gray-200">
+                Utilizamos Inpainting Neural, onde nossa IA reconstrói os pixels ocultos analisando o contexto da imagem ao redor do objeto removido.
+              </p>
+            </details>
+
+            <details className="group bg-gray-50 rounded-xl p-4 cursor-pointer">
+              <summary className="font-bold flex justify-between items-center list-none">
+                Posso usar para imagens comerciais e e-commerce?
+                <span className="group-open:rotate-180 transition-transform">↓</span>
+              </summary>
+              <p className="pt-4 text-gray-600 border-t mt-4 border-gray-200">
+                Sim! Muitos profissionais usam nossa ferramenta para <strong>remover marca d'água de imagem</strong> de produtos para catálogos, sempre respeitando direitos autorais.
               </p>
             </details>
           </div>

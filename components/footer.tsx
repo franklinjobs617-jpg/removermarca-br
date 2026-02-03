@@ -102,16 +102,38 @@ export function Footer() {
 
           {/* 第四列：Empresa */}
           <div className="space-y-6">
-            <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Institucional</h4>
+            <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Segurança & Legal</h4>
             <ul className="space-y-4 text-sm font-bold text-slate-500">
-              <li><Link href="/quem-somos" className="hover:text-blue-600 transition-colors">Quem Somos</Link></li>
-              <li><Link href="/politica-de-privacid" className="hover:text-blue-600 transition-colors">Privacidade</Link></li>
-              <li><Link href="/termos-de-uso" className="hover:text-blue-600 transition-colors">Termos de Uso</Link></li>
-              <li><Link href="/contato" className="hover:text-blue-600 transition-colors">Contato</Link></li>
+              <li>
+                <Link href="/politica-de-privacid" className="hover:text-blue-600 transition-colors flex items-center gap-2">
+                  <ShieldCheck size={14} className="text-green-600" />
+                  Política de Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link href="/termos-de-uso" className="hover:text-blue-600 transition-colors">
+                  Termos de Uso
+                </Link>
+              </li>
+              <li>
+                <Link href="/quem-somos" className="hover:text-blue-600 transition-colors">
+                  Quem Somos
+                </Link>
+              </li>
+              <li>
+                <Link href="/contato" className="hover:text-blue-600 transition-colors">
+                  Contato
+                </Link>
+              </li>
               <li className="pt-2">
-                <div className="flex items-center gap-2 text-green-600">
-                  <ShieldCheck size={16} />
-                  <span className="text-[10px] uppercase font-black tracking-widest">LGPD Compliant</span>
+                <div className="p-3 bg-green-50 rounded-xl border border-green-100">
+                  <div className="flex items-center gap-2 text-green-700 mb-2">
+                    <ShieldCheck size={16} />
+                    <span className="text-[10px] uppercase font-black tracking-widest">100% Seguro</span>
+                  </div>
+                  <p className="text-[10px] text-green-600 leading-relaxed">
+                    Suas imagens são criptografadas e deletadas em 24h. Conformidade total com LGPD.
+                  </p>
                 </div>
               </li>
             </ul>

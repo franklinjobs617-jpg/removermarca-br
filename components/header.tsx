@@ -326,7 +326,9 @@ export function Header({
           ))}
 
           <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
           </button>
         </div>
       </header>
