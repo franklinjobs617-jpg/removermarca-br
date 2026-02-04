@@ -1,4 +1,25 @@
 User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: https://removermarca.com/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /editor/temp/
+
+# Allow important pages for SEO
+Allow: /
+Allow: /tirar-marca-dagua-online-gratis
+Allow: /removedor-de-marca-dagua-de-imagem
+Allow: /como-remover-marca-dagua-de-foto
+Allow: /como-tirar-a-marca-dagua-de-uma-foto
+Allow: /removedor-de-marca-da-agua
+Allow: /apagar-marca-dagua-de-foto
+Allow: /precos
+Allow: /en/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

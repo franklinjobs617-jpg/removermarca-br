@@ -12,21 +12,35 @@ export default function NotFound() {
                 </h1>
 
                 <div className="relative z-10 space-y-8">
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                         <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter">
-                            Página não encontrada
+                            Ops! Essa marca d'água sumiu junto com a página.
                         </h2>
-                        <p className="text-slate-500 max-w-sm mx-auto font-medium text-lg">
-                            Desculpe, a página que você está procurando não existe ou foi movida.
+                        <p className="text-slate-500 max-w-lg mx-auto font-medium text-lg leading-relaxed">
+                            Parece que o link que você tentou acessar não existe ou foi movido. Mas não se preocupe, nossa Inteligência Artificial continua pronta para limpar suas fotos!
                         </p>
                     </div>
 
-                    <Link
-                        href="/"
-                        className="inline-block bg-blue-600 text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue-200 hover:bg-blue-700 hover:scale-105 transition-all active:scale-95"
-                    >
-                        Voltar ao Início
-                    </Link>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link
+                            href="/"
+                            className="inline-block bg-blue-600 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-blue-200 hover:bg-blue-700 hover:scale-105 transition-all active:scale-95"
+                        >
+                            Ir para a Página Inicial
+                        </Link>
+                        <Link
+                            href="/tirar-marca-dagua-online-gratis"
+                            className="inline-block bg-slate-100 text-slate-700 px-8 py-4 rounded-2xl font-black uppercase tracking-widest border border-slate-200 hover:bg-slate-200 hover:scale-105 transition-all active:scale-95"
+                        >
+                            Ferramenta Gratuita
+                        </Link>
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em]">
+                            © 2026 RemoverMarca.com | Tecnologia e Simplicidade.
+                        </p>
+                    </div>
                 </div>
             </main>
         </div>

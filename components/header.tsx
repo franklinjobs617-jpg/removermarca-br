@@ -102,7 +102,7 @@ export function Header({
     { name: "FAQ", href: "/en/how-to-remove-watermark-from-photo-in-photoshop" },
   ] : [
     { name: "Início", href: "/" },
-    { name: "Tirar Grátis", href: "/tirar-marca-dagua-online-gratis" },
+    { name: "Versão Grátis", href: "/tirar-marca-dagua-online-gratis" },
     {
       name: "Ferramentas",
       isDropdown: true,
@@ -114,7 +114,7 @@ export function Header({
     },
     { name: "Preços", href: "/precos" },
     { name: "Tutorial", href: "/como-remover-marca-dagua-de-foto" },
-    { name: "FAQ", href: "/como-tirar-marca-dagua" },
+    { name: "FAQ", href: "/como-tirar-a-marca-dagua-de-uma-foto" },
   ]
 
   const [showUserMenu, setShowUserMenu] = useState(false)

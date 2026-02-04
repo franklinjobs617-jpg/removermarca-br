@@ -60,7 +60,6 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // 1. 服务端获取路径 (用于首屏 SEO)
   const headerList = await headers();
   const pathname = headerList.get('x-current-path') || "";
 

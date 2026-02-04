@@ -9,22 +9,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '',                                   // 首页
     '/editor',                            // 编辑器
     '/precos',                            // 定价
-    '/tirar-marca-dagua-online-gratis',   // 免费工具
-    '/removedor-de-marca-dagua-de-imagem',// AI 移除
-    '/remover-de-marca-da-agua',          // 品牌移除
-    '/apagar-marca-dagua-de-foto',        // 擦除工具
-    '/como-remover-marca-dagua-de-foto',  // 教程1
-    '/como-tirar-a-marca-dagua-de-uma-foto', // 教程2
-    '/como-tirar-marca-dagua',            // FAQ/教程3
+    '/tirar-marca-dagua-online-gratis',   // 免费工具 (Spoke 3)
+    '/removedor-de-marca-dagua-de-imagem',// AI 移除 (Spoke 1)
+    '/removedor-de-marca-da-agua',        // 低难度切入 (Spoke 4)
+    '/apagar-marca-dagua-de-foto',        // 商业变体 (Spoke 6)
+    '/como-remover-marca-dagua-de-foto',  // 教程指南 (Spoke 2)
+    '/como-tirar-a-marca-dagua-de-uma-foto', // 极致长尾问答 (Spoke 5)
     '/quem-somos',                        // 关于我们
     '/contato',                           // 联系
-    '/politica-de-privacid',              // 隐私 (根据你截图的文件夹名)
-    '/termos-de-uso',                     // 条款
+    '/politica-de-privacid',              // 隐私政策
+    '/termos-de-uso',                     // 服务条款
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: currentDate,
     changeFrequency: 'daily' as const,
-    priority: route === '' || route === '/editor' ? 1.0 : 0.8,
+    priority: route === '' ? 1.0 : route === '/editor' ? 0.9 : 0.8,
   }))
 
   // 2. 英语路由 (/en)
