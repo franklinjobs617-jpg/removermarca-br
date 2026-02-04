@@ -25,7 +25,7 @@ export function FooterEn() {
                             <Link href="#" className="hover:text-blue-600 transition-colors"><Twitter size={20} /></Link>
                             <Link href="#" className="hover:text-blue-600 transition-colors"><Github size={20} /></Link>
                         </div>
-                        <div className="pt-2">
+                        <div className="pt-2 space-y-3">
                             <Link
                                 href="https://theresanaiforthat.com/ai/removermarca/?ref=featured&v=7340698"
                                 target="_blank"
@@ -37,6 +37,20 @@ export function FooterEn() {
                                     height="50"
                                     src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600"
                                     alt="Featured on There's An AI For That"
+                                    className="rounded-lg shadow-sm"
+                                />
+                            </Link>
+                            <Link
+                                href="https://toolsaiapp.com/"
+                                target="_blank"
+                                rel="nofollow"
+                                className="block hover:opacity-80 transition-opacity"
+                            >
+                                <Image
+                                    width="240"
+                                    height="54"
+                                    src="https://toolsaiapp.com/wp-content/uploads/2025/12/badge.png"
+                                    alt="Featured on Tools AI App"
                                     className="rounded-lg shadow-sm"
                                 />
                             </Link>
