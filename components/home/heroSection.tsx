@@ -13,7 +13,7 @@ export function HeroSection() {
                         {/* 移动端文字 */}
                         <div className="space-y-5 text-center block md:hidden mb-8">
                             <h1 className="text-4xl font-black text-slate-900 leading-[1.15] tracking-tight">
-                                Ferramenta de IA para <span className="text-blue-600 italic">tirar marca d&apos;água</span>
+                                <span className="text-blue-600 italic">Removedor de marca d&apos;água online</span> com IA
                             </h1>
                         </div>
                         <UploadArea
@@ -38,12 +38,11 @@ export function HeroSection() {
                             <span className="text-[11px] font-black text-blue-700 tracking-widest uppercase">Algoritmo de Inpainting Avançado</span>
                         </div>
                         <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight">
-                            Ferramenta de IA para <br className="hidden sm:block" />
-                            <span className="text-blue-600 italic">tirar marca d&apos;água</span> <br />
-                            online grátis
+                            <span className="text-blue-600 italic">Removedor de marca d&apos;água online</span> <br className="hidden sm:block" />
+                            grátis com IA avançada
                         </h1>
                         <p className="text-lg text-slate-500 max-w-md mx-auto lg:mx-0 font-medium">
-                            O jeito mais rápido e profissional de <strong className="text-slate-900">remover marca d&apos;água de foto</strong> sem perder qualidade.
+                            O <strong className="text-slate-900">removedor de marca d&apos;água online</strong> mais rápido e profissional para <strong className="text-slate-900">remover marca d&apos;água de foto</strong> sem perder qualidade.
                         </p>
                         
                         {/* Prova Social */}

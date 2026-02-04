@@ -8,7 +8,7 @@ export function StaticContent() {
             <section className="py-24 bg-white border-y border-slate-100">
                 <div className="max-w-7xl mx-auto px-6">
                     <h2 className="text-3xl md:text-4xl font-black text-center mb-16 italic">
-                        Como <span className="text-blue-600">remover marca d&apos;água de foto</span> e tirar marca d&apos;água passo a passo
+                        Como usar nosso <span className="text-blue-600">removedor de marca d&apos;água online</span> para tirar marca d&apos;água passo a passo
                     </h2>
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
@@ -31,17 +31,17 @@ export function StaticContent() {
                 <div className="grid lg:grid-cols-3 gap-16 items-start">
                     <h2 className="text-4xl font-black italic leading-tight">Dicas profissionais <br /><span className="text-blue-600">sem perda de qualidade</span></h2>
                     <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
-                        <FeatureCard icon={<ShieldCheck className="text-emerald-500" />} title="Privacidade" desc="Fotos deletadas em 24h. Seguro e criptografado." />
-                        <FeatureCard icon={<Zap className="text-blue-500" />} title="IA Neural" desc="Inpainting de ponta para pixels perfeitos." />
-                        <FeatureCard icon={<Star className="text-amber-400" />} title="Teste Gratuito" desc="1 crédito gratuito para novos usuários testarem a qualidade." />
-                        <FeatureCard icon={<Check className="text-blue-500" />} title="Fidelidade 4K" desc="Mantemos o DPI original da sua imagem." />
+                        <FeatureCard icon={<ShieldCheck className="text-emerald-500" />} title="Privacidade" desc="Fotos deletadas em 24h. Removedor de marca d'água online seguro e criptografado." />
+                        <FeatureCard icon={<Zap className="text-blue-500" />} title="IA Neural" desc="Removedor de marca d'água online com inpainting de ponta para pixels perfeitos." />
+                        <FeatureCard icon={<Star className="text-amber-400" />} title="Teste Gratuito" desc="1 crédito gratuito para testar nosso removedor de marca d'água online." />
+                        <FeatureCard icon={<Check className="text-blue-500" />} title="Fidelidade 4K" desc="Nosso removedor de marca d'água online mantém o DPI original da sua imagem." />
                     </div>
                 </div>
 
                 {/* 内部链接 CTA */}
                 <div className="mt-16 text-center space-y-4">
                     <p className="text-slate-600 text-sm font-medium">
-                        Pronto para começar? <Link href="/editor" className="text-blue-600 font-black hover:underline">Experimente nossa ferramenta de remover marca d&apos;água grátis</Link> ou veja nossos <Link href="/precos" className="text-blue-600 font-black hover:underline">planos premium</Link>.
+                        Pronto para começar? <Link href="/editor" className="text-blue-600 font-black hover:underline">Experimente nosso removedor de marca d&apos;água online grátis</Link> ou veja nossos <Link href="/precos" className="text-blue-600 font-black hover:underline">planos premium</Link>.
                     </p>
                 </div>
             </section>
@@ -60,7 +60,7 @@ export function StaticContent() {
                         <TestimonialCard 
                             name="Marina Silva"
                             role="Fotógrafa Profissional"
-                            text="Uso para limpar amostras do meu portfólio. A qualidade é impressionante, não perde nada da resolução original."
+                            text="Uso este removedor de marca d'água online para limpar amostras do meu portfólio. A qualidade é impressionante, não perde nada da resolução original."
                             rating={5}
                             scenario="portfolio"
                         />
@@ -125,12 +125,16 @@ export function StaticContent() {
                 </div>
                 <div className="space-y-4">
                     <FaqItem
+                        q="Por que escolher nosso removedor de marca d'água online?"
+                        a="Nosso removedor de marca d'água online é o mais avançado do Brasil, usando IA neural para resultados profissionais. Diferente de outros removedores de marca d'água online, garantimos qualidade 4K e total privacidade dos seus arquivos."
+                    />
+                    <FaqItem
                         q="Quantos créditos gratuitos recebo?"
                         a="Novos usuários recebem 1 crédito gratuito para testar nossa ferramenta. Cada crédito permite remover marca d'água de uma foto em alta qualidade. Após o teste, oferecemos planos flexíveis para uso contínuo."
                     />
                     <FaqItem
-                        q="Como funciona a ferramenta para tirar marca d'água?"
-                        a="Nossa IA usa tecnologia de inpainting neural para reconstruir texturas automaticamente. Basta fazer upload da foto e a ferramenta remove marca d'água em segundos."
+                        q="Como funciona o removedor de marca d'água online?"
+                        a="Nosso removedor de marca d'água online usa tecnologia de inpainting neural para reconstruir texturas automaticamente. Basta fazer upload da foto e a ferramenta remove marca d'água em segundos com qualidade profissional."
                     />
                     <FaqItem
                         q="É seguro usar o removedor de marca d'água online?"

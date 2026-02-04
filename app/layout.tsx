@@ -16,16 +16,17 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Remover Marca d'Água de Foto Online Grátis em 4K - RemoverMarca",
-  description: "O melhor removedor de IA do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis. Tecnologia PicWish para limpeza extrema em 4K Ultra.",
+  title: "Removedor de Marca d'Água Online Grátis em 4K - RemoverMarca",
+  description: "O melhor removedor de marca d'água online do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis. Tecnologia PicWish para limpeza extrema em 4K Ultra.",
   keywords: [
+    "removedor de marca d'água online",
     "remover marca dagua",
     "remover marca d'água de foto",
     "remover marca d'água",
     "tirar marca d'água",
     "apagar marca d'água",
     "removedor de marca d'água",
-    "watermark remover"
+    "watermark remover online"
   ],
   alternates: {
     canonical: "https://removermarca.com",
@@ -35,8 +36,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Remover Marca d'Água de Foto Online Grátis em 4K - RemoverMarca",
-    description: "O melhor removedor de IA do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis. Tecnologia PicWish para limpeza extrema em 4K Ultra.",
+    title: "Removedor de Marca d'Água Online Grátis em 4K - RemoverMarca",
+    description: "O melhor removedor de marca d'água online do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis. Tecnologia PicWish para limpeza extrema em 4K Ultra.",
     url: "https://removermarca.com",
     siteName: "RemoverMarca",
     images: [
@@ -52,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Remover Marca d'Água de Foto Online Grátis em 4K",
-    description: "O melhor removedor de IA do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis.",
+    title: "Removedor de Marca d'Água Online Grátis em 4K",
+    description: "O melhor removedor de marca d'água online do Brasil. Remova logos, carimbos e marcas d'água de fotos online grátis.",
     images: ["https://removermarca.com/og-image.png"],
   },
 }
@@ -69,7 +70,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "RemoverMarca",
+    "name": "RemoverMarca - Removedor de Marca d'Água Online",
+    "description": "O melhor removedor de marca d'água online do Brasil com tecnologia de IA avançada",
     "operatingSystem": "Windows, macOS, Android, iOS",
     "applicationCategory": "MultimediaApplication",
     "offers": {
@@ -101,15 +103,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         "name": "Como tirar marca d'água de foto funciona?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Nossa IA usa tecnologia de inpainting neural para reconstruir texturas automaticamente e remover marca d'água sem perder qualidade."
+          "text": "Nosso removedor de marca d'água online usa tecnologia de inpainting neural para reconstruir texturas automaticamente e remover marca d'água sem perder qualidade."
         }
       },
       {
         "@type": "Question",
-        "name": "É seguro usar o removedor de marca d'água?",
+        "name": "É seguro usar o removedor de marca d'água online?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Totalmente seguro. Seguimos a LGPD, usamos conexão SSL criptografada e deletamos suas fotos em 24h."
+          "text": "Totalmente seguro. Nosso removedor de marca d'água online segue a LGPD, usa conexão SSL criptografada e deleta suas fotos em 24h."
         }
       }
     ]

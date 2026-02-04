@@ -15,21 +15,21 @@ import {
 // --- 1. SEO Metadados (SSR) ---
 export const metadata: Metadata = {
   title: "Como Remover Marca d'Água de Foto: Guia Passo a Passo (2026)",
-  description: "Aprenda como remover marca d'água de foto, apagar marca d'água de foto e remover marca d'água foto de forma profissional. Guia completo com IA para limpar imagens sem perder qualidade.",
+  description: "Aprenda como remover marca d'água de foto e como tirar a marca d'água de uma foto de forma profissional. Guia completo com IA para limpar imagens sem perder qualidade.",
   keywords: [
-    "remover marca d'água de foto",
     "como remover marca d'água de foto",
+    "remover marca d'água de foto",
+    "como tirar a marca d'água de uma foto",
     "apagar marca d'água de foto",
     "remover marca d'água foto",
-    "tirar marca d'água de foto",
-    "como tirar marca d'água de foto"
+    "tirar marca d'água de foto"
   ],
   alternates: {
     canonical: "https://removermarca.com/como-remover-marca-dagua-de-foto",
   },
   openGraph: {
     title: "Como Remover Marca d'Água de Foto: Guia Completo 2026",
-    description: "Tutorial passo a passo para remover marca d'água de foto usando IA. Aprenda técnicas profissionais.",
+    description: "Tutorial passo a passo sobre como remover marca d'água de foto e como tirar a marca d'água de uma foto usando IA. Aprenda técnicas profissionais.",
     url: "https://removermarca.com/como-remover-marca-dagua-de-foto",
     siteName: "RemoverMarca",
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Como Remover Marca d'Água de Foto - Guia 2026",
-    description: "Tutorial completo para remover marca d'água de foto com IA.",
+    description: "Tutorial completo sobre como remover marca d'água de foto e como tirar a marca d'água de uma foto com IA.",
     images: ["https://removermarca.com/tutorial-como-remover-marca-dagua-de-foto-passo-a-passo.webp"]
   }
 }
@@ -57,7 +57,7 @@ export default function ComoRemoverMarcaPassoAPasso() {
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "Como remover marca d'água de foto com perfeição",
-    "description": "Tutorial completo usando inteligência artificial para limpar fotos em segundos.",
+    "description": "Tutorial completo sobre como tirar a marca d'água de uma foto usando inteligência artificial para limpar fotos em segundos.",
     "step": [
       {
         "@type": "HowToStep",
@@ -92,7 +92,7 @@ export default function ComoRemoverMarcaPassoAPasso() {
               Como Remover Marca d&apos;Água de Foto: Guia Completo (2026)
             </h1>
             <p className="text-lg text-slate-600 font-medium italic mb-8">
-              Seja você um designer ou um vendedor do Mercado Livre, dominar essa técnica com qualidade profissional economiza tempo e dinheiro. Neste guia completo, mostramos o método testado por especialistas em 2026.
+              Seja você um designer ou um vendedor do Mercado Livre, saber <strong className="text-slate-900">como remover marca d&apos;água de foto</strong> e <strong className="text-slate-900">como tirar a marca d&apos;água de uma foto</strong> com qualidade profissional economiza tempo e dinheiro. Neste guia completo, mostramos o método testado por especialistas em 2026.
             </p>
 
             {/* --- ÍNDICE (TOC) COM LINKS DE ANCORAGEM --- */}
@@ -125,7 +125,7 @@ export default function ComoRemoverMarcaPassoAPasso() {
               1. O que você precisa saber antes de começar
             </h2>
             <p className="mb-6">
-              Muitas pessoas cometem o erro de apenas &quot;borrar&quot; o logotipo. Para um resultado invisível ao <strong>remover marca d&apos;água foto</strong>, a técnica de <em>Inpainting</em> é essencial. Isso reconstrói os detalhes da imagem em vez de apenas escondê-los, garantindo que você possa <strong>apagar marca d&apos;água de foto</strong> sem deixar rastros.
+              Muitas pessoas cometem o erro de apenas &quot;borrar&quot; o logotipo. Para um resultado invisível ao <strong>remover marca d&apos;água foto</strong>, a técnica de <em>Inpainting</em> é essencial. Isso reconstrói os detalhes da imagem em vez de apenas escondê-los, garantindo que você saiba exatamente <strong>como tirar a marca d&apos;água de uma foto</strong> sem deixar rastros visíveis.
             </p>
 
             {/* [INSERT_LEGAL_CONTEXT_BRAZIL_HERE] */}
