@@ -39,9 +39,7 @@ export const metadata: Metadata = {
         url: "https://removermarca.com/como-tirar-marca-dagua-de-fotos",
         images: [
             {
-                url: "https://removermarca.com/og-como-tirar-marca-dagua.png",
-                width: 1200,
-                height: 630,
+                url: "https://removermarca.com/icon.svg",
                 alt: "Como tirar marca d'água de fotos com IA",
             },
         ],
@@ -86,7 +84,7 @@ export default function ComoTirarMarcaDaguaDeFotos() {
         "@type": "HowTo",
         "name": "Como Tirar Marca d'Água de Fotos com IA",
         "description": "Guia passo a passo para remover marca d'água de fotos usando inteligência artificial",
-        "image": "https://removermarca.com/og-como-tirar-marca-dagua.png",
+     
         "totalTime": "PT3M",
         "estimatedCost": {
             "@type": "MonetaryAmount",
@@ -110,25 +108,29 @@ export default function ComoTirarMarcaDaguaDeFotos() {
                 "@type": "HowToStep",
                 "name": "Upload da Imagem",
                 "text": "Arraste sua foto ou clique para selecionar do seu dispositivo",
-                "image": "https://removermarca.com/step1-upload.png"
+                "url": "https://removermarca.com/como-tirar-marca-dagua-de-fotos",
+        
             },
             {
                 "@type": "HowToStep",
                 "name": "Marque a Área",
                 "text": "Use nossa ferramenta de pincel para destacar a marca d'água",
-                "image": "https://removermarca.com/step2-mark.png"
+                "url": "https://removermarca.com/como-tirar-marca-dagua-de-fotos",
+           
             },
             {
                 "@type": "HowToStep",
                 "name": "Processamento IA",
                 "text": "Nossa inteligência artificial remove e reconstrói a área em segundos",
-                "image": "https://removermarca.com/step3-process.png"
+                "url": "https://removermarca.com/como-tirar-marca-dagua-de-fotos",
+             
             },
             {
                 "@type": "HowToStep",
                 "name": "Download HD",
                 "text": "Baixe sua foto limpa em alta resolução, pronta para uso",
-                "image": "https://removermarca.com/step4-download.png"
+                "url": "https://removermarca.com/como-tirar-marca-dagua-de-fotos",
+               
             }
         ]
     }
@@ -138,7 +140,6 @@ export default function ComoTirarMarcaDaguaDeFotos() {
         "@type": "Article",
         "headline": "Como Tirar Marca d'Água de Fotos: Guia Completo 2026",
         "description": "Aprenda como tirar marca d'água de fotos e como tirar a marca d'água de uma foto com IA. Ferramenta gratuita para fotógrafos.",
-        "image": "https://removermarca.com/og-como-tirar-marca-dagua.png",
         "author": {
             "@type": "Organization",
             "name": "RemoverMarca",
@@ -149,15 +150,20 @@ export default function ComoTirarMarcaDaguaDeFotos() {
             "name": "RemoverMarca",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://removermarca.com/logo.png"
+                "url": "https://removermarca.com/icon.svg",
+                "width": 200,
+                "height": 60
             }
         },
-        "datePublished": "2026-02-05",
-        "dateModified": "2026-02-05",
+        "datePublished": "2026-02-05T10:00:00Z",
+        "dateModified": "2026-02-05T10:00:00Z",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://removermarca.com/como-tirar-marca-dagua-de-fotos"
-        }
+        },
+        "wordCount": 2500,
+        "articleBody": "Guia completo sobre como tirar marca d'água de fotos usando inteligência artificial. Aprenda técnicas profissionais para remover marcas d'água sem perder qualidade.",
+        "inLanguage": "pt-BR"
     }
 
     return (
