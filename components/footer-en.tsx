@@ -95,7 +95,7 @@ export function FooterEn() {
                             {/* Linked to: /en/how-do-i-remove-watermarks-from-photos */}
                             <li>
                                 <Link href="/en/how-do-i-remove-watermarks-from-photos" className="hover:text-blue-600 transition-colors">
-                                    How-To Guide
+                                    Complete Guide
                                 </Link>
                             </li>
                             {/* Linked to: /en/how-to-remove-watermark-from-photo-in-photoshop */}

@@ -9,7 +9,6 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 
-          {/* 第一列：品牌与简介 */}
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center gap-2 group w-fit">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-xl italic transition-transform group-hover:scale-105">
@@ -80,7 +79,6 @@ export function Footer() {
                   Uso Comercial
                 </Link>
               </li>
-              {/* Spoke 3 - 显著标注 */}
               <li>
                 <Link href="/tirar-marca-dagua-online-gratis" className="hover:text-blue-600 transition-colors">
                   Tirar Grátis
@@ -96,7 +94,13 @@ export function Footer() {
               {/* Spoke 2 */}
               <li>
                 <Link href="/como-remover-marca-dagua-de-foto" className="hover:text-blue-600 transition-colors">
-                  Tutorial
+                  Tutorial Básico
+                </Link>
+              </li>
+              {/* New comprehensive guide */}
+              <li>
+                <Link href="/como-tirar-marca-dagua-de-fotos" className="hover:text-blue-600 transition-colors">
+                  Guia Completo
                 </Link>
               </li>
               {/* Spoke 5 */}

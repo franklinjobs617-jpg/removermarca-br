@@ -24,6 +24,8 @@ const routeMap: Record<string, string> = {
   "/removedor-de-marca-da-agua": "/remove-watermark-from-photo-online-free", // 假设对应这个
   "/apagar-marca-dagua-de-foto": "/remove-tiktok-watermark-from-photo",
   "/como-tirar-marca-dagua": "/how-to-remove-watermark-from-photo-in-photoshop", // 举例
+  "/como-tirar-marca-dagua-de-fotos": "/how-do-i-remove-watermarks-from-photos",
+  "/como-tirar-a-marca-dagua-de-uma-foto": "/how-to-remove-watermark-from-photo-in-photoshop",
   "/editor": "/editor",
 }
 
@@ -113,7 +115,7 @@ export function Header({
       ]
     },
     { name: "Preços", href: "/precos" },
-    { name: "Tutorial", href: "/como-remover-marca-dagua-de-foto" },
+    { name: "Tutorial", href: "/como-tirar-marca-dagua-de-fotos" },
     { name: "FAQ", href: "/como-tirar-a-marca-dagua-de-uma-foto" },
   ]
 
