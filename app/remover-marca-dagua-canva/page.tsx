@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "RemoverMarca",
     images: [
       {
-        url: "https://removermarca.com/remover-marca-dagua-canva-antes-depois.webp",
+        url: "https://removermarca.com/images/canva-after.webp",
         width: 1200,
         height: 630,
         alt: "Antes e depois: Design do Canva com grades vs limpo"
@@ -52,16 +52,37 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Remover Marca d'Água do Canva com IA (Grátis)",
     description: "Remova as grades e logos premium dos seus designs do Canva em segundos.",
-    images: ["https://removermarca.com/remover-marca-dagua-canva-antes-depois.webp"]
+    images: ["https://removermarca.com/images/canva-after.webp"]
   }
 }
 
 export default function RemoverMarcaDaguaCanva() {
-  const jsonLd = {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Remover Marca d'Água do Canva com IA",
+    "description": "Ferramenta gratuita baseada em IA para remover grades e marcas d'água de designs do Canva",
+    "image": "https://removermarca.com/images/canva-after.webp",
+    "operatingSystem": "Windows, macOS, Android, iOS",
+    "applicationCategory": "MultimediaApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "1250"
+    }
+  };
+
+  const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "Como remover marca d'água do Canva grátis",
     "description": "Tutorial passo a passo para tirar marca d'água canva grátis e baixar imagem canva sem marca d'água usando IA.",
+    "image": "https://removermarca.com/images/canva-after.webp",
     "step": [
       {
         "@type": "HowToStep",
@@ -126,7 +147,11 @@ export default function RemoverMarcaDaguaCanva() {
     <div className="min-h-screen bg-white text-slate-900 leading-relaxed font-sans">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
       <script
         type="application/ld+json"

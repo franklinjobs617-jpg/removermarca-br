@@ -43,7 +43,7 @@ export const metadata: Metadata = {
         siteName: "RemoverMarca",
         images: [
             {
-                url: "https://removermarca.com/canva-watermark-remover-before-after.webp",
+                url: "https://removermarca.com/images/canva-after.webp",
                 width: 1200,
                 height: 630,
                 alt: "Before and after: Canva design with grid lines vs clean design"
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "Free Canva Watermark Remover - AI Tool",
         description: "Remove grid lines and watermarks from your Canva designs instantly.",
-        images: ["https://removermarca.com/canva-watermark-remover-before-after.webp"]
+        images: ["https://removermarca.com/images/canva-after.webp"]
     }
 }
 
@@ -66,6 +66,7 @@ export default function CanvaWatermarkRemover() {
         "@type": "SoftwareApplication",
         "name": "Canva Watermark Remover",
         "description": "Free AI-powered tool to remove watermarks and grid lines from Canva designs",
+        "image": "https://removermarca.com/images/canva-after.webp",
         "operatingSystem": "Windows, macOS, Android, iOS",
         "applicationCategory": "MultimediaApplication",
         "offers": {
@@ -85,6 +86,7 @@ export default function CanvaWatermarkRemover() {
         "@type": "HowTo",
         "name": "How to remove watermark in Canva for free",
         "description": "Step-by-step guide to remove watermarks and grid lines from Canva designs using AI",
+        "image": "https://removermarca.com/images/canva-after.webp",
         "step": [
             {
                 "@type": "HowToStep",
