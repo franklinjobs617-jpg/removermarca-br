@@ -14,14 +14,13 @@ const PricingModal = dynamic(() => import("./pricing-modal").then(mod => mod.Pri
 const LoginModal = dynamic(() => import("./login-modal").then(mod => mod.LoginModal), { ssr: false })
 const SaveMenu = dynamic(() => import("./save-menu").then(mod => mod.SaveMenu), { ssr: false })
 
-// --- 路由对应关系表 ---
-// Key: 葡语路径, Value: 英语路径后缀 (不带/en)
 const routeMap: Record<string, string> = {
   "/precos": "/pricing",
   "/como-remover-marca-dagua-de-foto": "/how-do-i-remove-watermarks-from-photos",
   "/tirar-marca-dagua-online-gratis": "/remove-watermark-from-photo-online-free",
   "/removedor-de-marca-dagua-de-imagem": "/remove-watermark-from-photo-ai",
   "/removedor-de-marca-da-agua": "/remove-watermark-from-photo-online-free", // 假设对应这个
+  "/remover-marca-dagua-canva": "/canva-watermark-remover",
   "/apagar-marca-dagua-de-foto": "/remove-tiktok-watermark-from-photo",
   "/como-tirar-marca-dagua": "/how-to-remove-watermark-from-photo-in-photoshop", // 举例
   "/como-tirar-marca-dagua-de-fotos": "/how-do-i-remove-watermarks-from-photos",
@@ -95,6 +94,7 @@ export function Header({
       isDropdown: true,
       children: [
         { name: "AI Processing", href: "/en/remove-watermark-from-photo-ai" },
+        { name: "Canva Remover", href: "/en/canva-watermark-remover" },
         { name: "Mobile App", href: "/en/app-to-remove-watermark-from-photo" },
         { name: "TikTok Remover", href: "/en/remove-tiktok-watermark-from-photo" },
       ]
@@ -111,6 +111,7 @@ export function Header({
       children: [
         { name: "Processamento HD", href: "/removedor-de-marca-dagua-de-imagem" },
         { name: "Limpeza de Logos", href: "/removedor-de-marca-da-agua" },
+        { name: "Canva Remover", href: "/remover-marca-dagua-canva" },
         { name: "Uso Comercial", href: "/apagar-marca-dagua-de-foto" },
       ]
     },
@@ -198,7 +199,7 @@ export function Header({
                 <div key={item.name} ref={toolsRef} className="relative h-16 flex items-center">
                   <button
                     onClick={() => setShowToolsDropdown(!showToolsDropdown)}
-                    className={`flex items-center gap-1 text-sm font-bold transition-colors ${showToolsDropdown || item.children?.some(c => c.href === pathname) ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`flex items-center gap-1 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-lg ${showToolsDropdown || item.children?.some(c => c.href === pathname) ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
                   >
                     {item.name}
                     <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showToolsDropdown ? 'rotate-180' : ''}`} />
@@ -210,7 +211,7 @@ export function Header({
                         <Link
                           key={child.name}
                           href={child.href}
-                          className={`block px-5 py-3 text-sm font-bold transition-all ${pathname === child.href ? 'text-blue-600 bg-blue-50/50' : 'text-gray-500 hover:text-blue-600 hover:bg-gray-50'}`}
+                          className={`block px-5 py-3 text-sm font-bold transition-colors ${pathname === child.href ? 'text-blue-600 bg-blue-50/50' : 'text-gray-500 hover:text-blue-600 hover:bg-gray-50'}`}
                         >
                           {child.name}
                         </Link>
@@ -253,7 +254,7 @@ export function Header({
           <div className="relative" ref={promoRef}>
             <button
               onClick={() => setShowPromo(!showPromo)}
-              className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all group"
+              className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-white hover:border-blue-200 hover:shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white group"
             >
               <div className="flex items-center justify-center w-5 h-5 bg-blue-600 rounded-lg transform group-hover:rotate-12 transition-transform shadow-sm">
                 <Zap className="w-3 h-3 text-white fill-current" />
@@ -285,7 +286,7 @@ export function Header({
               <button
                 onClick={() => canSave && setShowSaveMenu(!showSaveMenu)}
                 disabled={!canSave}
-                className={`hidden lg:inline-block px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 ${canSave ? "bg-blue-600 text-white shadow-blue-100 hover:bg-blue-700" : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
+                className={`hidden lg:inline-block px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg transition-colors transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${canSave ? "bg-blue-600 text-white shadow-blue-100 hover:bg-blue-700" : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                   }`}
               >
                 {canSave ? t.save : t.saving}
@@ -306,7 +307,7 @@ export function Header({
 
           {isLoaded && (isLoggedIn ? (
             <div className="relative" ref={userMenuRef}>
-              <button onClick={() => setShowUserMenu(!showUserMenu)} className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-inner active:scale-95 transition-transform uppercase">
+              <button onClick={() => setShowUserMenu(!showUserMenu)} className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-inner active:scale-95 transition-transform uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                 {userInitial}
               </button>
               {showUserMenu && (
@@ -315,19 +316,19 @@ export function Header({
                     <Sparkles size={16} className="text-blue-600" /> {t.subscription}
                   </button>
                   <div className="h-px bg-gray-100 mx-2 my-1" />
-                  <button onClick={() => { logout(); setShowUserMenu(false); }} className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors text-left uppercase tracking-widest text-left">
+                  <button onClick={() => { logout(); setShowUserMenu(false); }} className="w-full px-4 py-3 flex items-center gap-3 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors text-left uppercase tracking-widest text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg> {t.logout}
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <button onClick={() => setIsLoginOpen(true)} className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md active:scale-95 transition-all font-bold">
+            <button onClick={() => setIsLoginOpen(true)} className="bg-sky-500 hover:bg-sky-600 text-white px-5 md:px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-md active:scale-95 transition-colors transition-transform font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
               {t.login}
             </button>
           ))}
 
-          <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors">
+          <button onClick={() => setIsDrawerOpen(true)} className="lg:hidden p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white" aria-label="Open menu">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -335,24 +336,22 @@ export function Header({
         </div>
       </header>
 
-      {/* --- 移动端侧边抽屉 --- */}
-      <div className={`fixed inset-0 z-[100] lg:hidden transition-all duration-300 ${isDrawerOpen ? "visible" : "invisible"}`}>
+      <div className={`fixed inset-0 z-[100] lg:hidden ${isDrawerOpen ? "visible" : "invisible"}`}>
         <div className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setIsDrawerOpen(false)} />
         <div className={`absolute top-0 right-0 w-80 h-full bg-white transition-transform duration-300 ease-out shadow-2xl flex flex-col ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}>
 
           <div className="p-6 flex justify-between items-center border-b border-gray-50 shrink-0">
             <span className="font-black text-xl text-gray-900 tracking-tighter italic uppercase">{t.brand}</span>
-            <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-slate-100 text-slate-500 rounded-full">
+            <button onClick={() => setIsDrawerOpen(false)} className="p-2 bg-slate-100 text-slate-500 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white" aria-label="Close menu">
               <X size={24} strokeWidth={2.5} />
             </button>
           </div>
 
-          {/* 移动端语言切换 */}
           <div className="px-6">
             <div className="flex p-1 bg-slate-100 rounded-2xl border border-slate-200/50 shadow-inner">
               <Link
                 href={getPtLink()}
-                className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-black transition-all duration-300 ${!isEn
+                className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-black transition-colors duration-300 ${!isEn
                   ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
@@ -361,7 +360,7 @@ export function Header({
               </Link>
               <Link
                 href={getEnLink()}
-                className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-black transition-all duration-300 ${isEn
+                className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-xs font-black transition-colors duration-300 ${isEn
                   ? 'bg-white text-blue-600 shadow-sm scale-[1.02]'
                   : 'text-slate-400 hover:text-slate-600'
                   }`}
@@ -375,7 +374,7 @@ export function Header({
             {navItems.map(item => (
               item.isDropdown ? (
                 <div key={item.name} className="flex flex-col">
-                  <button onClick={() => setMobileToolsOpen(!mobileToolsOpen)} className={`flex items-center justify-between p-4 rounded-3xl font-bold ${mobileToolsOpen ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'}`}>
+                  <button onClick={() => setMobileToolsOpen(!mobileToolsOpen)} className={`flex items-center justify-between p-4 rounded-3xl font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${mobileToolsOpen ? 'bg-blue-50 text-blue-600' : 'bg-gray-50 text-gray-500'}`}>
                     {item.name} <ChevronDown className={`w-5 h-5 transition-transform ${mobileToolsOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {mobileToolsOpen && (
@@ -387,14 +386,13 @@ export function Header({
                   )}
                 </div>
               ) : (
-                <Link key={item.name} href={item.href || "#"} className={`p-4 rounded-3xl text-sm font-bold block transition-all ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}>
+                <Link key={item.name} href={item.href || "#"} className={`p-4 rounded-3xl text-sm font-bold block transition-colors ${pathname === item.href ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-gray-50 text-gray-500'}`} onClick={() => setIsDrawerOpen(false)}>
                   {item.name}
                 </Link>
               )
             ))}
-
             {isLoggedIn && (
-              <button onClick={() => { logout(); setIsDrawerOpen(false); }} className="p-4 bg-red-50 text-red-500 rounded-3xl font-bold text-left w-full mt-4 text-sm uppercase">
+              <button onClick={() => { logout(); setIsDrawerOpen(false); }} className="p-4 bg-red-50 text-red-500 rounded-3xl font-bold text-left w-full mt-4 text-sm uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                 {t.exit}
               </button>
             )}
