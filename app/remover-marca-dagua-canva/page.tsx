@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description: "Remova as grades e logos premium dos seus designs do Canva em segundos. Mantenha a qualidade HD. Funciona para tirar marca d'água canva grátis e baixar imagem canva sem marca d'água.",
   keywords: [
     "remover marca d'água canva",
-    "tirar marca d'água canva grátis", 
+    "tirar marca d'água canva grátis",
     "baixar imagem canva sem marca d'água",
     "remover grades canva",
     "canva sem marca d'água",
@@ -69,14 +69,14 @@ export default function RemoverMarcaDaguaCanva() {
         "text": "Baixe seu design do Canva em formato JPG ou PNG."
       },
       {
-        "@type": "HowToStep", 
+        "@type": "HowToStep",
         "url": "https://removermarca.com/remover-marca-dagua-canva#step2",
         "name": "Carregar no Removedor",
         "text": "Arraste a imagem para o nosso removedor de marca d'água."
       },
       {
         "@type": "HowToStep",
-        "url": "https://removermarca.com/remover-marca-dagua-canva#step3", 
+        "url": "https://removermarca.com/remover-marca-dagua-canva#step3",
         "name": "IA Remove Automaticamente",
         "text": "Aguarde 3 segundos enquanto a IA detecta e remove as grades do Canva."
       },
@@ -106,7 +106,7 @@ export default function RemoverMarcaDaguaCanva() {
         "@type": "Question",
         "name": "É gratuito remover marca d'água do Canva?",
         "acceptedAnswer": {
-          "@type": "Answer", 
+          "@type": "Answer",
           "text": "Sim, oferecemos créditos gratuitos diários para remover marca d'água do Canva. Você pode processar até 3 imagens por dia gratuitamente."
         }
       },
@@ -143,16 +143,16 @@ export default function RemoverMarcaDaguaCanva() {
           <p className="text-xl text-slate-600 font-medium mb-8 max-w-3xl mx-auto italic">
             Remova as <strong className="text-slate-900">grades e logos premium</strong> dos seus designs do Canva em segundos. Mantenha a qualidade HD sem pagar pelo Canva Pro.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="bg-purple-600 text-white px-8 py-4 rounded-2xl font-black text-lg uppercase tracking-widest hover:bg-purple-700 transition-all shadow-lg shadow-purple-200 active:scale-95"
             >
               Remover Agora Grátis
             </Link>
-            <Link 
-              href="#tutorial" 
+            <Link
+              href="#tutorial"
               className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-2xl font-black text-lg uppercase tracking-widest hover:bg-purple-50 transition-all active:scale-95"
             >
               Ver Tutorial
@@ -168,19 +168,17 @@ export default function RemoverMarcaDaguaCanva() {
             </h2>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="text-center">
-                <div className="relative aspect-video bg-white rounded-3xl border-2 border-red-200 p-6 mb-4 shadow-lg">
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl relative overflow-hidden">
-                    {/* Simulação das grades do Canva */}
-                    <div className="absolute inset-0 opacity-30">
-                      {Array.from({length: 10}).map((_, i) => (
-                        <div key={i} className="absolute w-full h-px bg-gray-400" style={{top: `${i * 10}%`}} />
-                      ))}
-                      {Array.from({length: 10}).map((_, i) => (
-                        <div key={i} className="absolute h-full w-px bg-gray-400" style={{left: `${i * 10}%`}} />
-                      ))}
-                    </div>
+                <div className="relative aspect-video bg-white rounded-3xl border-2 border-red-200 p-4 mb-4 shadow-lg overflow-hidden">
+                  <div className="w-full h-full relative rounded-2xl overflow-hidden">
+                    <Image
+                      src="/images/canva-before.webp"
+                      alt="Design do Canva com grades"
+                      fill
+                      className="object-cover"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">
+                      <div className="bg-black/20 absolute inset-0" />
+                      <div className="relative bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
                         Design com Grades
                       </div>
                     </div>
@@ -188,12 +186,18 @@ export default function RemoverMarcaDaguaCanva() {
                 </div>
                 <p className="text-sm font-bold text-red-600 uppercase tracking-widest">❌ Com Marca d&apos;Água</p>
               </div>
-              
+
               <div className="text-center">
-                <div className="relative aspect-video bg-white rounded-3xl border-2 border-green-200 p-6 mb-4 shadow-lg">
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl relative overflow-hidden">
+                <div className="relative aspect-video bg-white rounded-3xl border-2 border-green-200 p-4 mb-4 shadow-lg overflow-hidden">
+                  <div className="w-full h-full relative rounded-2xl overflow-hidden">
+                    <Image
+                      src="/images/canva-after.webp"
+                      alt="Design do Canva limpo"
+                      fill
+                      className="object-cover"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">
+                      <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
                         Design Limpo
                       </div>
                     </div>
@@ -227,7 +231,7 @@ export default function RemoverMarcaDaguaCanva() {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-purple-600 p-8 rounded-[40px] text-white">
               <h3 className="text-2xl font-black mb-4 uppercase italic tracking-tighter">
                 Nossa Solução IA
@@ -241,13 +245,13 @@ export default function RemoverMarcaDaguaCanva() {
               </div>
             </div>
           </div>
-        </section>       
- {/* How-to Steps Tutorial */}
+        </section>
+        {/* How-to Steps Tutorial */}
         <section id="tutorial" className="mb-16 scroll-mt-24">
           <h2 className="text-3xl font-black text-center text-slate-900 mb-12 uppercase italic tracking-tighter">
             Como Funciona em 4 Passos Simples
           </h2>
-          
+
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center group" id="step1">
               <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
@@ -258,7 +262,7 @@ export default function RemoverMarcaDaguaCanva() {
                 <strong>Baixe seu design do Canva</strong> (JPG ou PNG) para o seu dispositivo.
               </p>
             </div>
-            
+
             <div className="text-center group" id="step2">
               <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
                 <ChevronRight className="text-white" size={28} />
@@ -268,7 +272,7 @@ export default function RemoverMarcaDaguaCanva() {
                 <strong>Arraste para o nosso removedor</strong> ou clique para fazer upload.
               </p>
             </div>
-            
+
             <div className="text-center group" id="step3">
               <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
                 <Wand2 className="text-white" size={28} />
@@ -278,7 +282,7 @@ export default function RemoverMarcaDaguaCanva() {
                 <strong>Aguarde 3 segundos</strong> enquanto a IA detecta e limpa automaticamente.
               </p>
             </div>
-            
+
             <div className="text-center group" id="step4">
               <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
                 <Download className="text-white" size={28} />
@@ -289,10 +293,10 @@ export default function RemoverMarcaDaguaCanva() {
               </p>
             </div>
           </div>
-          
+
           <div className="text-center mt-12">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="bg-purple-600 text-white px-10 py-4 rounded-2xl font-black text-xl uppercase tracking-widest hover:bg-purple-700 transition-all shadow-lg shadow-purple-200 active:scale-95 inline-block"
             >
               Começar Agora Grátis
@@ -387,7 +391,7 @@ export default function RemoverMarcaDaguaCanva() {
           <h2 className="text-3xl font-black text-center text-slate-900 mb-12 uppercase italic tracking-tighter">
             Perguntas Frequentes
           </h2>
-          
+
           <div className="space-y-4 max-w-4xl mx-auto">
             <details className="group bg-white border border-slate-200 rounded-3xl overflow-hidden transition-all">
               <summary className="p-6 font-black text-slate-800 list-none flex justify-between items-center cursor-pointer uppercase text-sm tracking-widest group-open:bg-purple-50/50">
@@ -449,8 +453,8 @@ export default function RemoverMarcaDaguaCanva() {
           <p className="text-xl text-purple-100 font-medium mb-8 italic">
             Junte-se a mais de 15.000 designers que já removeram marca d'água do Canva com nossa IA.
           </p>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="bg-white text-purple-600 px-12 py-5 rounded-2xl font-black text-xl uppercase tracking-widest hover:scale-105 transition-all active:scale-95 inline-block shadow-2xl"
           >
             Começar Grátis Agora

@@ -195,19 +195,17 @@ export default function CanvaWatermarkRemover() {
                         </h2>
                         <div className="grid md:grid-cols-2 gap-8 items-center">
                             <div className="text-center">
-                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-red-200 p-6 mb-4 shadow-lg">
-                                    <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl relative overflow-hidden">
-                                        {/* Canva grid simulation */}
-                                        <div className="absolute inset-0 opacity-30">
-                                            {Array.from({ length: 10 }).map((_, i) => (
-                                                <div key={i} className="absolute w-full h-px bg-gray-400" style={{ top: `${i * 10}%` }} />
-                                            ))}
-                                            {Array.from({ length: 10 }).map((_, i) => (
-                                                <div key={i} className="absolute h-full w-px bg-gray-400" style={{ left: `${i * 10}%` }} />
-                                            ))}
-                                        </div>
+                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-red-200 p-4 mb-4 shadow-lg overflow-hidden">
+                                    <div className="w-full h-full relative rounded-2xl overflow-hidden">
+                                        <Image
+                                            src="/images/canva-before.webp"
+                                            alt="Canva design with grid lines"
+                                            fill
+                                            className="object-cover"
+                                        />
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">
+                                            <div className="bg-black/20 absolute inset-0" />
+                                            <div className="relative bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
                                                 Design with Grid Lines
                                             </div>
                                         </div>
@@ -217,10 +215,16 @@ export default function CanvaWatermarkRemover() {
                             </div>
 
                             <div className="text-center">
-                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-green-200 p-6 mb-4 shadow-lg">
-                                    <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl relative overflow-hidden">
+                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-green-200 p-4 mb-4 shadow-lg overflow-hidden">
+                                    <div className="w-full h-full relative rounded-2xl overflow-hidden">
+                                        <Image
+                                            src="/images/canva-after.webp"
+                                            alt="Clean Canva design"
+                                            fill
+                                            className="object-cover"
+                                        />
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600">
+                                            <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
                                                 Clean Design
                                             </div>
                                         </div>
@@ -268,7 +272,7 @@ export default function CanvaWatermarkRemover() {
                             </div>
                         </div>
                     </div>
-                </section>       
+                </section>
                 <section id="how-to" className="mb-16 scroll-mt-24">
                     <h2 className="text-3xl font-black text-center text-slate-900 mb-4 uppercase italic tracking-tighter">
                         How to Remove Watermark in Canva for Free?
