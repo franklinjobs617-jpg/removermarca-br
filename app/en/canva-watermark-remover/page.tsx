@@ -14,6 +14,7 @@ import {
     Download,
     CheckCircle
 } from "lucide-react"
+import { BeforeAfterSlider } from "@/components/before-after-slider"
 
 // --- SEO Metadata (SSR) ---
 export const metadata: Metadata = {
@@ -187,50 +188,25 @@ export default function CanvaWatermarkRemover() {
                     </div>
                 </section>
 
-                {/* Visual Contrast - Before/After */}
                 <section className="mb-16">
                     <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-8 rounded-[40px] border border-purple-100 shadow-inner">
                         <h2 className="text-2xl font-black text-center mb-8 uppercase italic tracking-tighter text-purple-600">
-                            Before vs After
+                            Swipe to Compare
                         </h2>
-                        <div className="grid md:grid-cols-2 gap-8 items-center">
-                            <div className="text-center">
-                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-red-200 p-4 mb-4 shadow-lg overflow-hidden">
-                                    <div className="w-full h-full relative rounded-2xl overflow-hidden">
-                                        <Image
-                                            src="/images/canva-before.webp"
-                                            alt="Canva design with grid lines"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="bg-black/20 absolute inset-0" />
-                                            <div className="relative bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
-                                                Design with Grid Lines
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-bold text-red-600 uppercase tracking-widest">❌ With Watermark</p>
-                            </div>
-
-                            <div className="text-center">
-                                <div className="relative aspect-video bg-white rounded-3xl border-2 border-green-200 p-4 mb-4 shadow-lg overflow-hidden">
-                                    <div className="w-full h-full relative rounded-2xl overflow-hidden">
-                                        <Image
-                                            src="/images/canva-after.webp"
-                                            alt="Clean Canva design"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-bold text-gray-600 shadow-md">
-                                                Clean Design
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-bold text-green-600 uppercase tracking-widest">✅ Watermark-Free</p>
+                        <div className="max-w-4xl mx-auto">
+                            <BeforeAfterSlider
+                                beforeImage="/images/canva-before.webp"
+                                afterImage="/images/canva-after.webp"
+                                beforeLabel="With Grid Lines"
+                                afterLabel="Clean Design"
+                            />
+                            <div className="flex justify-between mt-6 px-4">
+                                <p className="text-sm font-bold text-red-600 uppercase tracking-widest flex items-center gap-2">
+                                    <span>❌</span> With Watermark
+                                </p>
+                                <p className="text-sm font-bold text-green-600 uppercase tracking-widest flex items-center gap-2">
+                                    Watermark-Free <span>✅</span>
+                                </p>
                             </div>
                         </div>
                     </div>
