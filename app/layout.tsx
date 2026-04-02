@@ -127,6 +127,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
+         <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-3NNE8Y1VC0"
+          strategy="lazyOnload"
+        />
+        <Script id="google-analytics" strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-3NNE8Y1VC0'); 
+          `}
+        </Script>
       </head>
       <body className={`${inter.variable} antialiased font-sans`}>
         <LangSync />
@@ -143,11 +156,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </AuthProvider>
       </body>
+      <Script>
 
-      {/* <GoogleAnalytics gaId="G-3NNE8Y1VC0" />
       <Script
         id="microsoft-clarity"
-        strategy="afterInteractive" // 在页面交互后加载，不影响首屏速度
+        strategy="afterInteractive" 
         dangerouslySetInnerHTML={{
           __html: `
                 (function(c,l,a,r,i,t,y){
@@ -157,7 +170,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 })(window, document, "clarity", "script", "v07km7j8jp");
               `,
         }}
-      /> */}
+      /> 
     </html>
   )
 }
