@@ -156,8 +156,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </AuthProvider>
       </body>
-      <Script>
-
       <Script
         id="microsoft-clarity"
         strategy="afterInteractive" 
